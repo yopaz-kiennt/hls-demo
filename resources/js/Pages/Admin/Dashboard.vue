@@ -55,8 +55,6 @@ import { Head } from '@inertiajs/vue3';
             </AlertDialogContent>
         </AlertDialog>
 
-        <h3 class="mb-6 mt-4">Shadcn Pagination</h3>
-
         <Pagination
             v-slot="{ page }"
             class="mb-10"

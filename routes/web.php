@@ -28,9 +28,6 @@ Route::middleware('auth')->group(function () {
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::get('/settings', [DashboardController::class, 'index'])->name('settings');
-    Route::get('/histories', [DashboardController::class, 'index'])->name('histories');
 });
 
 require __DIR__ . '/auth.php';

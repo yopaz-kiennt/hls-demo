@@ -37,7 +37,7 @@ const menuItems = ref([
         children: [
             {
                 title: 'Settings',
-                routeName: 'admin.settings',
+                routeName: '',
             },
             {
                 title: 'Starred',
@@ -52,7 +52,7 @@ const menuItems = ref([
         children: [
             {
                 title: 'History',
-                routeName: 'admin.histories',
+                routeName: '',
             },
             {
                 title: 'Explorer',
@@ -260,7 +260,7 @@ onUnmounted(() => {
                             <span class="text-xs font-medium"> CN </span>
                         </div>
                         <div class="flex-1 text-left">
-                            <p class="text-sm font-medium">shadcn</p>
+                            <p class="text-sm font-medium">admin</p>
                             <p class="text-xs text-gray-500">m@example.com</p>
                         </div>
                         <ChevronDown
