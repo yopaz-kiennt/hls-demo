@@ -47,6 +47,10 @@
     "resources/js/**/*.{js,vue}": [
       "eslint --fix",
       "git add ."
+    ],
+    "*.{php}": [
+      "vendor/bin/pint --dirty",
+      "git add ."
     ]
   }
 }
