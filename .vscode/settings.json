@@ -1,0 +1,24 @@
+{
+  "eslint.enable": true,
+  "[javascript]": {
+    "editor.formatOnSave": false,
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "vue",
+    "typescript",
+    "typescriptreact"
+  ],
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.tabSize": 4
+  },
+  "[typescript]": {
+    "editor.tabSize": 4
+  }
+}
