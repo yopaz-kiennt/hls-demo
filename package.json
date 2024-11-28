@@ -48,7 +48,7 @@
       "eslint --fix",
       "git add ."
     ],
-    "*.{php}": [
+    "*.php": [
       "vendor/bin/pint --dirty",
       "git add ."
     ]
