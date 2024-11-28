@@ -1,43 +1,97 @@
 <script setup>
-import { CircleCheck, TriangleAlert, X } from 'lucide-vue-next';
-import { ref, watch } from 'vue';
+import { CircleCheck, Info, TriangleAlert, X } from 'lucide-vue-next';
+import { computed, ref, watch } from 'vue';
 
-defineProps({
-    message: String,
-    type: String,
+const props = defineProps({
+    message: {
+        type: String,
+        default: '',
+    },
+    type: {
+        type: String,
+        default: '',
+    },
 });
+
 const progress = ref(100);
 const notificationDuration = 4000;
+const remainingTime = ref(notificationDuration);
 const showNotify = defineModel();
+let interval = null;
+let timeout = null;
+const isHovered = ref(false);
 
 const closeNotification = () => {
     showNotify.value = false;
 };
 
+const startProgress = () => {
+    interval = setInterval(() => {
+        if (!isHovered.value) {
+            remainingTime.value -= 100;
+            progress.value = (remainingTime.value / notificationDuration) * 100;
+            if (remainingTime.value <= 0) {
+                clearInterval(interval);
+                closeNotification();
+            }
+        }
+    }, 100);
+};
+
 watch(showNotify, (newVal) => {
     if (newVal) {
+        remainingTime.value = notificationDuration;
         progress.value = 100;
+        startProgress();
 
-        const interval = setInterval(() => {
-            progress.value -= (100 / notificationDuration) * 100;
-            if (progress.value <= 0) {
-                clearInterval(interval);
+        timeout = setTimeout(() => {
+            if (!isHovered.value) {
+                closeNotification();
             }
-        }, 100);
+        }, notificationDuration);
+    }
+});
 
-        setTimeout(() => closeNotification(), notificationDuration + 200);
+const handleMouseEnter = () => {
+    isHovered.value = true;
+    clearTimeout(timeout);
+};
+
+const handleMouseLeave = () => {
+    isHovered.value = false;
+
+    timeout = setTimeout(() => {
+        if (!isHovered.value) {
+            closeNotification();
+        }
+    }, remainingTime.value);
+};
+
+const icon = computed(() => {
+    switch (props.type) {
+        case 'error':
+            return TriangleAlert;
+        case 'success':
+            return CircleCheck;
+        case 'info':
+            return Info;
+        default:
+            return Info;
     }
 });
 </script>
 
 <template>
-    <div v-if="showNotify" class="notify" :class="type">
+    <div
+        v-if="showNotify"
+        class="notify"
+        :class="type"
+        @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave"
+    >
         <div class="content">
-            <div v-if="type === 'error'" class="icon">
-                <TriangleAlert class="w-[18px]" />
-            </div>
-            <div v-if="type === 'success'" class="icon">
-                <CircleCheck class="w-[22px]" />
+            <div v-if="icon" class="icon">
+                <component :is="icon" class="w-[22px]" />
             </div>
 
             <span>{{ message }}</span>
@@ -99,12 +153,11 @@ watch(showNotify, (newVal) => {
 
     .progress-bar {
         width: 100%;
-        height: 3px;
+        height: 4px;
         position: absolute;
         bottom: 0px;
         left: 0;
-        border-radius: 8px;
-        transition: width 0.3s ease-out;
+        transition: width 0.4s ease-out;
 
         &.success {
             background-color: #4b6c4d;
