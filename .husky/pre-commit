@@ -1,1 +1,3 @@
 pnpm lint-staged
+
+vendor/bin/pint --dirty
