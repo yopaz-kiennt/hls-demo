@@ -4,8 +4,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "docker": "vite --host",
     "lint": "eslint resources/js --ext .js,.vue --ignore-path .gitignore --fix",
+    "lint-staged": "lint-staged",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -42,5 +42,11 @@
     "tailwindcss-animate": "^1.0.7",
     "vue-tsc": "^2.1.10",
     "ziggy-js": "^2.4.1"
+  },
+  "lint-staged": {
+    "resources/js/**/*.{js,vue}": [
+      "eslint --fix",
+      "git add ."
+    ]
   }
 }
