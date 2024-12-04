@@ -10,10 +10,7 @@ const isMobileMenuOpen = ref(false);
 
 <template>
     <div class="flex h-screen overflow-hidden">
-        <Sidebar
-            :isMobileMenuOpen="isMobileMenuOpen"
-            @closeMobileMenu="isMobileMenuOpen = false"
-        />
+        <Sidebar :isMobileMenuOpen="isMobileMenuOpen" @closeMobileMenu="isMobileMenuOpen = false" />
 
         <main class="flex-1 pl-[0px]">
             <Header @openMobileMenu="isMobileMenuOpen = true" />

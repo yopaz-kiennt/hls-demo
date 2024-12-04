@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\EtaApplicationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,6 +24,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/eta-application', [EtaApplicationController::class, 'index'])->name('eta_application.index');
+    Route::post('/eta-application', [EtaApplicationController::class, 'register'])->name('eta_application.register');
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
