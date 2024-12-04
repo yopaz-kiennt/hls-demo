@@ -1,7 +1,9 @@
 <script setup>
+const ModalTravelDocument = defineAsyncComponent(() => import('@/Components/Modals/ModalTravelDocument.vue'));
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { ref } from 'vue';
+import { CircleHelp } from 'lucide-vue-next';
+import { defineAsyncComponent, ref } from 'vue';
 
 const travelDocuments = ref([
     {
@@ -41,6 +43,8 @@ const travelDocuments = ref([
         value: '8',
     },
 ]);
+
+const isOpenModalTravelDocument = ref(false);
 </script>
 
 <template>
@@ -83,7 +87,10 @@ const travelDocuments = ref([
     </div>
 
     <div class="mt-5 grid w-full items-center gap-1.5">
-        <LabelRequired :title="'What travel document do you plan to use to travel to Canada?'" />
+        <div class="flex">
+            <LabelRequired :title="'What travel document do you plan to use to travel to Canada?'" />
+            <CircleHelp class="icon-question" @click="isOpenModalTravelDocument = true" />
+        </div>
 
         <div class="md:max-w-[60%]">
             <Select>
@@ -103,7 +110,10 @@ const travelDocuments = ref([
     </div>
 
     <div class="form-group">
-        <LabelRequired :title="'Select the code that matches the one on your passport.'" />
+        <div class="flex">
+            <LabelRequired :title="'Select the code that matches the one on your passport.'" />
+            <CircleHelp class="icon-question" />
+        </div>
 
         <p>
             Find this code on your passport information page - see the field named "Code", "Issuing country",
@@ -126,7 +136,10 @@ const travelDocuments = ref([
     </div>
 
     <div class="form-group">
-        <LabelRequired :title="'What is the nationality noted on this passport?'" />
+        <div class="flex">
+            <LabelRequired :title="'What is the nationality noted on this passport?'" />
+            <CircleHelp class="icon-question" />
+        </div>
 
         <p>See "Nationality" on your passport information page</p>
 
@@ -144,6 +157,8 @@ const travelDocuments = ref([
             </Select>
         </div>
     </div>
+
+    <ModalTravelDocument :open="isOpenModalTravelDocument" @close="isOpenModalTravelDocument = false" />
 </template>
 
 <style scoped lang="scss">

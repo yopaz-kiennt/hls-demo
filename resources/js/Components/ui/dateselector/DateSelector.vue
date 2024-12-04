@@ -1,11 +1,24 @@
 <script setup>
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => 1900 + i).reverse();
+const props = defineProps({
+    endYear: {
+        type: Number || null,
+        default: null,
+    },
+});
 
+// Init years
+const currentYear = new Date().getFullYear();
+let years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => 1900 + i).reverse();
+if (props.endYear) {
+    years = Array.from({ length: props.endYear - currentYear + 1 }, (_, i) => currentYear + i);
+}
+
+// Init months
 const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
 
+// Init days
 const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, '0'));
 
 const year = defineModel('year');

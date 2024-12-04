@@ -3,7 +3,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
-        stepIndex: 1,
+        stepIndex: 3,
         formData: {
             // Step 01
             isRepresentative: '',

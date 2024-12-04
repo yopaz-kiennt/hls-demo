@@ -3,6 +3,7 @@ import { Button } from '@/Components/ui/button';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { Head } from '@inertiajs/vue3';
+import { ArrowRight } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { onBeforeUnmount } from 'vue';
 import StepApplicantType from './StepApplicantType.vue';
@@ -44,7 +45,10 @@ onBeforeUnmount(() => {
 
                         <StepPassportInfo v-if="stepIndex === 3" />
 
-                        <Button class="float-right mt-3">Next</Button>
+                        <Button class="float-right mt-3">
+                            <span>Next</span>
+                            <ArrowRight />
+                        </Button>
                     </form>
                 </div>
             </div>

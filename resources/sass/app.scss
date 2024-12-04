@@ -22,3 +22,7 @@
 .leading-form {
     @apply mb-3 mt-5 text-[28px] font-medium;
 }
+
+.icon-question {
+    @apply cursor-pointer text-[#50b0c7] hover:text-[#155f70] ml-2
+}

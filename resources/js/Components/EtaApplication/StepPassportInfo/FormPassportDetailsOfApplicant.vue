@@ -141,6 +141,7 @@ const { formData } = storeToRefs(etaApplicationStore);
                 v-model:year="formData.personDetails.expiryDateYear"
                 v-model:month="formData.personDetails.expiryDateMonth"
                 v-model:day="formData.personDetails.expiryDateDay"
+                :end-year="2066"
             />
         </div>
     </div>
