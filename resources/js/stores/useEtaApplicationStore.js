@@ -1,9 +1,27 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios';
 import { acceptHMRUpdate, defineStore } from 'pinia';
+import * as yup from 'yup';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
-        stepIndex: 3,
+        stepIndex: 1,
+        steps: [
+            {
+                step: 1,
+                title: 'Applicant Type',
+                description: 'Choose the type of applicant you are and provide basic details',
+            },
+            {
+                step: 2,
+                title: 'Representative Details',
+                description: 'Provide information about the representative (if applicable)',
+            },
+            {
+                step: 3,
+                title: 'Passport Info',
+                description: 'Enter your passport details',
+            },
+        ],
         formData: {
             // Step 01
             isRepresentative: '',
@@ -78,10 +96,25 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         loading: false,
         errors: {},
     }),
-    actions: {
-        updateStepIndex(index) {
-            this.stepIndex = index;
+    getters: {
+        formSchema() {
+            const schemas = [
+                yup.object({
+                    isRepresentative: yup.string().required('This field is required.'),
+                    isApplyingOnBehalfOfMinorChild: yup.string().when('isRepresentative', {
+                        is: (value) => value == 'yes',
+                        then: () => yup.string().required('This field is required.'),
+                    }),
+                }),
+                yup.object().shape({
+                    representativeRelationship: yup.string().required('This field is required.'),
+                    representativeCompensated: yup.string().required('This field is required.'),
+                }),
+            ];
+            return schemas;
         },
+    },
+    actions: {
         async submitForm() {
             try {
                 this.loading = true;

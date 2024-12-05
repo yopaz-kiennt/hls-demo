@@ -1,5 +1,5 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
+import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
@@ -10,17 +10,74 @@ const ModalHelpApplyForSomeone = defineAsyncComponent(() => import('@/Components
 
 const etaApplicationStore = useEtaApplicationStore();
 
-const { formData, errors } = storeToRefs(etaApplicationStore);
+const { formData } = storeToRefs(etaApplicationStore);
 
 const isOpenModalHelpApplyForSomeone = ref(false);
 </script>
 
 <template>
-    <div class="form-group">
-        <div class="flex">
-            <LabelRequired :title="'Are you applying on behalf of someone?'" />
-            <CircleHelp class="icon-question" @click="isOpenModalHelpApplyForSomeone = true" />
-        </div>
+    <FormField v-slot="{ componentField }" name="isRepresentative">
+        <FormItem class="form-group">
+            <div class="flex">
+                <LabelRequired :title="'Are you applying on behalf of someone?'" />
+                <CircleHelp class="icon-question" @click="isOpenModalHelpApplyForSomeone = true" />
+            </div>
+
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.isRepresentative" v-bind="componentField">
+                    <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Please select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="yes">Yes</SelectItem>
+                            <SelectItem value="no">No</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField
+        v-if="formData.isRepresentative && formData.isRepresentative == 'yes'"
+        v-slot="{ componentField }"
+        name="isApplyingOnBehalfOfMinorChild"
+    >
+        <FormItem class="form-group">
+            <div class="flex">
+                <LabelRequired :title="'Are you applying on behalf of a minor child? '" />
+                <CircleHelp class="icon-question" />
+            </div>
+
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.isApplyingOnBehalfOfMinorChild" v-bind="componentField">
+                    <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Please select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="yes">Yes</SelectItem>
+                            <SelectItem value="no">No</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <!-- <div class="form-group">
+        <LabelRequired :title="'Are you applying on behalf of a minor child?'" />
 
         <div class="md:max-w-[60%]">
             <Select v-model="formData.isRepresentative">
@@ -41,7 +98,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
     </div>
 
     <div v-if="formData.isRepresentative && formData.isRepresentative == 'yes'" class="form-group">
-        <LabelRequired :title="'Are you applying on behalf of a minor child?'" />
+        <LabelRequired :title="'Are you applying on behalf of a minor child? '" />
 
         <div class="md:max-w-[60%]">
             <Select v-model="formData.isApplyingOnBehalfOfMinorChild">
@@ -59,7 +116,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
             <InputError :message="errors.isApplyingOnBehalfOfMinorChild && errors.isApplyingOnBehalfOfMinorChild[0]" />
         </div>
-    </div>
+    </div> -->
 
     <ModalHelpApplyForSomeone :open="isOpenModalHelpApplyForSomeone" @close="isOpenModalHelpApplyForSomeone = false" />
 </template>

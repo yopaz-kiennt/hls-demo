@@ -3,8 +3,8 @@ const FormStepRepresentativeDetails = defineAsyncComponent(
     () => import('@/Components/EtaApplication/StepRepresentativeDetails/FormStepRepresentativeDetails.vue')
 );
 import { Checkbox } from '@/Components/ui/checkbox';
+import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
 import LabelNoRequired from '@/Components/ui/label/LabelNoRequired.vue';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
@@ -25,63 +25,77 @@ const { formData } = storeToRefs(etaApplicationStore);
 
     <h2 class="mb-3 text-[28px] font-medium">Parent/guardian or representative details</h2>
 
-    <div class="form-group">
-        <Label class="mb-[5px] text-[16px]">
-            <span class="required">*</span>
-            <span> I am </span>
-            <span class="required ml-1 text-[16px]">(required)</span>
-        </Label>
+    <FormField v-slot="{ componentField }" name="representativeRelationship">
+        <FormItem class="form-group">
+            <LabelRequired :title="'I am'" />
 
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.representative.representativeRelationship">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.representative.representativeRelationship" v-bind="componentField">
+                    <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Please select" />
+                        </SelectTrigger>
+                    </FormControl>
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem :value="representativeRelationship.familyOrMember">
-                            A family member or friend
-                        </SelectItem>
-                        <SelectItem :value="representativeRelationship.memberOfNonGovernmental">
-                            A member of a non-governmental or religious organization
-                        </SelectItem>
-                        <SelectItem :value="representativeRelationship.memberOfCollege">
-                            A member of the College of Immigration and Citizenship Consultants (CICC)
-                        </SelectItem>
-                        <SelectItem :value="representativeRelationship.memberOfCanadian">
-                            A member of a Canadian provincial or territorial law society
-                        </SelectItem>
-                        <SelectItem :value="representativeRelationship.memberOfChampre">
-                            A member of the Chambre des notaires du Québec
-                        </SelectItem>
-                        <SelectItem :value="representativeRelationship.travelAgent"> A travel agent </SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+                    <SelectContent>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem :value="representativeRelationship.familyOrMember">
+                                    A family member or friend
+                                </SelectItem>
+                                <SelectItem :value="representativeRelationship.memberOfNonGovernmental">
+                                    A member of a non-governmental or religious organization
+                                </SelectItem>
+                                <SelectItem :value="representativeRelationship.memberOfCollege">
+                                    A member of the College of Immigration and Citizenship Consultants (CICC)
+                                </SelectItem>
+                                <SelectItem :value="representativeRelationship.memberOfCanadian">
+                                    A member of a Canadian provincial or territorial law society
+                                </SelectItem>
+                                <SelectItem :value="representativeRelationship.memberOfChampre">
+                                    A member of the Chambre des notaires du Québec
+                                </SelectItem>
+                                <SelectItem :value="representativeRelationship.travelAgent">
+                                    A travel agent
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectContent>
+                </Select>
+            </div>
 
-    <div class="form-group">
-        <LabelRequired
-            :title="'Are you being paid to represent the applicant and complete the form on their behalf?'"
-        />
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.representative.representativeCompensated">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+    <FormField v-slot="{ componentField }" name="representativeCompensated">
+        <FormItem class="form-group">
+            <LabelRequired
+                :title="'Are you being paid to represent the applicant and complete the form on their behalf?'"
+            />
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.representative.representativeCompensated" v-bind="componentField">
+                    <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Please select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value="yes">Yes</SelectItem>
+                                <SelectItem value="no">No</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
     <FormStepRepresentativeDetails
         v-if="
@@ -93,21 +107,33 @@ const { formData } = storeToRefs(etaApplicationStore);
         "
     />
 
-    <div class="form-group">
-        <LabelNoRequired :title="'Fax number'" />
+    <FormField v-slot="{ componentField }" name="faxNumber">
+        <FormItem class="form-group">
+            <LabelNoRequired :title="'Fax number'" />
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.representative.faxNumber" type="text" />
-        </div>
-    </div>
+            <div class="md:max-w-[60%]">
+                <FormControl>
+                    <Input v-model="formData.representative.faxNumber" type="text" v-bind="componentField" />
+                </FormControl>
+            </div>
 
-    <div class="form-group">
-        <LabelNoRequired :title="'Email address'" />
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.representative.emailAddress" type="email" />
-        </div>
-    </div>
+    <FormField v-slot="{ componentField }" name="emailAddress">
+        <FormItem class="form-group">
+            <LabelNoRequired :title="'Email address'" />
+
+            <div class="md:max-w-[60%]">
+                <FormControl>
+                    <Input v-model="formData.representative.emailAddress" type="email" v-bind="componentField" />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
     <div class="mt-8 grid w-full items-center gap-1.5">
         <LabelRequired title="Representative's declaration" class="text-[22px] font-normal" />
