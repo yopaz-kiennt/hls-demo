@@ -25,13 +25,13 @@ const { formData } = storeToRefs(etaApplicationStore);
 
     <h2 class="mb-3 text-[28px] font-medium">Parent/guardian or representative details</h2>
 
-    <FormField v-slot="{ componentField }" name="representativeRelationship">
+    <FormField v-slot="{ componentField, errors }" name="representativeRelationship">
         <FormItem class="form-group">
             <LabelRequired :title="'I am'" />
 
             <div class="md:max-w-[60%]">
                 <Select v-model="formData.representative.representativeRelationship" v-bind="componentField">
-                    <FormControl>
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue placeholder="Please select" />
                         </SelectTrigger>
@@ -68,7 +68,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="representativeCompensated">
+    <FormField v-slot="{ componentField, errors }" name="representativeCompensated">
         <FormItem class="form-group">
             <LabelRequired
                 :title="'Are you being paid to represent the applicant and complete the form on their behalf?'"
@@ -76,7 +76,7 @@ const { formData } = storeToRefs(etaApplicationStore);
 
             <div class="md:max-w-[60%]">
                 <Select v-model="formData.representative.representativeCompensated" v-bind="componentField">
-                    <FormControl>
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue placeholder="Please select" />
                         </SelectTrigger>

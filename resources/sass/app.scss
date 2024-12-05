@@ -24,5 +24,9 @@
 }
 
 .icon-question {
-    @apply cursor-pointer text-[#50b0c7] hover:text-[#155f70] ml-2
+    @apply cursor-pointer text-[#50b0c7] hover:text-[#155f70] ml-2;
+}
+
+.input-invalid {
+    @apply border-red-500;
 }

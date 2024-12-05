@@ -39,7 +39,7 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('eta_application.index')"
                                     :active="route().current('eta_application.index')"
                                 >
-                                    Eta Application
+                                    eTA Application
                                 </NavLink>
                             </div>
                         </div>

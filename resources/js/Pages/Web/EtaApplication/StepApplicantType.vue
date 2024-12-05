@@ -16,7 +16,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 </script>
 
 <template>
-    <FormField v-slot="{ componentField }" name="isRepresentative">
+    <FormField v-slot="{ componentField, errors }" name="isRepresentative">
         <FormItem class="form-group">
             <div class="flex">
                 <LabelRequired :title="'Are you applying on behalf of someone?'" />
@@ -25,7 +25,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
             <div class="md:max-w-[60%]">
                 <Select v-model="formData.isRepresentative" v-bind="componentField">
-                    <FormControl>
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue placeholder="Please select" />
                         </SelectTrigger>
@@ -46,7 +46,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
     <FormField
         v-if="formData.isRepresentative && formData.isRepresentative == 'yes'"
-        v-slot="{ componentField }"
+        v-slot="{ componentField, errors }"
         name="isApplyingOnBehalfOfMinorChild"
     >
         <FormItem class="form-group">
@@ -57,7 +57,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
             <div class="md:max-w-[60%]">
                 <Select v-model="formData.isApplyingOnBehalfOfMinorChild" v-bind="componentField">
-                    <FormControl>
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue placeholder="Please select" />
                         </SelectTrigger>
