@@ -1,4 +1,5 @@
 <script setup>
+import { ScrollArea } from '@/Components/ui/scroll-area';
 import { Link } from '@inertiajs/vue3';
 import {
     Bell,
@@ -163,7 +164,7 @@ onUnmounted(() => {
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 overflow-y-auto">
+            <ScrollArea class="flex-1 overflow-y-auto">
                 <div class="p-2">
                     <p class="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Platform</p>
                     <div class="space-y-1">
@@ -217,7 +218,7 @@ onUnmounted(() => {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </ScrollArea>
 
             <!-- User Profile -->
             <div class="mt-auto border-t">

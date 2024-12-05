@@ -1,9 +1,7 @@
 <script setup>
 import FormContentComplete from '@/Components/EtaApplication/StepPassportInfo/FormContentComplete.vue';
+import FormPassportDetailsOfApplicant from '@/Components/EtaApplication/StepPassportInfo/FormPassportDetailsOfApplicant.vue';
 import { defineAsyncComponent } from 'vue';
-const FormPassportDetailsOfApplicant = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/FormPassportDetailsOfApplicant.vue')
-);
 const FormPersonalDetailsOfApplicant = defineAsyncComponent(
     () => import('@/Components/EtaApplication/StepPassportInfo/FormPersonalDetailsOfApplicant.vue')
 );
