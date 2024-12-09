@@ -41,15 +41,6 @@ services:
             - mynetwork
         restart: unless-stopped
 
-    redis:
-        image: redis:6.0-alpine
-        container_name: eta_redis
-        volumes:
-            - ./docker/data/redis:/data
-        networks:
-            - mynetwork
-        restart: unless-stopped
-
     vite:
         image: node:20-alpine
         container_name: eta_vite
@@ -61,6 +52,25 @@ services:
         volumes:
             - ./:/var/www
         command: sh -c "npm install -g pnpm && pnpm install && pnpm run dev"
+        networks:
+            - mynetwork
+        restart: unless-stopped
+
+    rabbitmq:
+        image: rabbitmq:4.0.4-management-alpine
+        container_name: eta_rabbitmq
+        ports:
+            - 5672:5672
+            - 15672:15672
+        depends_on:
+            - app
+        environment:
+            RABBITMQ_DEFAULT_USER: 'admin'
+            RABBITMQ_DEFAULT_PASS: '123456'
+            RABBITMQ_DEFAULT_VHOST: 'eta_vhost'
+        volumes:
+            - ./docker/data/rabbitmq:/var/lib/rabbitmq/
+            - ./docker/rabbitmq/log:/var/log/rabbitmq
         networks:
             - mynetwork
         restart: unless-stopped
