@@ -41,6 +41,15 @@ services:
             - mynetwork
         restart: unless-stopped
 
+    redis:
+        image: redis:6.0-alpine
+        container_name: eta_redis
+        volumes:
+            - ./docker/data/redis:/data
+        networks:
+            - mynetwork
+        restart: unless-stopped
+
     vite:
         image: node:20-alpine
         container_name: eta_vite
