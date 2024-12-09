@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\ProcessRabbitMQMessage;
+use App\Services\RabbitMQService;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -16,7 +16,8 @@ class DashboardController extends Controller
             'name' => 'John Doe',
         ];
 
-        ProcessRabbitMQMessage::dispatch($message);
+        $rabbitmqService = new RabbitMQService();
+        $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue'), json_encode($message));
 
         return Inertia::render('Admin/Dashboard');
     }
