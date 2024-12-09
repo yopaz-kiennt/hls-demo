@@ -20,7 +20,16 @@ RUN apk update && apk add \
     unzip \
     git \
     oniguruma-dev \
-    curl
+    curl \
+    libffi-dev \
+    cmake \
+    autoconf \
+    libtool \
+    make \
+    gcc \
+    g++ \
+    openssl-dev \
+    linux-headers
 
 COPY php.ini /usr/local/etc/php/php.ini
 
@@ -30,6 +39,15 @@ RUN docker-php-ext-configure gd
 RUN apk add autoconf && pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis && apk del autoconf
+
+# Install RabbitMQ
+RUN git clone --recursive https://github.com/alanxz/rabbitmq-c.git /tmp/rabbitmq-c \
+    && cd /tmp/rabbitmq-c \
+    && mkdir build && cd build \
+    && cmake -DCMAKE_BUILD_TYPE=Release .. \
+    && make && make install \
+    && rm -rf /tmp/rabbitmq-c
+RUN pecl install amqp && docker-php-ext-enable amqp
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
