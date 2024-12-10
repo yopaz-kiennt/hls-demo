@@ -2,7 +2,7 @@
 
 # Variables
 DOCKER_COMPOSE_FILE=docker-compose.yml
-DOCKER_COMPOSE=docker-compose -f $(DOCKER_COMPOSE_FILE)
+DOCKER_COMPOSE=docker compose -f $(DOCKER_COMPOSE_FILE)
 
 .PHONY: up down build build-up setup init start stop restart logs
 

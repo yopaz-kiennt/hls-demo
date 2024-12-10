@@ -14,11 +14,11 @@ class RabbitMQService
     public function __construct()
     {
         $this->connection = new AMQPStreamConnection(
-            config('queue.connections.rabbitmq.hosts.host'),
-            config('queue.connections.rabbitmq.hosts.port'),
-            config('queue.connections.rabbitmq.hosts.user'),
-            config('queue.connections.rabbitmq.hosts.password'),
-            config('queue.connections.rabbitmq.hosts.vhost'),
+            env('RABBITMQ_HOST', '127.0.0.1'),
+            env('RABBITMQ_PORT', 5672),
+            env('RABBITMQ_USER', 'guest'),
+            env('RABBITMQ_PASSWORD', 'guest'),
+            env('RABBITMQ_VHOST', '/')
         );
 
         $this->channel = $this->connection->channel();

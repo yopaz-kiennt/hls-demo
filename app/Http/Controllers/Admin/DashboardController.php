@@ -11,13 +11,13 @@ class DashboardController extends Controller
     public function index()
     {
         $message = [
-            'id' => 123,
-            'email' => 'user@example.com',
-            'name' => 'John Doe',
+            'id' => 1,
+            'email' => 'dangthang@example.com',
+            'name' => 'Thang Pham Dang',
         ];
 
-        $rabbitmqService = new RabbitMQService();
-        $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue'), json_encode($message));
+        $rabbitmqService = new RabbitMQService;
+        $rabbitmqService->sendMessage('crawler', json_encode($message));
 
         return Inertia::render('Admin/Dashboard');
     }
