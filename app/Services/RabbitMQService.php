@@ -24,12 +24,14 @@ class RabbitMQService
         $this->channel = $this->connection->channel();
     }
 
-    public function sendMessage(string $queue, string $message)
+    public function sendMessage(string $exchangeName, string $routingKey, string $message)
     {
-        $this->channel->queue_declare($queue, false, true, false, false);
+        $this->channel->exchange_declare($exchangeName, 'direct', false, true, false);
+        $this->channel->queue_declare($routingKey, false, true, false, false);
+        $this->channel->queue_bind($routingKey, $exchangeName, $routingKey);
 
         $msg = new AMQPMessage($message);
-        $this->channel->basic_publish($msg, '', $queue);
+        $this->channel->basic_publish($msg, $exchangeName, $routingKey);
     }
 
     public function __destruct()
