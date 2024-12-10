@@ -17,7 +17,9 @@ class DashboardController extends Controller
         ];
 
         $rabbitmqService = new RabbitMQService;
-        $rabbitmqService->sendMessage('crawler', json_encode($message));
+        $exchange = 'record_saved';
+        $routingKey = 'puppeteer_run';
+        $rabbitmqService->sendMessage($exchange, $routingKey, json_encode($message));
 
         return Inertia::render('Admin/Dashboard');
     }
