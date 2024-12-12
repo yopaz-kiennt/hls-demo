@@ -24,7 +24,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         </p>
 
         <div class="md:max-w-[60%]">
-            <Input v-model="formData.personDetails.passportNumber" type="text" />
+            <Input v-model="formData.personalDetails.passportNumber" type="text" />
         </div>
     </div>
 
@@ -34,7 +34,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <p>You cannot copy and paste into this field.</p>
 
         <div class="md:max-w-[60%]">
-            <Input v-model="formData.personDetails.passportNumberReEnter" type="text" @paste.prevent @copy.prevent />
+            <Input v-model="formData.personalDetails.passportNumberReEnter" type="text" @paste.prevent @copy.prevent />
         </div>
     </div>
 
@@ -44,7 +44,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <p>Please enter exactly as shown on your passport or identity document.</p>
 
         <div class="md:max-w-[60%]">
-            <Input v-model="formData.personDetails.lastName" type="text" />
+            <Input v-model="formData.personalDetails.lastName" type="text" />
         </div>
     </div>
 
@@ -54,7 +54,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <p>Please enter exactly as shown on your passport or identity document.</p>
 
         <div class="md:max-w-[60%]">
-            <Input v-model="formData.personDetails.firstName" type="text" />
+            <Input v-model="formData.personalDetails.firstName" type="text" />
         </div>
     </div>
 
@@ -63,9 +63,9 @@ const { formData } = storeToRefs(etaApplicationStore);
 
         <div class="md:max-w-[60%]">
             <DateSelector
-                v-model:year="formData.personDetails.dobYear"
-                v-model:month="formData.personDetails.dobMonth"
-                v-model:day="formData.personDetails.dobDay"
+                v-model:year="formData.personalDetails.dobYear"
+                v-model:month="formData.personalDetails.dobMonth"
+                v-model:day="formData.personalDetails.dobDay"
             />
         </div>
     </div>
@@ -74,7 +74,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <LabelRequired :title="'Gender'" />
 
         <div class="md:max-w-[60%]">
-            <Select v-model="formData.personDetails.gender">
+            <Select v-model="formData.personalDetails.gender">
                 <SelectTrigger>
                     <SelectValue placeholder="Please select" />
                 </SelectTrigger>
@@ -94,7 +94,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <LabelRequired :title="'Country/territory of birth'" />
 
         <div class="md:max-w-[60%]">
-            <Select v-model="formData.personDetails.gender">
+            <Select v-model="formData.personalDetails.gender">
                 <SelectTrigger>
                     <SelectValue placeholder="Please select" />
                 </SelectTrigger>
@@ -117,7 +117,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         </p>
 
         <div class="md:max-w-[60%]">
-            <Input v-model="formData.personDetails.cityTownOfBirth" type="text" />
+            <Input v-model="formData.personalDetails.cityTownOfBirth" type="text" />
         </div>
     </div>
 
@@ -126,9 +126,9 @@ const { formData } = storeToRefs(etaApplicationStore);
 
         <div class="md:max-w-[60%]">
             <DateSelector
-                v-model:year="formData.personDetails.issueDateYear"
-                v-model:month="formData.personDetails.issueDateMonth"
-                v-model:day="formData.personDetails.issueDateDay"
+                v-model:year="formData.personalDetails.issueDateYear"
+                v-model:month="formData.personalDetails.issueDateMonth"
+                v-model:day="formData.personalDetails.issueDateDay"
             />
         </div>
     </div>
@@ -138,9 +138,9 @@ const { formData } = storeToRefs(etaApplicationStore);
 
         <div class="md:max-w-[60%]">
             <DateSelector
-                v-model:year="formData.personDetails.expiryDateYear"
-                v-model:month="formData.personDetails.expiryDateMonth"
-                v-model:day="formData.personDetails.expiryDateDay"
+                v-model:year="formData.personalDetails.expiryDateYear"
+                v-model:month="formData.personalDetails.expiryDateMonth"
+                v-model:day="formData.personalDetails.expiryDateDay"
                 :end-year="2066"
             />
         </div>

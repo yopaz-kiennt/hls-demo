@@ -60,7 +60,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <LabelRequired :title="'Country/territory'" />
 
         <div class="md:max-w-[60%]">
-            <Select v-model="formData.personDetails.country">
+            <Select v-model="formData.personalDetails.country">
                 <SelectTrigger>
                     <SelectValue placeholder="Please select" />
                 </SelectTrigger>

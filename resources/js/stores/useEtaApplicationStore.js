@@ -4,7 +4,7 @@ import * as yup from 'yup';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
-        stepIndex: 1,
+        stepIndex: 3,
         steps: [
             {
                 step: 1,
@@ -45,7 +45,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             },
             // Step 03
             travelDocumentType: '',
-            personDetails: {
+            personalDetails: {
                 passportNumber: '',
                 passportNumberReEnter: '',
                 lastName: '',
@@ -63,9 +63,18 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 expiryDateMonth: '',
                 expiryDateDay: '',
                 additionalCitizenship: '',
+                maritalStatus: '',
                 hasPreviouslyAppliedToCanada: '',
                 uci: '',
                 uciReEnter: '',
+            },
+            employmentDetails: {
+                occupation: '',
+                title: '',
+                companyEmployerSchoolFacilityName: '',
+                country: '',
+                city: '',
+                fromDateYear: '',
             },
             contactDetails: {
                 languageOfPreference: '',
@@ -112,6 +121,22 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 }),
             ];
             return schemas;
+        },
+        checkAgeOfPersonalDetails(state) {
+            const dobYear = parseInt(state.formData.personalDetails.dobYear.replace(/'/g, ''), 10);
+            const dobMonth = parseInt(state.formData.personalDetails.dobMonth.replace(/'/g, ''), 10);
+            const dobDay = parseInt(state.formData.personalDetails.dobDay.replace(/'/g, ''), 10);
+
+            if (!dobYear || !dobMonth || !dobDay) return 0;
+
+            const today = new Date();
+            let age = today.getFullYear() - dobYear;
+
+            if (today.getMonth() + 1 < dobMonth || (today.getMonth() + 1 === dobMonth && today.getDate() < dobDay)) {
+                age--;
+            }
+
+            return age;
         },
     },
     actions: {

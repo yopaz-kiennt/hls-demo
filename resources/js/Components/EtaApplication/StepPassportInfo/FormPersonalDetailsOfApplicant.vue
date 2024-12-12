@@ -20,7 +20,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <p>Indicate which countries/territories you are a citizen of.</p>
 
         <div class="md:max-w-[60%]">
-            <Select v-model="formData.personDetails.additionalCitizenship">
+            <Select v-model="formData.personalDetails.additionalCitizenship">
                 <SelectTrigger>
                     <SelectValue placeholder="Please select" />
                 </SelectTrigger>
@@ -35,12 +35,36 @@ const { formData } = storeToRefs(etaApplicationStore);
     </div>
 
     <div class="form-group">
+        <LabelRequired :title="'Marital status'" />
+
+        <div class="md:max-w-[60%]">
+            <Select v-model="formData.personalDetails.maritalStatus">
+                <SelectTrigger>
+                    <SelectValue placeholder="Please select" />
+                </SelectTrigger>
+
+                <SelectContent>
+                    <SelectGroup>
+                        <SelectItem value="0">Married</SelectItem>
+                        <SelectItem value="1">Legally Separated</SelectItem>
+                        <SelectItem value="2">Divorced</SelectItem>
+                        <SelectItem value="3">Annulled Marriage</SelectItem>
+                        <SelectItem value="4">Widowed</SelectItem>
+                        <SelectItem value="5">Common-Law</SelectItem>
+                        <SelectItem value="6">Never Married/Single</SelectItem>
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+        </div>
+    </div>
+
+    <div class="form-group">
         <LabelRequired
             :title="'Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada?'"
         />
 
         <div class="md:max-w-[60%]">
-            <Select v-model="formData.personDetails.hasPreviouslyAppliedToCanada">
+            <Select v-model="formData.personalDetails.hasPreviouslyAppliedToCanada">
                 <SelectTrigger>
                     <SelectValue placeholder="Please select" />
                 </SelectTrigger>
@@ -57,8 +81,8 @@ const { formData } = storeToRefs(etaApplicationStore);
 
     <template
         v-if="
-            formData.personDetails.hasPreviouslyAppliedToCanada &&
-            formData.personDetails.hasPreviouslyAppliedToCanada == 'yes'
+            formData.personalDetails.hasPreviouslyAppliedToCanada &&
+            formData.personalDetails.hasPreviouslyAppliedToCanada == 'yes'
         "
     >
         <div class="form-group">
@@ -67,7 +91,7 @@ const { formData } = storeToRefs(etaApplicationStore);
             />
 
             <div class="md:max-w-[60%]">
-                <Input v-model="formData.personDetails.uci" type="text" />
+                <Input v-model="formData.personalDetails.uci" type="text" />
             </div>
         </div>
 
@@ -77,7 +101,7 @@ const { formData } = storeToRefs(etaApplicationStore);
             />
 
             <div class="md:max-w-[60%]">
-                <Input v-model="formData.personDetails.uciReEnter" type="text" />
+                <Input v-model="formData.personalDetails.uciReEnter" type="text" />
             </div>
         </div>
     </template>
