@@ -4,7 +4,7 @@ import * as yup from 'yup';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
-        stepIndex: 3,
+        stepIndex: 1,
         steps: [
             {
                 step: 1,
@@ -98,7 +98,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 travelDateTimeTimezone: '',
             },
             consentAndDeclaration: {
-                inAggreance: '',
+                inAggreance: false,
                 fullName: '',
             },
         },
@@ -111,7 +111,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 yup.object({
                     isRepresentative: yup.string().required('This field is required.'),
                     isApplyingOnBehalfOfMinorChild: yup.string().when('isRepresentative', {
-                        is: (value) => value == 'yes',
+                        is: (value) => value == '0',
                         then: () => yup.string().required('This field is required.'),
                     }),
                 }),

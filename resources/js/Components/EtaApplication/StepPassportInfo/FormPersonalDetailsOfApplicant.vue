@@ -71,8 +71,8 @@ const { formData } = storeToRefs(etaApplicationStore);
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="0">Yes</SelectItem>
+                        <SelectItem value="1">No</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
@@ -82,7 +82,7 @@ const { formData } = storeToRefs(etaApplicationStore);
     <template
         v-if="
             formData.personalDetails.hasPreviouslyAppliedToCanada &&
-            formData.personalDetails.hasPreviouslyAppliedToCanada == 'yes'
+            formData.personalDetails.hasPreviouslyAppliedToCanada == '0'
         "
     >
         <div class="form-group">

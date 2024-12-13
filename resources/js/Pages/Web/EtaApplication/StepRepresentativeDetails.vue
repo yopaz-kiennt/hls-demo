@@ -3,6 +3,7 @@ const FormStepRepresentativeDetails = defineAsyncComponent(
     () => import('@/Components/EtaApplication/StepRepresentativeDetails/FormStepRepresentativeDetails.vue')
 );
 import { Checkbox } from '@/Components/ui/checkbox';
+import FormInputCheckbox from '@/Components/ui/checkbox/FormInputCheckbox.vue';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import LabelNoRequired from '@/Components/ui/label/LabelNoRequired.vue';
@@ -85,8 +86,8 @@ const { formData } = storeToRefs(etaApplicationStore);
                     <SelectContent>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectItem value="yes">Yes</SelectItem>
-                                <SelectItem value="no">No</SelectItem>
+                                <SelectItem value="0">Yes</SelectItem>
+                                <SelectItem value="1">No</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </SelectContent>
@@ -97,15 +98,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         </FormItem>
     </FormField>
 
-    <FormStepRepresentativeDetails
-        v-if="
-            formData.representative.representativeRelationship == representativeRelationship.familyOrMember ||
-            formData.representative.representativeRelationship == representativeRelationship.memberOfNonGovernmental ||
-            formData.representative.representativeRelationship == representativeRelationship.memberOfCollege ||
-            formData.representative.representativeRelationship == representativeRelationship.memberOfCanadian ||
-            formData.representative.representativeRelationship == representativeRelationship.memberOfChampre
-        "
-    />
+    <FormStepRepresentativeDetails />
 
     <FormField v-slot="{ componentField }" name="faxNumber">
         <FormItem class="form-group">
@@ -138,26 +131,25 @@ const { formData } = storeToRefs(etaApplicationStore);
     <div class="mt-8 grid w-full items-center gap-1.5">
         <LabelRequired title="Representative's declaration" class="text-[22px] font-normal" />
 
-        <div class="flex items-center space-x-2">
-            <Checkbox
-                id="declareContactAndInformationIsTruthy"
-                v-model="formData.representative.declareContactAndInformationIsTruthy"
-                value="1"
-            />
-
-            <label for="declareContactAndInformationIsTruthy">
-                I declare that my contact and personal information above is truthful, complete and correct.
-            </label>
-        </div>
+        <FormInputCheckbox
+            id="declareContactAndInformationIsTruthy"
+            v-model="formData.representative.declareContactAndInformationIsTruthy"
+            value="1"
+            label="I declare that my contact and personal information above is truthful, complete and correct."
+        />
     </div>
 
     <div class="mt-8 grid w-full gap-1.5">
         <LabelRequired title="Representative's authorization" class="text-[22px] font-normal" />
 
         <div class="flex space-x-2">
-            <Checkbox id="understandAndAccept" v-model="formData.representative.understandAndAccept" value="1" />
+            <Checkbox
+                id="understandAndAccept"
+                v-model:checked="formData.representative.understandAndAccept"
+                value="1"
+            />
 
-            <label for="understandAndAccept" class="mt-[-5px]">
+            <label for="understandAndAccept" class="mt-[-5px] cursor-pointer">
                 I understand and accept that I am the person appointed by the applicant to conduct business on the
                 applicant or sponsor's behalf with Immigration, Refugees and Citizenship Canada and the Canada Border
                 Services Agency.

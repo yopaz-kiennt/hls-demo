@@ -11,6 +11,17 @@ import {
     AlertDialogTrigger,
 } from '@/Components/ui/alert-dialog';
 import { Button } from '@/Components/ui/button';
+import {
+    Pagination,
+    PaginationEllipsis,
+    PaginationFirst,
+    PaginationLast,
+    PaginationList,
+    PaginationListItem,
+    PaginationNext,
+    PaginationPrev,
+} from '@/Components/ui/pagination';
+import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
@@ -22,6 +33,48 @@ import { Head } from '@inertiajs/vue3';
     </Head>
 
     <AdminLayout>
+        <ScrollArea class="table-container mb-[30px]">
+            <table class="table-hover table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="i in 10" :key="i">
+                        <td>{{ i + 1 }}</td>
+                        <td>abc {{ i + 1 }}</td>
+                        <td>abc</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+
+        <Pagination v-slot="{ page }" :total="100" :sibling-count="1" show-edges :default-page="2" class="mb-4">
+            <PaginationList v-slot="{ items }" class="flex items-center gap-1">
+                <PaginationFirst />
+                <PaginationPrev />
+
+                <template v-for="(item, index) in items">
+                    <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+                        <Button class="h-10 w-10 p-0" :variant="item.value === page ? 'default' : 'outline'">
+                            {{ item.value }}
+                        </Button>
+                    </PaginationListItem>
+                    <PaginationEllipsis v-else :key="item.type" :index="index" />
+                </template>
+
+                <PaginationNext />
+                <PaginationLast />
+            </PaginationList>
+        </Pagination>
+
         <AlertDialog>
             <AlertDialogTrigger as-child>
                 <Button variant="outline"> Show Dialog </Button>
@@ -43,3 +96,42 @@ import { Head } from '@inertiajs/vue3';
         </AlertDialog>
     </AdminLayout>
 </template>
+
+<style scoped lang="scss">
+.table-container {
+    width: 100%;
+    overflow: auto;
+
+    table {
+        width: 100%;
+
+        &.table-hover {
+            tr {
+                &:hover {
+                    background-color: #fff;
+                }
+            }
+        }
+
+        tr {
+            border-bottom: 1px solid gainsboro;
+
+            td,
+            th {
+                padding: 12px;
+            }
+        }
+
+        thead {
+            tr {
+                th {
+                    font-size: 13px;
+                    text-align: left;
+                    color: #71717a;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}
+</style>

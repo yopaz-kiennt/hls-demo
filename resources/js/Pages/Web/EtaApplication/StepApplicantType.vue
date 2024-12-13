@@ -33,8 +33,8 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="yes">Yes</SelectItem>
-                            <SelectItem value="no">No</SelectItem>
+                            <SelectItem value="0">Yes</SelectItem>
+                            <SelectItem value="1">No</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -45,7 +45,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
     </FormField>
 
     <FormField
-        v-if="formData.isRepresentative && formData.isRepresentative == 'yes'"
+        v-if="formData.isRepresentative && formData.isRepresentative == '0'"
         v-slot="{ componentField, errors }"
         name="isApplyingOnBehalfOfMinorChild"
     >
@@ -65,8 +65,8 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="yes">Yes</SelectItem>
-                            <SelectItem value="no">No</SelectItem>
+                            <SelectItem value="0">Yes</SelectItem>
+                            <SelectItem value="1">No</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -87,8 +87,8 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="0">Yes</SelectItem>
+                        <SelectItem value="1">No</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
@@ -97,7 +97,7 @@ const isOpenModalHelpApplyForSomeone = ref(false);
         </div>
     </div>
 
-    <div v-if="formData.isRepresentative && formData.isRepresentative == 'yes'" class="form-group">
+    <div v-if="formData.isRepresentative && formData.isRepresentative == '0'" class="form-group">
         <LabelRequired :title="'Are you applying on behalf of a minor child? '" />
 
         <div class="md:max-w-[60%]">
@@ -108,8 +108,8 @@ const isOpenModalHelpApplyForSomeone = ref(false);
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="0">Yes</SelectItem>
+                        <SelectItem value="1">No</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>

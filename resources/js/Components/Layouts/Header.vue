@@ -12,7 +12,7 @@ defineEmits(['openMobileMenu']);
 </script>
 
 <template>
-    <header class="flex h-[73px] items-center gap-2 border-b px-4">
+    <header class="fixed top-0 flex h-[73px] w-[100%] items-center gap-2 border-b bg-white px-4">
         <button
             class="inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-gray-100 md:hidden"
             @click="$emit('openMobileMenu')"

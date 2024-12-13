@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Checkbox } from '@/Components/ui/checkbox';
+import FormInputCheckbox from '@/Components/ui/checkbox/FormInputCheckbox.vue';
 import { Input } from '@/Components/ui/input';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
@@ -95,11 +95,12 @@ const { formData } = storeToRefs(etaApplicationStore);
         <LabelRequired :title="'I Agree'" :classes="'text-[24px] font-normal'" />
 
         <div class="md:max-w-[60%]">
-            <div class="flex items-center space-x-2">
-                <Checkbox id="inAggreance" v-model="formData.consentAndDeclaration.inAggreance" name="inAggreance" />
-
-                <label for="inAggreance"> I agree </label>
-            </div>
+            <FormInputCheckbox
+                id="inAggreance"
+                v-model="formData.consentAndDeclaration.inAggreance"
+                value="1"
+                label="I agree"
+            />
         </div>
     </div>
 

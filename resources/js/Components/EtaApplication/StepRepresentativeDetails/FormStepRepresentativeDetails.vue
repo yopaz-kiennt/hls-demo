@@ -61,7 +61,9 @@ const { formData } = storeToRefs(etaApplicationStore);
         v-if="
             formData.representative.representativeRelationship == representativeRelationship.memberOfNonGovernmental ||
             formData.representative.representativeRelationship == representativeRelationship.memberOfCollege ||
-            formData.representative.representativeRelationship == representativeRelationship.memberOfCanadian
+            formData.representative.representativeRelationship == representativeRelationship.memberOfCanadian ||
+            formData.representative.representativeRelationship == representativeRelationship.memberOfChampre ||
+            formData.representative.representativeRelationship == representativeRelationship.travelAgent
         "
         class="form-group"
     >

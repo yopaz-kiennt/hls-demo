@@ -31,15 +31,15 @@ const { formData } = storeToRefs(etaApplicationStore);
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="0">Yes</SelectItem>
+                        <SelectItem value="1">No</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
         </div>
     </div>
 
-    <template v-if="formData.travelDetails.isTravelDateKnown && formData.travelDetails.isTravelDateKnown == 'yes'">
+    <template v-if="formData.travelDetails.isTravelDateKnown && formData.travelDetails.isTravelDateKnown == '0'">
         <div class="form-group">
             <LabelRequired :title="'When do you plan to travel to Canada?'" />
 
