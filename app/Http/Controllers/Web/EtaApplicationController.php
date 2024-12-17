@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EtaApplication\RegisterRequest;
 use App\Models\Application;
 use App\Services\RabbitMQService;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class EtaApplicationController extends Controller
@@ -22,7 +23,7 @@ class EtaApplicationController extends Controller
         $birthday = sprintf('%04d-%02d-%02d', $dob['dobYear'], $dob['dobMonth'], $dob['dobDay']);
 
         $applicationCreated = Application::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::user()->id,
             'is_representative' => $request->get('isRepresentative'),
             'is_applying_for_minor' => $request->get('isApplyingOnBehalfOfMinorChild'),
             'representative_relationship' => $request->get('representative')['representativeRelationship'],
