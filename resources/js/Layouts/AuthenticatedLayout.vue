@@ -1,9 +1,8 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import CommonNotify from '@/Components/ui/notify/CommonNotify.vue';
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -30,7 +29,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    ダッシュボード
                                 </NavLink>
                             </div>
 
@@ -39,13 +38,12 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('eta_application.index')"
                                     :active="route().current('eta_application.index')"
                                 >
-                                    eTA Application
+                                    eTA登録
                                 </NavLink>
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Settings Dropdown -->
+                        <!-- <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
@@ -80,7 +78,7 @@ const showingNavigationDropdown = ref(false);
                                     </template>
                                 </Dropdown>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
@@ -125,12 +123,18 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            ダッシュボード
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('eta_application.index')"
+                            :active="route().current('eta_application.index')"
+                        >
+                            eTA登録
                         </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
+                    <!-- <div class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
                         <div class="px-4">
                             <div class="text-base font-medium text-gray-800 dark:text-gray-200">
                                 {{ $page.props.auth.user.name }}
@@ -146,7 +150,7 @@ const showingNavigationDropdown = ref(false);
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </nav>
 
@@ -163,4 +167,6 @@ const showingNavigationDropdown = ref(false);
             </main>
         </div>
     </div>
+
+    <CommonNotify />
 </template>

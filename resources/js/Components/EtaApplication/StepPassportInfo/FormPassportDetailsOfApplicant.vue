@@ -4,18 +4,32 @@ import { Input } from '@/Components/ui/input';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
+import { CircleHelp } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
+import { defineAsyncComponent, ref } from 'vue';
+const ModalPassportNumber = defineAsyncComponent(() => import('./Modals/ModalPassportNumber.vue'));
+const ModalSurnameOrLastname = defineAsyncComponent(() => import('./Modals/ModalSurnameOrLastname.vue'));
+const ModalDateOfIssueOfPassport = defineAsyncComponent(() => import('./Modals/ModalDateOfIssueOfPassport.vue'));
+const ModalDateOfExpiryOfPassport = defineAsyncComponent(() => import('./Modals/ModalDateOfExpiryOfPassport.vue'));
 
 const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
+
+const isOpenModalPassportNumber = ref(false);
+const isOpenModalSurnameOrLastname = ref(false);
+const isOpenModalDateOfIssueOfPassport = ref(false);
+const isOpenModalDateOfExpiryOfPassport = ref(false);
 </script>
 
 <template>
     <h2 class="leading-form">Passport details of applicant</h2>
 
     <div class="form-group">
-        <LabelRequired :title="'Passport number'" />
+        <div class="flex">
+            <LabelRequired :title="'Passport number'" />
+            <CircleHelp class="icon-question" @click="isOpenModalPassportNumber = true" />
+        </div>
 
         <p>
             Enter the
@@ -39,7 +53,10 @@ const { formData } = storeToRefs(etaApplicationStore);
     </div>
 
     <div class="form-group">
-        <LabelRequired :title="'Surname(s) / last name(s)'" />
+        <div class="flex">
+            <LabelRequired :title="'Surname(s) / last name(s)'" />
+            <CircleHelp class="icon-question" @click="isOpenModalSurnameOrLastname = true" />
+        </div>
 
         <p>Please enter exactly as shown on your passport or identity document.</p>
 
@@ -94,7 +111,7 @@ const { formData } = storeToRefs(etaApplicationStore);
         <LabelRequired :title="'Country/territory of birth'" />
 
         <div class="md:max-w-[60%]">
-            <Select v-model="formData.personalDetails.gender">
+            <Select v-model="formData.personalDetails.countryOfBirth">
                 <SelectTrigger>
                     <SelectValue placeholder="Please select" />
                 </SelectTrigger>
@@ -122,7 +139,10 @@ const { formData } = storeToRefs(etaApplicationStore);
     </div>
 
     <div class="form-group">
-        <LabelRequired :title="'Date of issue of passport'" />
+        <div class="flex">
+            <LabelRequired :title="'Date of issue of passport'" />
+            <CircleHelp class="icon-question" @click="isOpenModalDateOfIssueOfPassport = true" />
+        </div>
 
         <div class="md:max-w-[60%]">
             <DateSelector
@@ -134,7 +154,10 @@ const { formData } = storeToRefs(etaApplicationStore);
     </div>
 
     <div class="form-group">
-        <LabelRequired :title="'Date of expiry of passport'" />
+        <div class="flex">
+            <LabelRequired :title="'Date of expiry of passport'" />
+            <CircleHelp class="icon-question" @click="isOpenModalDateOfExpiryOfPassport = true" />
+        </div>
 
         <div class="md:max-w-[60%]">
             <DateSelector
@@ -145,4 +168,15 @@ const { formData } = storeToRefs(etaApplicationStore);
             />
         </div>
     </div>
+
+    <ModalPassportNumber :open="isOpenModalPassportNumber" @close="isOpenModalPassportNumber = false" />
+    <ModalSurnameOrLastname :open="isOpenModalSurnameOrLastname" @close="isOpenModalSurnameOrLastname = false" />
+    <ModalDateOfIssueOfPassport
+        :open="isOpenModalDateOfIssueOfPassport"
+        @close="isOpenModalDateOfIssueOfPassport = false"
+    />
+    <ModalDateOfExpiryOfPassport
+        :open="isOpenModalDateOfExpiryOfPassport"
+        @close="isOpenModalDateOfExpiryOfPassport = false"
+    />
 </template>

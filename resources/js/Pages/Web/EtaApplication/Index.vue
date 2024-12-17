@@ -1,10 +1,6 @@
 <script setup>
 import { Button } from '@/Components/ui/button';
 import { Form } from '@/Components/ui/form';
-// import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
-// import { Input } from '@/Components/ui/input';
-// import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
-// import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import {
     Stepper,
     StepperDescription,
@@ -16,7 +12,7 @@ import {
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { Head } from '@inertiajs/vue3';
-import { Check, Circle, Dot } from 'lucide-vue-next';
+import { ArrowLeft, ArrowRight, Check, Circle, Dot, Save } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { onBeforeUnmount } from 'vue';
 import StepApplicantType from './StepApplicantType.vue';
@@ -31,25 +27,26 @@ const handleSubmit = () => {
     etaApplicationStore.submitForm();
 };
 
+const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
+};
+
 onBeforeUnmount(() => {
     etaApplicationStore.$reset();
 });
 </script>
 
 <template>
-    <Head title="eService - Immigration, Refugees and Citizenship Canada" />
+    <Head title="eTA登録" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">eTA Application</h2>
-        </template>
-
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white p-4 shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                    <h1 class="mb-[40px] border-b-2 border-red-600 text-[32px] font-medium">
-                        Application for an Electronic Travel Authorization (eTA)
-                    </h1>
+                    <h1 class="mb-[40px] border-b-2 border-red-600 text-[32px] font-medium">eTA登録</h1>
 
                     <Form
                         v-slot="{ meta, values, validate }"
@@ -74,7 +71,7 @@ onBeforeUnmount(() => {
                                     }
                                 "
                             >
-                                <div class="flex-start mb-5 flex w-full gap-2">
+                                <div class="flex-start mb-5 hidden w-full gap-2">
                                     <StepperItem
                                         v-for="step in steps"
                                         :key="step.step"
@@ -130,42 +127,39 @@ onBeforeUnmount(() => {
                                 <StepPassportInfo v-if="stepIndex === 3" />
 
                                 <div class="mt-4 flex items-center justify-between">
-                                    <Button :disabled="isPrevDisabled" variant="outline" size="sm" @click="prevStep()">
-                                        Back
-                                    </Button>
+                                    <div>
+                                        <Button
+                                            v-if="stepIndex > 1"
+                                            :disabled="isPrevDisabled"
+                                            variant="outline"
+                                            size="lg"
+                                            @click="(prevStep(), scrollToTop())"
+                                        >
+                                            <ArrowLeft />
+                                            <span>Back</span>
+                                        </Button>
+                                    </div>
+
                                     <div class="flex items-center gap-3">
                                         <Button
                                             v-if="stepIndex !== 3"
                                             :type="meta.valid ? 'button' : 'submit'"
                                             :disabled="isNextDisabled"
-                                            size="sm"
-                                            @click="meta.valid && nextStep()"
+                                            size="lg"
+                                            @click="(meta.valid && nextStep(), scrollToTop())"
                                         >
-                                            Next
+                                            <span>次へ</span>
+                                            <ArrowRight />
                                         </Button>
-                                        <Button v-if="stepIndex === 3" size="sm" type="submit"> Submit </Button>
+                                        <Button v-if="stepIndex === 3" size="lg" type="submit">
+                                            <Save />
+                                            <span>Submit</span>
+                                        </Button>
                                     </div>
                                 </div>
                             </form>
                         </Stepper>
                     </Form>
-
-                    <!-- <h1 class="mb-[20px] border-b-2 border-red-600 text-[32px] font-medium">
-                        Application for an Electronic Travel Authorization (eTA)
-                    </h1> -->
-
-                    <!-- <form method="POST" @submit.prevent="handleSubmit">
-                        <StepApplicantType v-if="stepIndex === 1" />
-
-                        <StepRepresentativeDetails v-if="stepIndex === 2" />
-
-                        <StepPassportInfo v-if="stepIndex === 3" />
-
-                        <Button class="float-right mt-3">
-                            <span>Next</span>
-                            <ArrowRight />
-                        </Button>
-                    </form> -->
                 </div>
             </div>
         </div>

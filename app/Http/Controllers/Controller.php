@@ -11,7 +11,7 @@ abstract class Controller
         $status = ! is_null($customStatus) ? $customStatus : ($failed ? 422 : 200);
 
         return response()->json([
-            'messages' => empty($message) ? null : $message,
+            'message' => empty($message) ? null : $message,
             'data' => $data,
         ], $status);
     }

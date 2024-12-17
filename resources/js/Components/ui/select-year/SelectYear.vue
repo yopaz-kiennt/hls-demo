@@ -28,7 +28,7 @@ const model = defineModel();
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem v-for="yearOption in years" :key="yearOption" :value="`'${yearOption}'`">
+                        <SelectItem v-for="yearOption in years" :key="yearOption" :value="yearOption">
                             {{ yearOption }}
                         </SelectItem>
                     </SelectGroup>

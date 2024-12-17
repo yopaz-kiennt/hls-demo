@@ -1,9 +1,23 @@
 <script setup>
-const ModalTravelDocument = defineAsyncComponent(() => import('@/Components/Modals/ModalTravelDocument.vue'));
+const ModalTravelDocument = defineAsyncComponent(
+    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalTravelDocument.vue')
+);
+const ModalSelectCodeOnPassport = defineAsyncComponent(
+    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalSelectCodeOnPassport.vue')
+);
+const ModalNationalOnPassport = defineAsyncComponent(
+    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalNationalOnPassport.vue')
+);
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { CircleHelp } from 'lucide-vue-next';
+import { storeToRefs } from 'pinia';
 import { defineAsyncComponent, ref } from 'vue';
+
+const etaApplicationStore = useEtaApplicationStore();
+
+const { formData } = storeToRefs(etaApplicationStore);
 
 const travelDocuments = ref([
     {
@@ -45,6 +59,8 @@ const travelDocuments = ref([
 ]);
 
 const isOpenModalTravelDocument = ref(false);
+const isOpenModalSelectCodeOnPassport = ref(false);
+const isOpenModalNationalOnPassport = ref(false);
 </script>
 
 <template>
@@ -93,7 +109,7 @@ const isOpenModalTravelDocument = ref(false);
         </div>
 
         <div class="md:max-w-[60%]">
-            <Select>
+            <Select v-model="formData.prerequisite.travelDocumentType">
                 <SelectTrigger>
                     <SelectValue placeholder="Please select" />
                 </SelectTrigger>
@@ -109,56 +125,63 @@ const isOpenModalTravelDocument = ref(false);
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="flex">
-            <LabelRequired :title="'Select the code that matches the one on your passport.'" />
-            <CircleHelp class="icon-question" />
+    <template v-if="formData.prerequisite.travelDocumentType">
+        <div class="form-group">
+            <div class="flex">
+                <LabelRequired :title="'Select the code that matches the one on your passport.'" />
+                <CircleHelp class="icon-question" @click="isOpenModalSelectCodeOnPassport = true" />
+            </div>
+
+            <p>
+                Find this code on your passport information page - see the field named "Code", "Issuing country",
+                "Authority" or "Country code".
+            </p>
+
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.prerequisite.countryOfCitizenship">
+                    <SelectTrigger>
+                        <SelectValue placeholder="Please select" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="ja">JPN (Japan)</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
         </div>
 
-        <p>
-            Find this code on your passport information page - see the field named "Code", "Issuing country",
-            "Authority" or "Country code".
-        </p>
+        <div v-if="formData.prerequisite.countryOfCitizenship" class="form-group">
+            <div class="flex">
+                <LabelRequired :title="'What is the nationality noted on this passport?'" />
+                <CircleHelp class="icon-question" @click="isOpenModalNationalOnPassport = true" />
+            </div>
 
-        <div class="md:max-w-[60%]">
-            <Select>
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+            <p>See "Nationality" on your passport information page</p>
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="ja">JPN (Japan)</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.prerequisite.passportNotedNationality">
+                    <SelectTrigger>
+                        <SelectValue placeholder="Please select" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="ja">Japan</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
         </div>
-    </div>
-
-    <div class="form-group">
-        <div class="flex">
-            <LabelRequired :title="'What is the nationality noted on this passport?'" />
-            <CircleHelp class="icon-question" />
-        </div>
-
-        <p>See "Nationality" on your passport information page</p>
-
-        <div class="md:max-w-[60%]">
-            <Select>
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
-
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="ja">Japan</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+    </template>
 
     <ModalTravelDocument :open="isOpenModalTravelDocument" @close="isOpenModalTravelDocument = false" />
+    <ModalSelectCodeOnPassport
+        :open="isOpenModalSelectCodeOnPassport"
+        @close="isOpenModalSelectCodeOnPassport = false"
+    />
+    <ModalNationalOnPassport :open="isOpenModalNationalOnPassport" @close="isOpenModalNationalOnPassport = false" />
 </template>
 
 <style scoped lang="scss">

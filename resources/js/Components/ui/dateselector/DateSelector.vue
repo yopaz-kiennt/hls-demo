@@ -36,7 +36,7 @@ const day = defineModel('day');
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem v-for="yearOption in years" :key="yearOption" :value="`'${yearOption}'`">
+                        <SelectItem v-for="yearOption in years" :key="yearOption" :value="yearOption">
                             {{ yearOption }}
                         </SelectItem>
                     </SelectGroup>
@@ -52,7 +52,7 @@ const day = defineModel('day');
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem v-for="monthOption in months" :key="monthOption" :value="`'${monthOption}'`">
+                        <SelectItem v-for="monthOption in months" :key="monthOption" :value="monthOption">
                             {{ monthOption }}
                         </SelectItem>
                     </SelectGroup>
@@ -68,7 +68,7 @@ const day = defineModel('day');
 
                 <SelectContent>
                     <SelectGroup>
-                        <SelectItem v-for="dayOption in days" :key="dayOption" :value="`'${dayOption}'`">
+                        <SelectItem v-for="dayOption in days" :key="dayOption" :value="dayOption">
                             {{ dayOption }}
                         </SelectItem>
                     </SelectGroup>

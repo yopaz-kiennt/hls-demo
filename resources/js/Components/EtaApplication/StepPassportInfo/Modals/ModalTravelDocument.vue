@@ -1,7 +1,6 @@
 <script setup>
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
 import { ScrollArea } from '@/Components/ui/scroll-area';
-import DialogDescription from '../ui/dialog/DialogDescription.vue';
 
 const props = defineProps({
     isOpen: {
@@ -19,7 +18,7 @@ defineEmits(['close']);
             class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)_auto] p-0 sm:max-w-[625px]"
             @close="$emit('close')"
         >
-            <DialogHeader class="p-6 pb-0">
+            <DialogHeader>
                 <DialogTitle class="text-[20px]">
                     Help - What travel document do you plan to use to travel to Canada?
                 </DialogTitle>

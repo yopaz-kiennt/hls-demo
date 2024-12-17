@@ -5,7 +5,7 @@ import { SelectItem, SelectItemIndicator, SelectItemText, useForwardProps } from
 import { computed } from 'vue';
 
 const props = defineProps({
-    value: { type: String, required: true },
+    value: { type: [String, Number], required: true },
     disabled: { type: Boolean, required: false },
     textValue: { type: String, required: false },
     asChild: { type: Boolean, required: false },

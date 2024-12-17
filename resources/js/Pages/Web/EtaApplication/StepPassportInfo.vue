@@ -1,4 +1,5 @@
 <script setup>
+import FormBackgroundQuestion from '@/Components/EtaApplication/StepPassportInfo/FormBackgroundQuestion.vue';
 import FormContentComplete from '@/Components/EtaApplication/StepPassportInfo/FormContentComplete.vue';
 import FormPassportDetailsOfApplicant from '@/Components/EtaApplication/StepPassportInfo/FormPassportDetailsOfApplicant.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
@@ -24,31 +25,38 @@ const FormPrivacyNotice = defineAsyncComponent(
 );
 
 const etaApplicationStore = useEtaApplicationStore();
-const { checkAgeOfPersonalDetails } = storeToRefs(etaApplicationStore);
+const { checkAgeOfPersonalDetails, formData } = storeToRefs(etaApplicationStore);
 </script>
 
 <template>
     <!-- Complete the application form -->
     <FormContentComplete />
 
-    <!-- Passport details of applicant -->
-    <FormPassportDetailsOfApplicant />
+    <template
+        v-if="formData.prerequisite.passportNotedNationality && formData.prerequisite.passportNotedNationality == 'ja'"
+    >
+        <!-- Passport details of applicant -->
+        <FormPassportDetailsOfApplicant />
 
-    <!-- Personal details of applicant -->
-    <FormPersonalDetailsOfApplicant />
+        <!-- Personal details of applicant -->
+        <FormPersonalDetailsOfApplicant />
 
-    <!-- Employment information -->
-    <FormEmploymentInformation v-if="checkAgeOfPersonalDetails >= 18" />
+        <!-- Employment information -->
+        <FormEmploymentInformation v-if="checkAgeOfPersonalDetails > 18" />
 
-    <!-- Contact information -->
-    <FormContactInformation />
+        <!-- Contact information -->
+        <FormContactInformation />
 
-    <!-- Residential address -->
-    <FormResidentialAddress />
+        <!-- Residential address -->
+        <FormResidentialAddress />
 
-    <!-- Travel information -->
-    <FormTravelInformation />
+        <!-- Travel information -->
+        <FormTravelInformation />
 
-    <!-- Privacy notice -->
-    <FormPrivacyNotice />
+        <!-- Background Questions -->
+        <FormBackgroundQuestion />
+
+        <!-- Privacy notice -->
+        <FormPrivacyNotice />
+    </template>
 </template>

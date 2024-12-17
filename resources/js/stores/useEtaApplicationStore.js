@@ -1,6 +1,7 @@
-import axios, { AxiosError, HttpStatusCode } from 'axios';
+import { AxiosError, HttpStatusCode } from 'axios';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import * as yup from 'yup';
+import { useNotificationStore } from './useNotificationStore';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
@@ -40,11 +41,15 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 faxNumber: '',
                 emailAddress: '',
                 postalCodeZip: '',
-                declareContactAndInformationIsTruthy: '',
-                understandAndAccept: '',
+                declareContactAndInformationIsTruthy: false,
+                understandAndAccept: false,
             },
             // Step 03
-            travelDocumentType: '',
+            prerequisite: {
+                travelDocumentType: '',
+                countryOfCitizenship: '',
+                passportNotedNationality: '',
+            },
             personalDetails: {
                 passportNumber: '',
                 passportNumberReEnter: '',
@@ -69,6 +74,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 uciReEnter: '',
             },
             employmentDetails: {
+                // checkAgeOfPersonalDetails (birthday) > 18
                 occupation: '',
                 title: '',
                 companyEmployerSchoolFacilityName: '',
@@ -97,6 +103,18 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 travelDateTimeMinute: '',
                 travelDateTimeTimezone: '',
             },
+            backgroundQuestions: {
+                // checkAgeOfPersonalDetails (birthday) > 18
+                refusedVisaOrPermitOrDeniedEntryToCanada: '1',
+                refusedVisaOrPermitOrDeniedEntryToCanadaDetails: '',
+                committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere: '1',
+                committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails: '',
+                inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis: '1',
+                isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker: '1',
+                haveYouEverBeenDiagnosedWithTuberculosis: '1',
+                doYouHaveOneOfTheseConditions: '1',
+                haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails: '',
+            },
             consentAndDeclaration: {
                 inAggreance: false,
                 fullName: '',
@@ -109,7 +127,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         formSchema() {
             const schemas = [
                 yup.object({
-                    isRepresentative: yup.string().required('This field is required.'),
+                    isRepresentative: yup.string().required('この項目は必ず選択してください'),
                     isApplyingOnBehalfOfMinorChild: yup.string().when('isRepresentative', {
                         is: (value) => value == '0',
                         then: () => yup.string().required('This field is required.'),
@@ -123,9 +141,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             return schemas;
         },
         checkAgeOfPersonalDetails(state) {
-            const dobYear = parseInt(state.formData.personalDetails.dobYear.replace(/'/g, ''), 10);
-            const dobMonth = parseInt(state.formData.personalDetails.dobMonth.replace(/'/g, ''), 10);
-            const dobDay = parseInt(state.formData.personalDetails.dobDay.replace(/'/g, ''), 10);
+            const dobYear = state.formData.personalDetails.dobYear;
+            const dobMonth = state.formData.personalDetails.dobMonth;
+            const dobDay = state.formData.personalDetails.dobDay;
 
             if (!dobYear || !dobMonth || !dobDay) return 0;
 
@@ -141,10 +159,16 @@ export const useEtaApplicationStore = defineStore('eta_application', {
     },
     actions: {
         async submitForm() {
+            const notificationStore = useNotificationStore();
+
             try {
                 this.loading = true;
+                const { data } = await axios.post(this.$route('eta_application.register'), this.formData);
 
-                await axios.post(this.$route('eta_application.register'), this.formData);
+                notificationStore.triggerNotify({
+                    type: 'success',
+                    message: data.message,
+                });
             } catch (error) {
                 if (error instanceof AxiosError) {
                     if (error.response && error.response.status === HttpStatusCode.UnprocessableEntity) {

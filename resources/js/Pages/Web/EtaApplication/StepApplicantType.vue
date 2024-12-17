@@ -6,7 +6,9 @@ import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { CircleHelp } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { defineAsyncComponent, ref } from 'vue';
-const ModalHelpApplyForSomeone = defineAsyncComponent(() => import('@/Components/Modals/ModalHelpApplyForSomeone.vue'));
+const ModalHelpApplyForSomeone = defineAsyncComponent(
+    () => import('@/Components/EtaApplication/StepApplicantType/Modals/ModalHelpApplyForSomeone.vue')
+);
 
 const etaApplicationStore = useEtaApplicationStore();
 
@@ -19,7 +21,8 @@ const isOpenModalHelpApplyForSomeone = ref(false);
     <FormField v-slot="{ componentField, errors }" name="isRepresentative">
         <FormItem class="form-group">
             <div class="flex">
-                <LabelRequired :title="'Are you applying on behalf of someone?'" />
+                <LabelRequired :title="'この申請は誰かの代わりに行うものですか？'" />
+                <!-- Are you applying on behalf of someone? -->
                 <CircleHelp class="icon-question" @click="isOpenModalHelpApplyForSomeone = true" />
             </div>
 
@@ -27,14 +30,14 @@ const isOpenModalHelpApplyForSomeone = ref(false);
                 <Select v-model="formData.isRepresentative" v-bind="componentField">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
-                            <SelectValue placeholder="Please select" />
+                            <SelectValue placeholder="選択してください" />
                         </SelectTrigger>
                     </FormControl>
 
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="0">Yes</SelectItem>
-                            <SelectItem value="1">No</SelectItem>
+                            <SelectItem value="0">はい<!-- Yes --></SelectItem>
+                            <SelectItem value="1">いいえ</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -50,23 +53,21 @@ const isOpenModalHelpApplyForSomeone = ref(false);
         name="isApplyingOnBehalfOfMinorChild"
     >
         <FormItem class="form-group">
-            <div class="flex">
-                <LabelRequired :title="'Are you applying on behalf of a minor child? '" />
-                <CircleHelp class="icon-question" />
-            </div>
+            <LabelRequired :title="'この申請は未成年者の代わりに行うものですか? '" />
+            <!-- Are you applying on behalf of a minor child? -->
 
             <div class="md:max-w-[60%]">
                 <Select v-model="formData.isApplyingOnBehalfOfMinorChild" v-bind="componentField">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
-                            <SelectValue placeholder="Please select" />
+                            <SelectValue placeholder="選択してください" />
                         </SelectTrigger>
                     </FormControl>
 
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="0">Yes</SelectItem>
-                            <SelectItem value="1">No</SelectItem>
+                            <SelectItem value="0">はい</SelectItem>
+                            <SelectItem value="1">いいえ</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -75,48 +76,6 @@ const isOpenModalHelpApplyForSomeone = ref(false);
             <FormMessage />
         </FormItem>
     </FormField>
-
-    <!-- <div class="form-group">
-        <LabelRequired :title="'Are you applying on behalf of a minor child?'" />
-
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.isRepresentative">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
-
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="0">Yes</SelectItem>
-                        <SelectItem value="1">No</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-
-            <InputError :message="errors.isRepresentative && errors.isRepresentative[0]" />
-        </div>
-    </div>
-
-    <div v-if="formData.isRepresentative && formData.isRepresentative == '0'" class="form-group">
-        <LabelRequired :title="'Are you applying on behalf of a minor child? '" />
-
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.isApplyingOnBehalfOfMinorChild">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
-
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="0">Yes</SelectItem>
-                        <SelectItem value="1">No</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-
-            <InputError :message="errors.isApplyingOnBehalfOfMinorChild && errors.isApplyingOnBehalfOfMinorChild[0]" />
-        </div>
-    </div> -->
 
     <ModalHelpApplyForSomeone :open="isOpenModalHelpApplyForSomeone" @close="isOpenModalHelpApplyForSomeone = false" />
 </template>

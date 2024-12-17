@@ -17,6 +17,6 @@ defineProps({
     <Label class="mb-[5px] text-[16px]" :class="classes">
         <span class="required font-medium">*</span>
         <span>{{ title }}</span>
-        <span class="required ml-1 text-[16px] font-medium">(required)</span>
+        <span class="required ml-1 text-[16px] font-medium">(必須)</span>
     </Label>
 </template>
