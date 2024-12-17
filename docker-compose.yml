@@ -56,9 +56,7 @@ services:
         restart: unless-stopped
 
     rabbitmq:
-        build:
-            context: ./docker/rabbitmq
-            dockerfile: Dockerfile
+        image: rabbitmq:4.0.4-management-alpine
         container_name: eta_rabbitmq
         ports:
             - 5672:5672
@@ -68,6 +66,7 @@ services:
         environment:
             RABBITMQ_DEFAULT_USER: 'admin'
             RABBITMQ_DEFAULT_PASS: '123456'
+            RABBITMQ_DEFAULT_VHOST: 'eta_vhost'
         volumes:
             - ./docker/data/rabbitmq:/var/lib/rabbitmq/
             - ./docker/rabbitmq/log:/var/log/rabbitmq

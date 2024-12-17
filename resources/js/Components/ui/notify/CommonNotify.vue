@@ -2,7 +2,10 @@
 import { usePage } from '@inertiajs/vue3';
 import { computed, onMounted, ref, watch } from 'vue';
 
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import Notify from './Notify.vue';
+
+const notificationStore = useNotificationStore();
 
 const page = usePage();
 const notify = computed(() => {
@@ -16,6 +19,19 @@ const type = ref(null);
 watch(notify, () => {
     handleNotify();
 });
+
+watch(
+    () => notificationStore.showNotify,
+    (newValue) => {
+        if (newValue) {
+            message.value = notificationStore.message;
+            type.value = notificationStore.type;
+            showNotify.value = true;
+
+            setTimeout(() => notificationStore.resetNotify(), 5000);
+        }
+    }
+);
 
 onMounted(() => {
     handleNotify();

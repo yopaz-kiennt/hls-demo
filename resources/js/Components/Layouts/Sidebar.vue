@@ -1,4 +1,5 @@
 <script setup>
+import { ScrollArea } from '@/Components/ui/scroll-area';
 import { Link } from '@inertiajs/vue3';
 import {
     Bell,
@@ -110,9 +111,7 @@ const toggleMenu = (index) => {
 };
 
 const isChildActive = (children) => {
-    return children.some(
-        (child) => child.routeName && route().current(child.routeName),
-    );
+    return children.some((child) => child.routeName && route().current(child.routeName));
 };
 
 const handleClickOutside = (event) => {
@@ -149,9 +148,7 @@ onUnmounted(() => {
                 'show-menu': isMobileMenuOpen,
             }"
         >
-            <div
-                class="absolute inset-y-0 -right-1 w-2 transition-colors hover:bg-gray-200"
-            ></div>
+            <div class="absolute inset-y-0 -right-1 w-2 transition-colors hover:bg-gray-200"></div>
 
             <div class="flex items-center justify-between border-b p-4">
                 <div class="flex items-center gap-3">
@@ -167,34 +164,23 @@ onUnmounted(() => {
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 overflow-y-auto">
+            <ScrollArea class="flex-1 overflow-y-auto">
                 <div class="p-2">
-                    <p
-                        class="px-3 py-2 text-xs font-semibold uppercase text-gray-500"
-                    >
-                        Platform
-                    </p>
+                    <p class="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Platform</p>
                     <div class="space-y-1">
                         <div v-for="(item, index) in menuItems" :key="index">
                             <component
                                 :is="item.children ? 'a' : Link"
                                 class="flex w-full cursor-pointer items-center justify-between rounded-lg px-3 py-2 transition-colors hover:bg-gray-100"
                                 :class="{
-                                    active:
-                                        item.routeName &&
-                                        route().current(item.routeName),
+                                    active: item.routeName && route().current(item.routeName),
                                 }"
                                 :title="item.title"
-                                :href="
-                                    item.routeName ? route(item.routeName) : '#'
-                                "
+                                :href="item.routeName ? route(item.routeName) : '#'"
                                 @click="toggleMenu(index)"
                             >
                                 <div class="flex items-center gap-3">
-                                    <component
-                                        :is="item.icon"
-                                        class="h-5 w-5 text-gray-500"
-                                    />
+                                    <component :is="item.icon" class="h-5 w-5 text-gray-500" />
                                     <span class="text-sm">
                                         {{ item.title }}
                                     </span>
@@ -213,28 +199,15 @@ onUnmounted(() => {
                                 leave-from-class="opacity-100 translate-y-0"
                                 leave-to-class="opacity-0 -translate-y-2"
                             >
-                                <div
-                                    v-show="item.isOpen"
-                                    class="ul-parent relative overflow-hidden"
-                                >
+                                <div v-show="item.isOpen" class="ul-parent relative overflow-hidden">
                                     <div class="ml-9 mt-1 space-y-1">
                                         <Link
-                                            v-for="(
-                                                child, childIndex
-                                            ) in item.children"
+                                            v-for="(child, childIndex) in item.children"
                                             :key="childIndex"
-                                            :href="
-                                                child.routeName
-                                                    ? route(child.routeName)
-                                                    : '#'
-                                            "
+                                            :href="child.routeName ? route(child.routeName) : '#'"
                                             class="block rounded-lg px-2 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100"
                                             :class="{
-                                                active:
-                                                    child.routeName &&
-                                                    route().current(
-                                                        child.routeName,
-                                                    ),
+                                                active: child.routeName && route().current(child.routeName),
                                             }"
                                         >
                                             {{ child.title }}
@@ -245,18 +218,13 @@ onUnmounted(() => {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </ScrollArea>
 
             <!-- User Profile -->
             <div class="mt-auto border-t">
                 <div ref="profileRef" class="p-4">
-                    <button
-                        class="flex w-full items-center gap-3"
-                        @click="isProfileOpen = !isProfileOpen"
-                    >
-                        <div
-                            class="flex h-8 w-8 items-center justify-center rounded bg-gray-100"
-                        >
+                    <button class="flex w-full items-center gap-3" @click="isProfileOpen = !isProfileOpen">
+                        <div class="flex h-8 w-8 items-center justify-center rounded bg-gray-100">
                             <span class="text-xs font-medium"> CN </span>
                         </div>
                         <div class="flex-1 text-left">

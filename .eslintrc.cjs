@@ -7,6 +7,7 @@ module.exports = {
         'plugin:vue/vue3-essential',
         'eslint:recommended',
         '@vue/eslint-config-prettier',
+        'plugin:prettier/recommended',
     ],
     parserOptions: {
         ecmaVersion: 'latest',
@@ -32,7 +33,7 @@ module.exports = {
             'error',
             {
                 ignoreWhenEmpty: true,
-                ignores: ['pre', 'form'],
+                ignores: ['pre', 'form', 'a'],
                 allowEmptyLines: false,
             },
         ],

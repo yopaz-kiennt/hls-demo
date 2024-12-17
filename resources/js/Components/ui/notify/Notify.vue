@@ -82,13 +82,7 @@ const icon = computed(() => {
 </script>
 
 <template>
-    <div
-        v-if="showNotify"
-        class="notify"
-        :class="type"
-        @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
-    >
+    <div v-if="showNotify" class="notify" :class="type" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
         <div class="content">
             <div v-if="icon" class="icon">
                 <component :is="icon" class="w-[22px]" />
@@ -101,10 +95,7 @@ const icon = computed(() => {
             </button>
         </div>
 
-        <div
-            :class="`progress-bar ${type}`"
-            :style="{ width: progress + '%', opacity: 0.6 }"
-        ></div>
+        <div :class="`progress-bar ${type}`" :style="{ width: progress + '%', opacity: 0.6 }"></div>
     </div>
 </template>
 

@@ -75,6 +75,7 @@ return [
         'rabbitmq' => [
             'driver' => 'rabbitmq',
             'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'queue_name' => env('RABBITMQ_QUEUE_NAME', 'record_saved'),
             'after_commit' => true,
             'hosts' => [
                 [
