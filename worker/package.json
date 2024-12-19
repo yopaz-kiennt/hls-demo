@@ -13,6 +13,8 @@
   "dependencies": {
     "amqplib": "^0.10.5",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
+    "mysql2": "^3.11.5",
     "puppeteer": "^23.10.3"
   },
   "devDependencies": {

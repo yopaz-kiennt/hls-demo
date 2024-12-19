@@ -2,9 +2,33 @@ const puppeteer = require("puppeteer");
 const amqp = require("amqplib/callback_api");
 const dayjs = require("dayjs");
 const fs = require("fs");
+const mysql = require("mysql2");
+require("dotenv").config();
+
+let dbConnection;
+connectToDB();
+function connectToDB() {
+  dbConnection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_DATABASE,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+  });
+}
+
+async function updateToDB(jobId, data) {
+  try {
+    const sql =
+      "UPDATE applications SET screenshots = ?, worker_log = ? WHERE `id` = ? LIMIT 1";
+    const values = [data.screenshots, data.workerLog, jobId];
+    const [result, fields] = await dbConnection.execute(sql, values);
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 listenFromQueue();
-
 function listenFromQueue() {
   amqp.connect("amqp://localhost", function (error0, connection) {
     if (error0) {
@@ -41,9 +65,13 @@ function listenFromQueue() {
 }
 
 async function apply(msg) {
+  let res = "error";
+  let workerLog = null;
   let browser;
+  let jobId;
+
   try {
-    const jobId = await getJobId(msg);
+    jobId = getJobId(msg);
 
     browser = await initBrowser();
     const page = await initPage(browser);
@@ -53,22 +81,52 @@ async function apply(msg) {
     await step3(page, jobId);
 
     // TODO: payment
-  } catch (err) {
-    console.log(err.stack);
 
+    res = "success";
+  } catch (err) {
+    console.error(err.stack);
+
+    workerLog = err.stack;
+    res = "error";
+  } finally {
     if (browser) {
       browser.close();
     }
-    return "error";
+
+    if (jobId) {
+      const screenshots = getScreenshotPaths(jobId);
+      updateToDB(jobId, {
+        screenshots: screenshots,
+        workerLog: workerLog,
+      });
+    }
   }
 
-  if (browser) {
-    browser.close();
-  }
-  return "success";
+  return res;
 }
 
-async function getJobId(msg) {
+function getScreenshotPaths(jobId) {
+  let res = null;
+
+  const imgPrefix =
+    "/public/screenshot/" + dayjs().format("YYYY-MM-DD") + `/${jobId}`;
+  const folderPath = `..${imgPrefix}`;
+
+  let fileNames;
+  try {
+    fileNames = fs.readdirSync(folderPath);
+  } catch (err) {
+    console.error(err);
+  }
+
+  if (fileNames && fileNames.length) {
+    res = fileNames.map((fileName) => `${imgPrefix}/${fileName}`);
+  }
+
+  return res;
+}
+
+function getJobId(msg) {
   return JSON.parse(msg).id;
 }
 
