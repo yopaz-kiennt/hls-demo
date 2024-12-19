@@ -1,83 +1,123 @@
 <script setup>
+import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import LabelNoRequired from '@/Components/ui/label/LabelNoRequired.vue';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
+import { usePage } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
 
 const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
+
+const { messages, lang } = usePage().props;
 </script>
 
 <template>
-    <h2 class="leading-form">Personal details of applicant</h2>
+    <h2 class="leading-form">{{ messages.personal_details_of_applicant }}</h2>
+    <!-- Personal details of applicant -->
 
-    <h3 class="text-[18px] font-medium">Additional nationalities</h3>
+    <!-- <h3 class="text-[18px] font-medium">Additional nationalities</h3> -->
 
-    <div class="form-group">
-        <p>Indicate which countries/territories you are a citizen of.</p>
+    <FormField v-slot="{ componentField, errors }" name="additionalCitizenship">
+        <FormItem class="form-group">
+            <LabelNoRequired :title="messages.indicate_countries_of_citizenship" />
+            <!-- Indicate which countries/territories you are a citizen of. -->
 
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.personalDetails.additionalCitizenship">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.personalDetails.additionalCitizenship" v-bind="componentField">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <SelectTrigger>
+                            <SelectValue :placeholder="messages.please_select" />
+                        </SelectTrigger>
+                    </FormControl>
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="ja">Japan</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="105">Japan</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
 
-    <div class="form-group">
-        <LabelRequired :title="'Marital status'" />
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.personalDetails.maritalStatus">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.maritalStatus">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.marital_status" />
+            <!-- Marital status -->
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="0">Married</SelectItem>
-                        <SelectItem value="1">Legally Separated</SelectItem>
-                        <SelectItem value="2">Divorced</SelectItem>
-                        <SelectItem value="3">Annulled Marriage</SelectItem>
-                        <SelectItem value="4">Widowed</SelectItem>
-                        <SelectItem value="5">Common-Law</SelectItem>
-                        <SelectItem value="6">Never Married/Single</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.personalDetails.maritalStatus" v-bind="componentField">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <SelectTrigger>
+                            <SelectValue :placeholder="messages.please_select" />
+                        </SelectTrigger>
+                    </FormControl>
 
-    <div class="form-group">
-        <LabelRequired
-            :title="'Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada?'"
-        />
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="0">
+                                {{ lang === 'en' ? 'Married' : '既婚' }}
+                            </SelectItem>
+                            <SelectItem value="1">
+                                {{ lang === 'en' ? 'Legally Separated' : '法的別居' }}
+                            </SelectItem>
+                            <SelectItem value="2">
+                                {{ lang === 'en' ? 'Divorced' : '離婚' }}
+                            </SelectItem>
+                            <SelectItem value="3">
+                                {{ lang === 'en' ? 'Annulled Marriage' : '婚姻取消' }}
+                            </SelectItem>
+                            <SelectItem value="4">
+                                {{ lang === 'en' ? 'Widowed' : '寡婦・寡夫' }}
+                            </SelectItem>
+                            <SelectItem value="5">
+                                {{ lang === 'en' ? 'Common-Law' : '事実婚' }}
+                            </SelectItem>
+                            <SelectItem value="6">
+                                {{ lang === 'en' ? 'Never Married/Singl' : '独身／未婚' }}
+                            </SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
 
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.personalDetails.hasPreviouslyAppliedToCanada">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="0">Yes</SelectItem>
-                        <SelectItem value="1">No</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.hasPreviouslyAppliedToCanada">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.visa_eta_permit_applied_obtained" />
+            <!-- Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada? -->
+
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.personalDetails.hasPreviouslyAppliedToCanada" v-bind="componentField">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <SelectTrigger>
+                            <SelectValue :placeholder="messages.please_select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value="0">{{ messages.yes }}</SelectItem>
+                                <SelectItem value="1">{{ messages.no }}</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
     <template
         v-if="
@@ -85,24 +125,44 @@ const { formData } = storeToRefs(etaApplicationStore);
             formData.personalDetails.hasPreviouslyAppliedToCanada == '0'
         "
     >
-        <div class="form-group">
-            <LabelNoRequired
-                :title="'Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (optional)'"
-            />
+        <FormField v-slot="{ componentField, errors }" name="personalDetails.uci">
+            <FormItem class="form-group">
+                <LabelNoRequired :title="messages.uci_previous_visa_eta_permit_number" />
+                <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (optional) -->
 
-            <div class="md:max-w-[60%]">
-                <Input v-model="formData.personalDetails.uci" type="text" />
-            </div>
-        </div>
+                <div class="md:max-w-[60%]">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <Input
+                            v-model="formData.personalDetails.uci"
+                            v-bind="componentField"
+                            type="text"
+                            maxlength="20"
+                        />
+                    </FormControl>
+                </div>
 
-        <div class="form-group">
-            <LabelNoRequired
-                :title="'Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (re-enter)'"
-            />
+                <FormMessage />
+            </FormItem>
+        </FormField>
 
-            <div class="md:max-w-[60%]">
-                <Input v-model="formData.personalDetails.uciReEnter" type="text" />
-            </div>
-        </div>
+        <FormField v-slot="{ componentField, errors }" name="personalDetails.uciReEnter">
+            <FormItem class="form-group">
+                <LabelNoRequired :title="messages.uci_previous_visa_eta_permit_number_reenter" />
+                <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (re-enter) -->
+
+                <div class="md:max-w-[60%]">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <Input
+                            v-model="formData.personalDetails.uciReEnter"
+                            v-bind="componentField"
+                            type="text"
+                            maxlength="20"
+                        />
+                    </FormControl>
+                </div>
+
+                <FormMessage />
+            </FormItem>
+        </FormField>
     </template>
 </template>

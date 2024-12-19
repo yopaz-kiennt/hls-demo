@@ -25,6 +25,10 @@ defineProps({
         type: String,
         default: '',
     },
+    boxClasses: {
+        type: String,
+        default: '',
+    },
 });
 
 const model = defineModel({
@@ -34,7 +38,7 @@ const model = defineModel({
 </script>
 
 <template>
-    <div class="flex items-center space-x-2">
+    <div class="flex items-center space-x-2" :class="boxClasses">
         <Checkbox :id="id" v-model:checked="model" :value="value" :class="inputClasses" />
         <label :for="id" class="cursor-pointer" :class="labelClasses">{{ label }}</label>
     </div>

@@ -1,31 +1,23 @@
 <script setup>
-import FormBackgroundQuestion from '@/Components/EtaApplication/StepPassportInfo/FormBackgroundQuestion.vue';
+import FormContactInformation from '@/Components/EtaApplication/StepPassportInfo/FormContactInformation.vue';
 import FormContentComplete from '@/Components/EtaApplication/StepPassportInfo/FormContentComplete.vue';
 import FormPassportDetailsOfApplicant from '@/Components/EtaApplication/StepPassportInfo/FormPassportDetailsOfApplicant.vue';
+import FormPersonalDetailsOfApplicant from '@/Components/EtaApplication/StepPassportInfo/FormPersonalDetailsOfApplicant.vue';
+import FormPrivacyNotice from '@/Components/EtaApplication/StepPassportInfo/FormPrivacyNotice.vue';
+import FormResidentialAddress from '@/Components/EtaApplication/StepPassportInfo/FormResidentialAddress.vue';
+import FormTravelInformation from '@/Components/EtaApplication/StepPassportInfo/FormTravelInformation.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { storeToRefs } from 'pinia';
 import { defineAsyncComponent } from 'vue';
-const FormPersonalDetailsOfApplicant = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/FormPersonalDetailsOfApplicant.vue')
-);
+
 const FormEmploymentInformation = defineAsyncComponent(
     () => import('@/Components/EtaApplication/StepPassportInfo/FormEmploymentInformation.vue')
 );
-const FormContactInformation = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/FormContactInformation.vue')
+const FormBackgroundQuestion = defineAsyncComponent(
+    () => import('@/Components/EtaApplication/StepPassportInfo/FormBackgroundQuestion.vue')
 );
-const FormResidentialAddress = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/FormResidentialAddress.vue')
-);
-const FormTravelInformation = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/FormTravelInformation.vue')
-);
-const FormPrivacyNotice = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/FormPrivacyNotice.vue')
-);
-
 const etaApplicationStore = useEtaApplicationStore();
-const { checkAgeOfPersonalDetails, formData } = storeToRefs(etaApplicationStore);
+const { checkAgeOfPersonalDetails, formData, minAgeRequired } = storeToRefs(etaApplicationStore);
 </script>
 
 <template>
@@ -33,7 +25,7 @@ const { checkAgeOfPersonalDetails, formData } = storeToRefs(etaApplicationStore)
     <FormContentComplete />
 
     <template
-        v-if="formData.prerequisite.passportNotedNationality && formData.prerequisite.passportNotedNationality == 'ja'"
+        v-if="formData.prerequisite.passportNotedNationality && formData.prerequisite.passportNotedNationality == 87"
     >
         <!-- Passport details of applicant -->
         <FormPassportDetailsOfApplicant />
@@ -42,7 +34,7 @@ const { checkAgeOfPersonalDetails, formData } = storeToRefs(etaApplicationStore)
         <FormPersonalDetailsOfApplicant />
 
         <!-- Employment information -->
-        <FormEmploymentInformation v-if="checkAgeOfPersonalDetails > 18" />
+        <FormEmploymentInformation v-if="checkAgeOfPersonalDetails > minAgeRequired" />
 
         <!-- Contact information -->
         <FormContactInformation />
@@ -54,7 +46,7 @@ const { checkAgeOfPersonalDetails, formData } = storeToRefs(etaApplicationStore)
         <FormTravelInformation />
 
         <!-- Background Questions -->
-        <FormBackgroundQuestion />
+        <FormBackgroundQuestion v-if="checkAgeOfPersonalDetails > minAgeRequired" />
 
         <!-- Privacy notice -->
         <FormPrivacyNotice />

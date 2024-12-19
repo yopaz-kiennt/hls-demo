@@ -1,3 +1,5 @@
+import { representativeRelationship } from '@/helper';
+import { router } from '@inertiajs/vue3';
 import { AxiosError, HttpStatusCode } from 'axios';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import * as yup from 'yup';
@@ -5,7 +7,8 @@ import { useNotificationStore } from './useNotificationStore';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
-        stepIndex: 1,
+        messages: {},
+        currentStep: 0,
         steps: [
             {
                 step: 1,
@@ -83,7 +86,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 fromDateYear: '',
             },
             contactDetails: {
-                languageOfPreference: '',
+                languageOfPreference: '0', // en: English
                 emailAddress: '',
                 emailAddressReEnter: '',
                 aptUnit: '',
@@ -101,18 +104,18 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 travelDateDay: '',
                 travelDateTimeHour: '',
                 travelDateTimeMinute: '',
-                travelDateTimeTimezone: '',
+                travelDateTimeTimezone: '79', // Japan Time
             },
             backgroundQuestions: {
                 // checkAgeOfPersonalDetails (birthday) > 18
-                refusedVisaOrPermitOrDeniedEntryToCanada: '1',
+                refusedVisaOrPermitOrDeniedEntryToCanada: '',
                 refusedVisaOrPermitOrDeniedEntryToCanadaDetails: '',
-                committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere: '1',
+                committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere: '',
                 committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails: '',
-                inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis: '1',
-                isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker: '1',
+                inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis: '',
+                isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker: '',
                 haveYouEverBeenDiagnosedWithTuberculosis: '1',
-                doYouHaveOneOfTheseConditions: '1',
+                doYouHaveOneOfTheseConditions: '',
                 haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails: '',
             },
             consentAndDeclaration: {
@@ -124,18 +127,345 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         errors: {},
     }),
     getters: {
-        formSchema() {
+        fieldNames() {
+            return {
+                isRepresentative: this.messages.are_you_applying_for_someone,
+                isApplyingOnBehalfOfMinorChild: this.messages.are_you_applying_on_behalf_of_minor,
+            };
+        },
+        formSchema(state) {
             const schemas = [
+                // Step 01
                 yup.object({
-                    isRepresentative: yup.string().required('この項目は必ず選択してください'),
+                    isRepresentative: yup.string().required(this.messages.this_item_must_be_selected),
                     isApplyingOnBehalfOfMinorChild: yup.string().when('isRepresentative', {
-                        is: (value) => value == '0',
-                        then: () => yup.string().required('This field is required.'),
+                        is: (value) => {
+                            return value == '0';
+                        },
+                        then: () => yup.string().required(this.messages.this_item_must_be_selected),
                     }),
                 }),
+
+                // Step 02
                 yup.object().shape({
-                    representativeRelationship: yup.string().required('This field is required.'),
-                    representativeCompensated: yup.string().required('This field is required.'),
+                    representative: yup.object().shape({
+                        representativeRelationship: yup.string().required(this.messages.this_item_must_be_selected),
+                        representativeCompensated: yup.string().required(this.messages.this_item_must_be_selected),
+                        membershipIdNumber: yup.string().when('representativeRelationship', {
+                            is: (value) => {
+                                return [
+                                    representativeRelationship.memberOfCollege,
+                                    representativeRelationship.memberOfCanadian,
+                                    representativeRelationship.memberOfChampre,
+                                ].includes(value);
+                            },
+                            then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                        }),
+                        province: yup.string().when('representativeRelationship', {
+                            // 107 (maxlength 50)
+                            is: (value) => {
+                                return [
+                                    representativeRelationship.memberOfCollege,
+                                    representativeRelationship.memberOfCanadian,
+                                ].includes(value);
+                            },
+                            then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                        }),
+                        lastName: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 108 (maxlength 50, regex)
+                        firstName: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 109 (maxlength 50, regex)
+                        organizationName: yup.string().when('representativeRelationship', {
+                            // 110 (maxlength 75)
+                            is: (value) => {
+                                return [
+                                    representativeRelationship.memberOfNonGovernmental,
+                                    representativeRelationship.memberOfCollege,
+                                    representativeRelationship.memberOfCanadian,
+                                    representativeRelationship.memberOfChampre,
+                                    representativeRelationship.travelAgent,
+                                ].includes(value);
+                            },
+                            then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                        }),
+
+                        mailingAddress: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 112 (maxlength 30)
+                        postalCodeZip: yup.string().when('representativeRelationship', {
+                            // 112 (maxlength 30)
+                            is: (value) => {
+                                return [
+                                    representativeRelationship.memberOfCollege,
+                                    representativeRelationship.memberOfCanadian,
+                                ].includes(value);
+                            },
+                            then: () =>
+                                yup
+                                    .string()
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .matches(/^[0-9]+$/, 'Must be numeric'),
+                        }),
+                        phoneNumber: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 113 (maxlength 20, regex)
+                        // faxNumber: yup.string(), // 114 (maxlength 20, regex)
+                        emailAddress: yup.string().email(this.messages.email_valid), // 115
+                        declareContactAndInformationIsTruthy: yup // 116
+                            .boolean()
+                            .oneOf([true], this.messages.this_item_must_be_selected)
+                            .required(this.messages.this_item_must_be_selected),
+                        understandAndAccept: yup
+                            .boolean()
+                            .oneOf([true], this.messages.this_item_must_be_selected)
+                            .required(this.messages.this_item_must_be_selected),
+                    }),
+                }),
+
+                // Step 03
+                yup.object().shape({
+                    prerequisite: yup.object().shape({
+                        travelDocumentType: yup.string().required(this.messages.this_item_must_be_selected), // 148 (regex)
+                        countryOfCitizenship: yup.string().when('travelDocumentType', {
+                            is: (value) => value >= 0,
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                        }),
+                        passportNotedNationality: yup.string().when('countryOfCitizenship', {
+                            is: (value) => {
+                                return value == '97';
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                        }),
+                    }),
+                    // =============================== Passport details of applicant ===============================
+                    personalDetails: yup.object().shape({
+                        passportNumber: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 246 (maxlength 12)
+                        passportNumberReEnter: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 247 (maxlength 12, regex)
+                        lastNameOfPassport: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 248 (maxlength 50, regex)
+                        firstNameOfPassport: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 249 (maxlength 50, regex)
+                        gender: yup.string().required(this.messages.this_item_must_be_selected),
+                        countryOfBirth: yup.string().required(this.messages.this_item_must_be_selected),
+                        // Date of birth
+                        dobYear: yup.number().required(this.messages.this_item_must_be_selected),
+                        dobMonth: yup.number().required(this.messages.this_item_must_be_selected),
+                        dobDay: yup.number().required(this.messages.this_item_must_be_selected),
+                        cityTownOfBirth: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // (maxlength 50)
+                        // Date of issue of passport
+                        issueDateYear: yup.number().required(this.messages.this_item_must_be_selected),
+                        issueDateMonth: yup.number().required(this.messages.this_item_must_be_selected),
+                        issueDateDay: yup.number().required(this.messages.this_item_must_be_selected),
+                        // Date of expiry of passport
+                        expiryDateYear: yup.number().required(this.messages.this_item_must_be_selected),
+                        expiryDateMonth: yup.number().required(this.messages.this_item_must_be_selected),
+                        expiryDateDay: yup.number().required(this.messages.this_item_must_be_selected),
+                        // ===============================
+
+                        // =============================== Personal details of applicant ===============================
+                        maritalStatus: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 284
+                        hasPreviouslyAppliedToCanada: yup // 285
+                            .string()
+                            .required(this.messages.please_be_sure_to_enter_this_item),
+                        uci: yup.string(),
+                        uciReEnter: yup.string().oneOf([yup.ref('uci')], '値が一致する必要があります'),
+                    }),
+                    // ===============================
+
+                    // =============================== Employment information ===============================
+                    employmentDetails: yup.object().shape({
+                        occupation: yup.string().when([], {
+                            // 327
+                            is: () => {
+                                return state.checkAgeOfPersonalDetails > state.minAgeRequired;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        title: yup.string().when('occupation', {
+                            // 361
+                            is: (value) => {
+                                return value && value != 10;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        companyEmployerSchoolFacilityName: yup.string().when('occupation', {
+                            // 362
+                            is: (value) => {
+                                return value && value != 10;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        countryOfEmployment: yup.string().when('occupation', {
+                            is: (value) => {
+                                return value && value != 10;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        cityOfEmployment: yup.string().when('occupation', {
+                            is: (value) => {
+                                return value && value != 10;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        fromDateYear: yup.string().when('occupation', {
+                            is: (value) => {
+                                return value && value != 10;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                    }),
+                    // ===============================
+
+                    // =============================== Contact information ===============================
+                    contactDetails: yup.object().shape({
+                        emailAddressOfContactDetails: yup // 388 (regex)
+                            .string()
+                            .required(this.messages.please_be_sure_to_enter_this_item)
+                            .email(this.messages.email_valid),
+                        emailAddressReEnterOfContactDetails: yup // 389 (regex)
+                            .string()
+                            .required(this.messages.please_be_sure_to_enter_this_item)
+                            .email(this.messages.email_valid)
+                            .oneOf([yup.ref('emailAddressOfContactDetails')], '値が一致する必要があります'),
+                        // =============================== Residential address ===============================
+                        streetNo: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                        streetAddress: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                        cityOfContactDetails: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                        countryOfContactDetails: yup.string().required(this.messages.this_item_must_be_selected),
+                    }),
+                    // ===============================
+
+                    // =============================== Travel information ===============================
+                    travelDetails: yup.object().shape({
+                        isTravelDateKnown: yup.string().required(this.messages.this_item_must_be_selected),
+                        // When do you plan to travel to Canada? // 465
+                        travelDateYear: yup.string().when('isTravelDateKnown', {
+                            is: (value) => {
+                                return value && value == 0;
+                            },
+                            then: () => yup.number().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.number().optional(),
+                        }),
+                        travelDateMonth: yup.string().when('isTravelDateKnown', {
+                            is: (value) => {
+                                return value && value == 0;
+                            },
+                            then: () => yup.number().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.number().optional(),
+                        }),
+                        travelDateDay: yup.string().when('isTravelDateKnown', {
+                            is: (value) => {
+                                return value && value == 0;
+                            },
+                            then: () => yup.number().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.number().optional(),
+                        }),
+
+                        // 467
+                        travelDateTimeHour: yup.string().when('isTravelDateKnown', {
+                            is: (value) => {
+                                return value && value == 0;
+                            },
+                            then: () => yup.number().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.number().optional(),
+                        }),
+                        travelDateTimeMinute: yup.string().when('isTravelDateKnown', {
+                            is: (value) => {
+                                return value && value == 0;
+                            },
+                            then: () => yup.number().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.number().optional(),
+                        }),
+                        travelDateTimeTimezone: yup
+                            .string()
+                            .default('79')
+                            .when('isTravelDateKnown', {
+                                is: (value) => {
+                                    return value && value == 0;
+                                },
+                                then: () =>
+                                    yup.string().default('79').required(this.messages.this_item_must_be_selected),
+                                otherwise: () => yup.string().optional(),
+                            }),
+                    }),
+                    // ===============================
+
+                    // =============================== Background questions ===============================
+                    backgroundQuestions: yup.object().shape({
+                        refusedVisaOrPermitOrDeniedEntryToCanada: yup.string().when([], {
+                            is: () => {
+                                return state.checkAgeOfPersonalDetails > state.minAgeRequired;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        refusedVisaOrPermitOrDeniedEntryToCanadaDetails: yup
+                            .string()
+                            .when('refusedVisaOrPermitOrDeniedEntryToCanada', {
+                                is: (value) => {
+                                    return value && value == 0;
+                                },
+                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                otherwise: () => yup.string().optional(),
+                            }),
+                        committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere: yup.string().when([], {
+                            is: () => {
+                                return state.checkAgeOfPersonalDetails > state.minAgeRequired;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails: yup
+                            .string()
+                            .when('committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere', {
+                                is: (value) => {
+                                    return value && value == 0;
+                                },
+                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                otherwise: () => yup.string().optional(),
+                            }),
+                        inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis: yup.string().when([], {
+                            is: () => {
+                                return state.checkAgeOfPersonalDetails > state.minAgeRequired;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                        isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker: yup
+                            .string()
+                            .when('inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis', {
+                                is: (value) => {
+                                    return value && value == 0;
+                                },
+                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                otherwise: () => yup.string().optional(),
+                            }),
+                        haveYouEverBeenDiagnosedWithTuberculosis: yup
+                            .string()
+                            .when('isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker', {
+                                is: (value) => {
+                                    return value && value == 0;
+                                },
+                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                otherwise: () => yup.string().optional(),
+                            }),
+                        doYouHaveOneOfTheseConditions: yup.string().when([], {
+                            is: () => {
+                                return state.checkAgeOfPersonalDetails > state.minAgeRequired;
+                            },
+                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().optional(),
+                        }),
+                    }),
+                    // ===============================
+
+                    // =============================== Privacy notice ===============================
+                    consentAndDeclaration: yup.object().shape({
+                        inAggreance: yup
+                            .boolean()
+                            .oneOf([true], this.messages.this_item_must_be_selected)
+                            .required(this.messages.this_item_must_be_selected),
+                        fullNameOfConsent: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                    }),
+                    // ===============================
                 }),
             ];
             return schemas;
@@ -156,8 +486,28 @@ export const useEtaApplicationStore = defineStore('eta_application', {
 
             return age;
         },
+        minAgeRequired() {
+            return 18;
+        },
     },
     actions: {
+        setMessages(messages) {
+            this.messages = messages;
+        },
+        nextStep() {
+            if (this.currentStep === 2) {
+                this.submitForm();
+
+                return;
+            }
+            this.currentStep++;
+        },
+        prevStep() {
+            if (this.currentStep <= 0) {
+                return;
+            }
+            this.currentStep--;
+        },
         async submitForm() {
             const notificationStore = useNotificationStore();
 
@@ -165,10 +515,20 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 this.loading = true;
                 const { data } = await axios.post(this.$route('eta_application.register'), this.formData);
 
-                notificationStore.triggerNotify({
-                    type: 'success',
-                    message: data.message,
-                });
+                setTimeout(() => {
+                    this.loading = false;
+                }, 300);
+
+                setTimeout(() => {
+                    notificationStore.triggerNotify({
+                        type: 'success',
+                        message: data.message,
+                    });
+                }, 400);
+
+                setTimeout(() => {
+                    router.visit(this.$route('eta_application.index'));
+                }, 6000);
             } catch (error) {
                 if (error instanceof AxiosError) {
                     if (error.response && error.response.status === HttpStatusCode.UnprocessableEntity) {
@@ -178,7 +538,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                     }
                 }
             } finally {
-                this.loading = false;
+                setTimeout(() => {
+                    this.loading = false;
+                }, 400);
             }
         },
     },

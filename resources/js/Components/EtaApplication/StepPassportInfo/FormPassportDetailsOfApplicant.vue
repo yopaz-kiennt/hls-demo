@@ -1,9 +1,11 @@
 <script setup>
 import DateSelector from '@/Components/ui/dateselector/DateSelector.vue';
+import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
+import { usePage } from '@inertiajs/vue3';
 import { CircleHelp } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { defineAsyncComponent, ref } from 'vue';
@@ -16,6 +18,8 @@ const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
 
+const { messages, lang } = usePage().props;
+
 const isOpenModalPassportNumber = ref(false);
 const isOpenModalSurnameOrLastname = ref(false);
 const isOpenModalDateOfIssueOfPassport = ref(false);
@@ -23,150 +27,237 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 </script>
 
 <template>
-    <h2 class="leading-form">Passport details of applicant</h2>
+    <h2 class="leading-form">{{ messages.passport_details_of_applicant }}</h2>
+    <!-- Passport details of applicant -->
+
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.passportNumber">
+        <FormItem class="form-group">
+            <div class="flex">
+                <LabelRequired :title="messages.passport_number" />
+                <!-- Passport number -->
+
+                <CircleHelp class="icon-question" @click="isOpenModalPassportNumber = true" />
+            </div>
+
+            <!-- <p>
+                Enter the
+                <a class="href-custom" href="javascript:void(0)">passport number</a>
+                exactly as it appears on the passport information page.
+            </p> -->
+
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.personalDetails.passportNumber"
+                        v-bind="componentField"
+                        type="text"
+                        maxlength="12"
+                    />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.passportNumberReEnter">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.passport_number_re_enter" />
+            <!-- Passport number (re-enter) -->
+
+            <!-- <p>You cannot copy and paste into this field.</p> -->
+
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.personalDetails.passportNumberReEnter"
+                        v-bind="componentField"
+                        type="text"
+                        maxlength="12"
+                    />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.lastNameOfPassport">
+        <FormItem class="form-group">
+            <div class="flex">
+                <LabelRequired :title="messages.surname_last_name" />
+                <!-- Surname(s) / last name(s) -->
+
+                <CircleHelp class="icon-question" @click="isOpenModalSurnameOrLastname = true" />
+            </div>
+
+            <!-- <p>Please enter exactly as shown on your passport or identity document.</p> -->
+
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.personalDetails.lastName"
+                        v-bind="componentField"
+                        type="text"
+                        maxlength="50"
+                    />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.firstNameOfPassport">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.given_first_name" />
+            <!-- Surname(s) / last name(s) -->
+
+            <!-- <p>Please enter exactly as shown on your passport or identity document.</p> -->
+
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.personalDetails.firstName"
+                        v-bind="componentField"
+                        type="text"
+                        maxlength="50"
+                    />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <div class="form-group">
+        <LabelRequired :title="messages.date_of_birth" />
+        <!-- Date of birth -->
+
+        <DateSelector
+            v-model:year="formData.personalDetails.dobYear"
+            v-model:month="formData.personalDetails.dobMonth"
+            v-model:day="formData.personalDetails.dobDay"
+            inputYear="personalDetails.dobYear"
+            inputMonth="personalDetails.dobMonth"
+            inputDay="personalDetails.dobDay"
+        />
+    </div>
+
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.gender">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.gender" />
+            <!-- Gender -->
+
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.personalDetails.gender" v-bind="componentField">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <SelectTrigger>
+                            <SelectValue :placeholder="messages.please_select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="0">
+                                {{ lang === 'en' ? 'Female' : '女性' }}
+                            </SelectItem>
+                            <SelectItem value="1">{{ lang === 'en' ? 'Male' : '男性' }}</SelectItem>
+                            <SelectItem value="2">{{ lang === 'en' ? 'Another gender' : 'その他の性別' }}</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.countryOfBirth">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.country_of_birth" />
+            <!-- Country/territory of birth -->
+
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.personalDetails.countryOfBirth" v-bind="componentField">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <SelectTrigger>
+                            <SelectValue :placeholder="messages.please_select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="107">Japan</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField, errors }" name="personalDetails.cityTownOfBirth">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.city_of_birth" />
+            <!-- City/town of birth -->
+
+            <!-- <p>
+                If there is no city/town/village on your passport, enter the name of the city/town/village where you
+                were born.
+            </p> -->
+
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.personalDetails.cityTownOfBirth"
+                        v-bind="componentField"
+                        type="text"
+                        maxlength="50"
+                    />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
     <div class="form-group">
         <div class="flex">
-            <LabelRequired :title="'Passport number'" />
-            <CircleHelp class="icon-question" @click="isOpenModalPassportNumber = true" />
-        </div>
+            <LabelRequired :title="messages.date_of_issue_of_passport" />
+            <!-- Date of issue of passport -->
 
-        <p>
-            Enter the
-            <a class="href-custom" href="javascript:void(0)">passport number</a>
-            exactly as it appears on the passport information page.
-        </p>
-
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.personalDetails.passportNumber" type="text" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <LabelRequired :title="'Passport number (re-enter)'" />
-
-        <p>You cannot copy and paste into this field.</p>
-
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.personalDetails.passportNumberReEnter" type="text" @paste.prevent @copy.prevent />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="flex">
-            <LabelRequired :title="'Surname(s) / last name(s)'" />
-            <CircleHelp class="icon-question" @click="isOpenModalSurnameOrLastname = true" />
-        </div>
-
-        <p>Please enter exactly as shown on your passport or identity document.</p>
-
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.personalDetails.lastName" type="text" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <LabelRequired :title="'Given name(s) / first name(s)'" />
-
-        <p>Please enter exactly as shown on your passport or identity document.</p>
-
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.personalDetails.firstName" type="text" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <LabelRequired :title="'Date of birth'" />
-
-        <div class="md:max-w-[60%]">
-            <DateSelector
-                v-model:year="formData.personalDetails.dobYear"
-                v-model:month="formData.personalDetails.dobMonth"
-                v-model:day="formData.personalDetails.dobDay"
-            />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <LabelRequired :title="'Gender'" />
-
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.personalDetails.gender">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
-
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="0">Female</SelectItem>
-                        <SelectItem value="1">Male</SelectItem>
-                        <SelectItem value="2">Another gender</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <LabelRequired :title="'Country/territory of birth'" />
-
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.personalDetails.countryOfBirth">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
-
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="ja">Japan</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <LabelRequired :title="'City/town of birth'" />
-
-        <p>
-            If there is no city/town/village on your passport, enter the name of the city/town/village where you were
-            born.
-        </p>
-
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.personalDetails.cityTownOfBirth" type="text" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="flex">
-            <LabelRequired :title="'Date of issue of passport'" />
             <CircleHelp class="icon-question" @click="isOpenModalDateOfIssueOfPassport = true" />
         </div>
 
-        <div class="md:max-w-[60%]">
-            <DateSelector
-                v-model:year="formData.personalDetails.issueDateYear"
-                v-model:month="formData.personalDetails.issueDateMonth"
-                v-model:day="formData.personalDetails.issueDateDay"
-            />
-        </div>
+        <DateSelector
+            v-model:year="formData.personalDetails.issueDateYear"
+            v-model:month="formData.personalDetails.issueDateMonth"
+            v-model:day="formData.personalDetails.issueDateDay"
+            inputYear="personalDetails.issueDateYear"
+            inputMonth="personalDetails.issueDateMonth"
+            inputDay="personalDetails.issueDateDay"
+        />
     </div>
 
     <div class="form-group">
         <div class="flex">
-            <LabelRequired :title="'Date of expiry of passport'" />
+            <LabelRequired :title="messages.date_of_expiry_of_passport" />
+            <!-- Date of expiry of passport -->
+
             <CircleHelp class="icon-question" @click="isOpenModalDateOfExpiryOfPassport = true" />
         </div>
 
-        <div class="md:max-w-[60%]">
-            <DateSelector
-                v-model:year="formData.personalDetails.expiryDateYear"
-                v-model:month="formData.personalDetails.expiryDateMonth"
-                v-model:day="formData.personalDetails.expiryDateDay"
-                :end-year="2066"
-            />
-        </div>
+        <DateSelector
+            v-model:year="formData.personalDetails.expiryDateYear"
+            v-model:month="formData.personalDetails.expiryDateMonth"
+            v-model:day="formData.personalDetails.expiryDateDay"
+            inputYear="personalDetails.expiryDateYear"
+            inputMonth="personalDetails.expiryDateMonth"
+            inputDay="personalDetails.expiryDateDay"
+            :end-year="2066"
+        />
     </div>
 
     <ModalPassportNumber :open="isOpenModalPassportNumber" @close="isOpenModalPassportNumber = false" />

@@ -39,6 +39,6 @@ class EtaApplicationController extends Controller
         $queueName = config('queue.connections.rabbitmq.queue_name');
         $rabbitmqService->sendMessage($queueName, $applicationCreated->id);
 
-        return $this->responseSuccess(null, 'Lưu thành công!');
+        return $this->responseSuccess(null, 'Đăng ký thành công!');
     }
 }
