@@ -1,54 +1,60 @@
 <script setup>
+import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
+import { usePage } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
 
 const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
+
+const { messages } = usePage().props;
 </script>
 
 <template>
-    <h2 class="leading-form">Contact information</h2>
+    <h2 class="leading-form">{{ messages.contact_information }}</h2>
+    <!-- Contact information -->
 
-    <div class="form-group">
-        <LabelRequired :title="'Preferred language to contact you'" />
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.emailAddressOfContactDetails">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.email_address" />
+            <!-- Email address -->
 
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.contactDetails.languageOfPreference">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.contactDetails.emailAddress"
+                        v-bind="componentField"
+                        type="email"
+                        maxlength="100"
+                    />
+                </FormControl>
+            </div>
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="fr">French</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-    <div class="form-group">
-        <LabelRequired :title="'Email address'" />
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.emailAddressReEnterOfContactDetails">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.email_address_re_enter" />
+            <!-- Email address (re-enter) -->
 
-        <p>Please enter a valid email address. It will be used to contact you about your application.</p>
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.contactDetails.emailAddressReEnter"
+                        v-bind="componentField"
+                        type="email"
+                        maxlength="100"
+                    />
+                    <!-- @paste.prevent @copy.prevent -->
+                </FormControl>
+            </div>
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.emailAddress" type="email" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <LabelRequired :title="'Email address (re-enter)'" />
-
-        <p>You cannot copy and paste into this field.</p>
-
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.emailAddressReEnter" type="email" @paste.prevent @copy.prevent />
-        </div>
-    </div>
+            <FormMessage />
+        </FormItem>
+    </FormField>
 </template>

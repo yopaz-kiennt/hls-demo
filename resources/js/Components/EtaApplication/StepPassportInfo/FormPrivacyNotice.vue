@@ -1,17 +1,22 @@
-<script setup lang="ts">
+<script setup>
 import FormInputCheckbox from '@/Components/ui/checkbox/FormInputCheckbox.vue';
+import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
+import { usePage } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
 
 const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
+
+const { messages } = usePage().props;
 </script>
 
 <template>
-    <h2 class="leading-form">Privacy notice</h2>
+    <h2 class="leading-form">{{ messages.privacy_notice }}</h2>
+    <!-- Privacy notice -->
 
     <p class="mb-4">
         Personal information provided on this form is collected and will be used, disclosed, and retained by
@@ -68,7 +73,7 @@ const { formData } = storeToRefs(etaApplicationStore);
     </p>
 
     <p class="mb-4">
-        <b>Consent and declaration</b> <br />
+        <b>{{ messages.consent_and_declaration }}</b> <br />
         <b>Declaration of applicant</b> <br />
         <span>I have read and understand the above.</span>
     </p>
@@ -91,26 +96,41 @@ const { formData } = storeToRefs(etaApplicationStore);
 
     <p>I agree that by typing my name and clicking sign, I am electronically signing my application.</p>
 
-    <div class="form-group">
-        <LabelRequired :title="'I Agree'" :classes="'text-[24px] font-normal'" />
+    <FormField v-slot="{ componentField }" name="consentAndDeclaration.inAggreance">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.i_agree" :classes="'text-[24px] font-normal'" />
 
-        <div class="md:max-w-[60%]">
-            <FormInputCheckbox
-                id="inAggreance"
-                v-model="formData.consentAndDeclaration.inAggreance"
-                value="1"
-                label="I agree"
-            />
-        </div>
-    </div>
+            <div class="md:max-w-[60%]">
+                <FormControl>
+                    <FormInputCheckbox
+                        id="inAggreance"
+                        v-model="formData.consentAndDeclaration.inAggreance"
+                        value="true"
+                        :label="messages.i_agree"
+                        v-bind="componentField"
+                    />
+                </FormControl>
+            </div>
 
-    <div class="form-group">
-        <LabelRequired :title="'Signature of applicant'" />
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-        <p>To sign, enter your name as it appears on your passport.</p>
+    <FormField v-slot="{ componentField, errors }" name="consentAndDeclaration.fullNameOfConsent">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.signature_of_applicant" />
+            <!-- Signature of applicant -->
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.consentAndDeclaration.fullName" type="text" />
-        </div>
-    </div>
+            <p>{{ messages.sign_instructions }}</p>
+            <!-- To sign, enter your name as it appears on your passport. -->
+
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input v-model="formData.consentAndDeclaration.fullName" type="text" v-bind="componentField" />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
 </template>

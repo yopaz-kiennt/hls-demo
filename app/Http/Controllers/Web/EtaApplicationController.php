@@ -41,6 +41,6 @@ class EtaApplicationController extends Controller
             "id" => $applicationCreated->id,
         ]));
 
-        return $this->responseSuccess(null, 'Lưu thành công!');
+        return $this->responseSuccess(null, 'Đăng ký thành công!');
     }
 }

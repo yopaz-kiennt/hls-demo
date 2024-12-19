@@ -1,84 +1,163 @@
 <script setup>
+import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import LabelNoRequired from '@/Components/ui/label/LabelNoRequired.vue';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
+import { usePage } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
 
 const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
+
+const { messages } = usePage().props;
 </script>
 
 <template>
-    <h2 class="leading-form">Residential address</h2>
+    <h2 class="leading-form">{{ messages.residential_address }}</h2>
+    <!-- Residential address -->
 
-    <p>Enter your permanent home address. Do not enter an address where you live temporarily.</p>
+    <!-- <p>Enter your permanent home address. Do not enter an address where you live temporarily.</p> -->
 
-    <div class="form-group">
-        <LabelNoRequired :title="'Apartment/unit number (if applicable)'" />
+    <FormField v-slot="{ componentField }" name="aptUnit">
+        <FormItem class="form-group">
+            <LabelNoRequired :title="messages.apartment_unit_number" />
+            <!-- Apartment/unit number (if applicable) -->
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.aptUnit" type="text" />
-        </div>
-    </div>
+            <div class="md:max-w-[60%]">
+                <FormControl>
+                    <Input
+                        v-model="formData.contactDetails.aptUnit"
+                        type="text"
+                        v-bind="componentField"
+                        maxlength="10"
+                    />
+                </FormControl>
+            </div>
 
-    <div class="form-group">
-        <LabelRequired :title="'Street/civic number or house name'" />
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.streetNo" type="text" />
-        </div>
-    </div>
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.streetNo">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.street_civic_number_or_house_name" />
+            <!-- Street/civic number or house name -->
 
-    <div class="form-group">
-        <LabelRequired :title="'Street address/name'" />
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.contactDetails.streetNo"
+                        type="text"
+                        v-bind="componentField"
+                        maxlength="30"
+                    />
+                </FormControl>
+            </div>
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.streetAddress" type="text" />
-        </div>
-    </div>
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-    <div class="form-group">
-        <LabelNoRequired :title="'Street address/name line 2 (if applicable)'" />
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.streetAddress">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.street_address_or_name" />
+            <!-- Street address/name -->
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.streetAddressAlt" type="text" />
-        </div>
-    </div>
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input
+                        v-model="formData.contactDetails.streetAddress"
+                        type="text"
+                        v-bind="componentField"
+                        maxlength="100"
+                    />
+                </FormControl>
+            </div>
 
-    <div class="form-group">
-        <LabelRequired :title="'City/town'" />
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.city" type="text" />
-        </div>
-    </div>
+    <FormField v-slot="{ componentField }" name="streetAddressAlt">
+        <FormItem class="form-group">
+            <LabelNoRequired :title="messages.street_address_or_name_line_2" />
+            <!-- Street address/name line 2 (if applicable) -->
 
-    <div class="form-group">
-        <LabelRequired :title="'Country/territory'" />
+            <div class="md:max-w-[60%]">
+                <FormControl>
+                    <Input
+                        v-model="formData.contactDetails.streetAddressAlt"
+                        type="text"
+                        v-bind="componentField"
+                        maxlength="100"
+                    />
+                </FormControl>
+            </div>
 
-        <div class="md:max-w-[60%]">
-            <Select v-model="formData.personalDetails.country">
-                <SelectTrigger>
-                    <SelectValue placeholder="Please select" />
-                </SelectTrigger>
+            <FormMessage />
+        </FormItem>
+    </FormField>
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem value="ja">Japan</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
-    </div>
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.cityOfContactDetails">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.city_or_town" />
+            <!-- City/town -->
 
-    <div class="form-group">
-        <LabelNoRequired :title="'District/region'" />
+            <div class="md:max-w-[60%]">
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                    <Input v-model="formData.contactDetails.city" type="text" v-bind="componentField" maxlength="50" />
+                </FormControl>
+            </div>
 
-        <div class="md:max-w-[60%]">
-            <Input v-model="formData.contactDetails.district" type="text" />
-        </div>
-    </div>
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.countryOfContactDetails">
+        <FormItem class="form-group">
+            <LabelRequired :title="messages.country_or_territory" />
+            <!-- Country/territory -->
+
+            <div class="md:max-w-[60%]">
+                <Select v-model="formData.contactDetails.country" v-bind="componentField">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <SelectTrigger>
+                            <SelectValue :placeholder="messages.please_select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="105">Japan</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
+
+    <FormField v-slot="{ componentField }" name="district">
+        <FormItem class="form-group">
+            <LabelNoRequired :title="messages.district_or_region" />
+            <!-- District/region -->
+
+            <div class="md:max-w-[60%]">
+                <FormControl>
+                    <Input
+                        v-model="formData.contactDetails.district"
+                        type="text"
+                        v-bind="componentField"
+                        maxlength="50"
+                    />
+                </FormControl>
+            </div>
+
+            <FormMessage />
+        </FormItem>
+    </FormField>
 </template>

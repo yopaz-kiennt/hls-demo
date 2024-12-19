@@ -1,10 +1,15 @@
 <script setup>
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import { usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     endYear: {
         type: Number || null,
         default: null,
+    },
+    classes: {
+        type: String,
+        default: '',
     },
 });
 
@@ -16,24 +21,24 @@ if (props.endYear) {
 }
 
 const model = defineModel();
+
+const { messages } = usePage().props;
 </script>
 
 <template>
-    <div class="flex w-[100%] justify-between">
-        <div class="md:w-[32%]">
-            <Select v-model="model">
-                <SelectTrigger>
-                    <SelectValue placeholder="Select year" />
-                </SelectTrigger>
+    <div class="w-[100%]" :class="classes">
+        <Select v-model="model">
+            <SelectTrigger>
+                <SelectValue :placeholder="messages.select_year" />
+            </SelectTrigger>
 
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectItem v-for="yearOption in years" :key="yearOption" :value="yearOption">
-                            {{ yearOption }}
-                        </SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
-        </div>
+            <SelectContent>
+                <SelectGroup>
+                    <SelectItem v-for="yearOption in years" :key="yearOption" :value="yearOption">
+                        {{ yearOption }}
+                    </SelectItem>
+                </SelectGroup>
+            </SelectContent>
+        </Select>
     </div>
 </template>

@@ -16,11 +16,11 @@
 }
 
 .form-group {
-    @apply mt-4 grid w-full items-center gap-1.5;
+    @apply mt-6 grid w-full items-center gap-1.5;
 }
 
 .leading-form {
-    @apply mb-3 mt-5 text-[28px] font-medium;
+    @apply mb-1 mt-6 text-[28px] font-medium;
 }
 
 .icon-question {
@@ -29,4 +29,16 @@
 
 .input-invalid {
     @apply border-red-500;
+}
+
+.select-invalid button {
+    @apply border-red-500;
+}
+
+.items-unset {
+    align-items: unset !important;
+}
+
+.loading-overlay {
+    @apply fixed left-0 top-0 flex h-[100%] w-[100%] items-center justify-center bg-[#14101014];
 }

@@ -16,11 +16,11 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->boolean('is_representative');
-            $table->boolean('is_applying_for_minor');
+            $table->boolean('is_applying_for_minor')->nullable();
             $table->integer('representative_relationship');
             $table->integer('travel_document_type');
             $table->date('birthday');
-            $table->boolean('is_travel_date_known');
+            $table->boolean('is_travel_date_known')->nullable();
             $table->json('data');
             $table->enum('status', array_column(ApplicationStatus::cases(), 'value'))->default(ApplicationStatus::Pending->value);
             $table->timestamps();
