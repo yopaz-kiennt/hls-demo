@@ -32,7 +32,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             isApplyingOnBehalfOfMinorChild: '',
             // Step 02
             representative: {
-                representativeRelationship: '0',
+                representativeRelationship: '',
                 representativeCompensated: '',
                 membershipIdNumber: '',
                 province: '',
@@ -131,6 +131,85 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             return {
                 isRepresentative: this.messages.are_you_applying_for_someone,
                 isApplyingOnBehalfOfMinorChild: this.messages.are_you_applying_on_behalf_of_minor,
+                'representative.representativeRelationship': this.messages.i_am,
+                'representative.representativeCompensated': this.messages.are_you_being_paid_to_represent,
+                'representative.membershipIdNumber': this.messages.membership_id_number,
+                'representative.province': this.messages.which_province_or_territory,
+                'representative.lastName': this.messages.surname_last_name,
+                'representative.firstName': this.messages.given_first_name,
+                'representative.organizationName': this.messages.name_of_firm_organization,
+                'representative.mailingAddress': this.messages.mailing_address,
+                'representative.phoneNumber': this.messages.telephone_number,
+                'representative.faxNumber': this.messages.fax_number,
+                'representative.emailAddress': this.messages.email_address,
+                'representative.postalCodeZip': this.messages.postal_code,
+                'representative.declareContactAndInformationIsTruthy': this.messages.representative_declaration,
+                'representative.understandAndAccept': this.messages.representative_authorization,
+
+                'prerequisite.travelDocumentType': this.messages.travel_document_question,
+                'prerequisite.countryOfCitizenship': this.messages.passport_code_selection,
+                'prerequisite.passportNotedNationality': this.messages.passport_nationality,
+
+                'personalDetails.passportNumber': this.messages.passport_number,
+                'personalDetails.passportNumberReEnter': this.messages.passport_number_re_enter,
+                'personalDetails.lastName': this.messages.surname_last_name,
+                'personalDetails.firstName': this.messages.given_first_name,
+                'personalDetails.dobYear': this.messages.date_of_birth,
+                'personalDetails.dobMonth': this.messages.date_of_birth,
+                'personalDetails.dobDay': this.messages.date_of_birth,
+                'personalDetails.gender': this.messages.gender,
+                'personalDetails.countryOfBirth': this.messages.country_of_birth,
+                'personalDetails.cityTownOfBirth': this.messages.city_of_birth,
+                'personalDetails.issueDateYear': this.messages.date_of_issue_of_passport,
+                'personalDetails.issueDateMonth': this.messages.date_of_issue_of_passport,
+                'personalDetails.issueDateDay': this.messages.date_of_issue_of_passport,
+                'personalDetails.expiryDateYear': this.messages.date_of_expiry_of_passport,
+                'personalDetails.expiryDateMonth': this.messages.date_of_expiry_of_passport,
+                'personalDetails.expiryDateDay': this.messages.date_of_expiry_of_passport,
+                'personalDetails.maritalStatus': this.messages.marital_status,
+                'personalDetails.hasPreviouslyAppliedToCanada': this.messages.visa_eta_permit_applied_obtained,
+                'personalDetails.uciReEnter': this.messages.uci_previous_visa_eta_permit_number_reenter,
+
+                'employmentDetails.occupation': this.messages.occupation,
+                'employmentDetails.title': this.messages.job_title,
+                'employmentDetails.companyEmployerSchoolFacilityName': this.messages.name_of_employer_or_school,
+                'employmentDetails.country': this.messages.country_or_territory,
+                'employmentDetails.city': this.messages.city_or_town,
+                'employmentDetails.fromDateYear': this.messages.since_what_year,
+
+                'contactDetails.emailAddress': this.messages.email_address,
+                'contactDetails.emailAddressReEnter': this.messages.email_address_re_enter,
+                'contactDetails.aptUnit': this.messages.apartment_unit_number,
+                'contactDetails.streetNo': this.messages.street_civic_number_or_house_name,
+                'contactDetails.streetAddress': this.messages.street_address_or_name,
+                'contactDetails.city': this.messages.city_or_town,
+                'contactDetails.country': this.messages.country_or_territory,
+                'contactDetails.district': this.messages.district_or_region,
+
+                'travelDetails.isTravelDateKnown': this.messages.travel_date_question,
+                'travelDetails.travelDateYear': this.messages.travel_plan_question,
+                'travelDetails.travelDateMonth': this.messages.travel_plan_question,
+                'travelDetails.travelDateDay': this.messages.travel_plan_question,
+                'travelDetails.travelDateTimeHour': this.messages.flight_departure_time_question,
+                'travelDetails.travelDateTimeMinute': this.messages.flight_departure_time_question,
+                'travelDetails.travelDateTimeTimezone': this.messages.flight_departure_time_question,
+
+                'backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada':
+                    this.messages.visa_refused_or_denied_entry,
+                'backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails': this.messages.refusal_details,
+                'backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere':
+                    this.messages.criminal_offence,
+                'backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails':
+                    this.messages.arrest_charge_conviction_details,
+                'backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis':
+                    this.messages.tuberculosis_diagnosis_contact,
+                'backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker':
+                    this.messages.tuberculosis_contact_health_worker,
+                'backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis': this.messages.tuberculosis_diagnosed,
+                'backgroundQuestions.doYouHaveOneOfTheseConditions': this.messages.health_condition_check,
+
+                'consentAndDeclaration.doYouHaveOneOfTheseConditions': this.messages.i_agree,
+                'consentAndDeclaration.fullName': this.messages.signature_of_applicant,
             };
         },
         formSchema(state) {

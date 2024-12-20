@@ -23,7 +23,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'isRepresentative' => 'required',
-            'isApplyingOnBehalfOfMinorChild' => 'required_if:isRepresentative,=,yes',
+            'isApplyingOnBehalfOfMinorChild' => 'required_if:isRepresentative,=,0',
         ];
     }
 }

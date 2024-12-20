@@ -26,7 +26,11 @@ const { formData } = storeToRefs(etaApplicationStore);
             <LabelRequired :title="messages.i_am" />
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.representative.representativeRelationship" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="representative.representativeRelationship"
+                    v-model="formData.representative.representativeRelationship"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -101,9 +105,10 @@ const { formData } = storeToRefs(etaApplicationStore);
             <div class="md:max-w-[60%]">
                 <FormControl>
                     <Input
+                        v-bind="componentField"
+                        id="representative.faxNumber"
                         v-model="formData.representative.faxNumber"
                         type="text"
-                        v-bind="componentField"
                         maxlength="20"
                     />
                 </FormControl>
@@ -121,9 +126,10 @@ const { formData } = storeToRefs(etaApplicationStore);
             <div class="md:max-w-[60%]">
                 <FormControl>
                     <Input
+                        v-bind="componentField"
+                        id="representative.emailAddress"
                         v-model="formData.representative.emailAddress"
                         type="email"
-                        v-bind="componentField"
                         maxlength="100"
                     />
                 </FormControl>
@@ -140,7 +146,7 @@ const { formData } = storeToRefs(etaApplicationStore);
             <div class="md:max-w-[60%]">
                 <FormControl>
                     <FormInputCheckbox
-                        id="declareContactAndInformationIsTruthy"
+                        id="representative.declareContactAndInformationIsTruthy"
                         v-model="formData.representative.declareContactAndInformationIsTruthy"
                         value="true"
                         :label="messages.declaration_contact_info"
@@ -162,11 +168,11 @@ const { formData } = storeToRefs(etaApplicationStore);
             <div class="md:max-w-[100%]">
                 <FormControl>
                     <FormInputCheckbox
-                        id="understandAndAccept"
+                        v-bind="componentField"
+                        id="representative.understandAndAccept"
                         v-model="formData.representative.understandAndAccept"
                         value="true"
                         :label="messages.declaration_authorization"
-                        v-bind="componentField"
                         boxClasses="items-unset"
                         labelClasses="mt-[-5px]"
                     />

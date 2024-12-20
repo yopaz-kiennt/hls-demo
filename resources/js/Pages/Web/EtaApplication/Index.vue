@@ -34,6 +34,14 @@ const nextStep = () => {
 onBeforeUnmount(() => {
     etaApplicationStore.$reset();
 });
+
+const scrollToField = (field) => {
+    const targetElement = document.getElementById(field);
+    if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetElement.focus();
+    }
+};
 </script>
 
 <template>
@@ -45,16 +53,15 @@ onBeforeUnmount(() => {
                 <div class="overflow-hidden bg-white p-4 shadow-sm dark:bg-gray-800 sm:rounded-lg">
                     <h1 class="mb-[40px] border-b-2 border-red-600 text-[32px] font-medium">eTA登録</h1>
 
-                    <Form
-                        ref="formRef"
-                        v-slot="{ meta }"
-                        keep-values
-                        :validation-schema="formSchema[currentStep]"
-                        @submit="nextStep()"
-                    >
+                    <Form ref="formRef" keep-values :validation-schema="formSchema[currentStep]" @submit="nextStep()">
                         <!-- <div v-if="Object.keys(errors).length > 0">
                             <div v-for="(error, field) in errors" :key="field">
-                                <p>{{ fieldNames[field] || field }}: {{ error }}</p>
+                                <p>
+                                    <a :href="`#${field}`" class="href-custom" @click.prevent="scrollToField(field)">{{
+                                        fieldNames[field] || field
+                                    }}</a
+                                    >: {{ error }}
+                                </p>
                             </div>
                         </div> -->
 
@@ -77,22 +84,12 @@ onBeforeUnmount(() => {
                             </div>
 
                             <div class="flex items-center gap-3">
-                                <Button
-                                    v-if="currentStep !== 2"
-                                    type="submit"
-                                    size="lg"
-                                    @click="(meta.valid && nextStep, scrollToTop())"
-                                >
+                                <Button v-if="currentStep !== 2" type="submit" size="lg" @click="scrollToTop()">
                                     <span>{{ messages.next }}</span>
                                     <ArrowRight />
                                 </Button>
 
-                                <Button
-                                    v-if="currentStep === 2"
-                                    size="lg"
-                                    type="submit"
-                                    @click="meta.valid ? nextStep() : scrollToTop()"
-                                >
+                                <Button v-if="currentStep === 2" size="lg" type="submit">
                                     <span>{{ messages.proceed_to_payment }}</span>
                                     <ArrowRight />
                                 </Button>
