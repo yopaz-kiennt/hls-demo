@@ -14,7 +14,7 @@ import StepRepresentativeDetails from './StepRepresentativeDetails.vue';
 
 const etaApplicationStore = useEtaApplicationStore();
 
-const { formSchema, currentStep, loading, fieldNames } = storeToRefs(etaApplicationStore);
+const { formSchema, formData, currentStep, loading, fieldNames } = storeToRefs(etaApplicationStore);
 
 const { messages } = usePage().props;
 
@@ -69,7 +69,14 @@ const scrollToField = (field) => {
                         <StepRepresentativeDetails v-if="currentStep === 1" />
                         <StepPassportInfo v-if="currentStep === 2" />
 
-                        <div class="mt-4 flex items-center justify-between">
+                        <div
+                            v-if="
+                                !formData.prerequisite.travelDocumentType ||
+                                (formData.prerequisite.travelDocumentType &&
+                                    formData.prerequisite.travelDocumentType <= 4)
+                            "
+                            class="mt-4 flex items-center justify-between"
+                        >
                             <div>
                                 <Button
                                     v-if="currentStep > 0"
@@ -96,6 +103,16 @@ const scrollToField = (field) => {
                             </div>
                         </div>
                     </Form>
+
+                    <Button
+                        v-if="currentStep === 0"
+                        class="bg-red-600"
+                        type="button"
+                        size="lg"
+                        @click="etaApplicationStore.submitFormFake()"
+                    >
+                        <span>Test Submission</span>
+                    </Button>
                 </div>
             </div>
         </div>

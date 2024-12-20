@@ -9,6 +9,7 @@ const ModalNationalOnPassport = defineAsyncComponent(
     () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalNationalOnPassport.vue')
 );
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
+import IconWarning from '@/Components/ui/icons/IconWarning.vue';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
@@ -140,7 +141,7 @@ const isOpenModalNationalOnPassport = ref(false);
         </FormItem>
     </FormField>
 
-    <template v-if="formData.prerequisite.travelDocumentType">
+    <template v-if="formData.prerequisite.travelDocumentType && formData.prerequisite.travelDocumentType <= 4">
         <FormField v-slot="{ componentField, errors }" name="prerequisite.countryOfCitizenship">
             <FormItem class="form-group">
                 <div class="flex">
@@ -204,6 +205,24 @@ const isOpenModalNationalOnPassport = ref(false);
         </FormField>
     </template>
 
+    <div
+        v-if="formData.prerequisite.travelDocumentType && formData.prerequisite.travelDocumentType > 4"
+        class="alert alert-travel mb-3 flex"
+    >
+        <IconWarning class="mr-2" />
+
+        <p v-if="lang === 'en'">
+            Based on your answers, you cannot apply for an eTA. You may
+            <a href="https://www.cic.gc.ca/english/visit/visas.asp">need a visa</a> or
+            <a href="https://www.cbsa-asfc.gc.ca/travel-voyage/td-dv-eng.html"> other type of travel document</a> to
+            travel to Canada.
+        </p>
+
+        <p v-else>
+            ご回答に基づき、eTA（電子渡航認証）を申請することはできません。カナダへの渡航には、ビザまたは他の渡航書類が必要です。
+        </p>
+    </div>
+
     <ModalTravelDocument :open="isOpenModalTravelDocument" @close="isOpenModalTravelDocument = false" />
     <ModalSelectCodeOnPassport
         :open="isOpenModalSelectCodeOnPassport"
@@ -216,5 +235,12 @@ const isOpenModalNationalOnPassport = ref(false);
 a {
     color: #2929c5;
     text-decoration: underline;
+}
+
+.alert {
+    &.alert-travel {
+        margin-top: 35px;
+        padding: 17px 0;
+    }
 }
 </style>
