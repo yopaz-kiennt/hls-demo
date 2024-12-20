@@ -38,7 +38,7 @@ class EtaApplicationController extends Controller
         $rabbitmqService = new RabbitMQService;
         $queueName = config('queue.connections.rabbitmq.queue_name');
         $rabbitmqService->sendMessage($queueName, json_encode([
-            "id" => $applicationCreated->id,
+            'id' => $applicationCreated->id,
         ]));
 
         return $this->responseSuccess(null, 'Đăng ký thành công!');

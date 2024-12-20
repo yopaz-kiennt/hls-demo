@@ -251,7 +251,8 @@ const untreatedConditions = ref([
             name="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
         >
             <FormItem class="form-group">
-                <LabelRequired :title="'Have you ever been diagnosed with tuberculosis?'" />
+                <LabelRequired :title="messages.tuberculosis_diagnosed" />
+                <!-- Have you ever been diagnosed with tuberculosis? -->
 
                 <div class="md:max-w-[60%]">
                     <Select

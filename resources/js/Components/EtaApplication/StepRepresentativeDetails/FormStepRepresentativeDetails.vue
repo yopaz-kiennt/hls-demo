@@ -31,8 +31,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.membershipIdNumber"
                         v-bind="componentField"
+                        id="representative.membershipIdNumber"
+                        v-model="formData.representative.membershipIdNumber"
                         type="text"
                         maxlength="50"
                     />
@@ -57,8 +58,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.province"
                         v-bind="componentField"
+                        id="representative.province"
+                        v-model="formData.representative.province"
                         type="text"
                         maxlength="50"
                     />
@@ -77,8 +79,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.lastName"
                         v-bind="componentField"
+                        id="representative.lastName"
+                        v-model="formData.representative.lastName"
                         type="text"
                         maxlength="50"
                     />
@@ -97,8 +100,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.firstName"
                         v-bind="componentField"
+                        id="representative.firstName"
+                        v-model="formData.representative.firstName"
                         type="text"
                         maxlength="50"
                     />
@@ -127,8 +131,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.organizationName"
                         v-bind="componentField"
+                        id="representative.organizationName"
+                        v-model="formData.representative.organizationName"
                         type="text"
                         maxlength="75"
                     />
@@ -147,8 +152,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.mailingAddress"
                         v-bind="componentField"
+                        id="representative.mailingAddress"
+                        v-model="formData.representative.mailingAddress"
                         type="text"
                         maxlength="30"
                     />
@@ -174,8 +180,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.postalCodeZip"
                         v-bind="componentField"
+                        id="representative.postalCodeZip"
+                        v-model="formData.representative.postalCodeZip"
                         type="text"
                         maxlength="30"
                     />
@@ -194,8 +201,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.representative.phoneNumber"
                         v-bind="componentField"
+                        id="representative.phoneNumber"
+                        v-model="formData.representative.phoneNumber"
                         type="text"
                         maxlength="20"
                     />

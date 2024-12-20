@@ -99,4 +99,5 @@ return [
     'sign_instructions' => '署名するには、パスポートに記載されている名前をNhậpしてください。',
     'declaration_contact_info' => '上記に入力した連絡先および個人情報が真実であり、完全かつ正確であることを宣言します。',
     'declaration_authorization' => '申請者またはスポンサーの代理人として、カナダ移民・難民・市民権省（IRCC）およびカナダ国境サービス庁（CBSA）との業務を行うことを承諾し、承諾します。',
+    'tuberculosis_diagnosed' => '結核と診断されたことがありますか？',
 ];
