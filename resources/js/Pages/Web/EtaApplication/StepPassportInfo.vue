@@ -25,7 +25,11 @@ const { checkAgeOfPersonalDetails, formData, minAgeRequired } = storeToRefs(etaA
     <FormContentComplete />
 
     <template
-        v-if="formData.prerequisite.passportNotedNationality && formData.prerequisite.passportNotedNationality == 87"
+        v-if="
+            formData.prerequisite.passportNotedNationality &&
+            formData.prerequisite.passportNotedNationality == 87 &&
+            formData.prerequisite.travelDocumentType <= 4
+        "
     >
         <!-- Passport details of applicant -->
         <FormPassportDetailsOfApplicant />
