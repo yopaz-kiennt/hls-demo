@@ -70,7 +70,12 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 expiryDateYear: '',
                 expiryDateMonth: '',
                 expiryDateDay: '',
-                additionalCitizenship: '',
+                additionalCountriesOfCitizenship: [
+                    {
+                        value: 105,
+                        label: 'Japan',
+                    },
+                ],
                 maritalStatus: '',
                 hasPreviouslyAppliedToCanada: '',
                 uci: '',
@@ -114,7 +119,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails: '',
                 inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis: '',
                 isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker: '',
-                haveYouEverBeenDiagnosedWithTuberculosis: '1',
+                haveYouEverBeenDiagnosedWithTuberculosis: '',
                 doYouHaveOneOfTheseConditions: '',
                 haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails: '',
             },
@@ -123,6 +128,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 fullName: '',
             },
         },
+        citizenshipOptions: [],
         loading: false,
         errors: {},
         occupations: {},
@@ -578,6 +584,18 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         setOccupations(occupations) {
             this.occupations = occupations;
         },
+        addCountriesOfCitizen(item) {
+            this.formData.personalDetails.additionalCountriesOfCitizenship.push(item);
+        },
+        deleteCountryOfCitizen(value) {
+            const index = this.formData.personalDetails.additionalCountriesOfCitizenship.findIndex(
+                (item) => item.value === value
+            );
+
+            if (index !== -1) {
+                this.formData.personalDetails.additionalCountriesOfCitizenship.splice(index, 1);
+            }
+        },
         getJobTitles() {
             const occupationId = this.occupations[this.formData.employmentDetails.occupation].id;
             const selectedOccupation = this.occupations.find((occupation) => occupation.id === occupationId);
@@ -634,7 +652,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
 
                 setTimeout(() => {
                     router.visit(this.$route('eta_application.index'));
-                }, 6000);
+                }, 5100);
             } catch (error) {
                 if (error instanceof AxiosError) {
                     if (error.response && error.response.status === HttpStatusCode.UnprocessableEntity) {
@@ -762,7 +780,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
 
                 setTimeout(() => {
                     router.visit(this.$route('eta_application.index'));
-                }, 6000);
+                }, 5100);
             } catch (error) {
                 if (error instanceof AxiosError) {
                     if (error.response && error.response.status === HttpStatusCode.UnprocessableEntity) {

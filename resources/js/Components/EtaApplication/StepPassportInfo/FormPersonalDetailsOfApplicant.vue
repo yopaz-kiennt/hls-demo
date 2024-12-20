@@ -1,4 +1,5 @@
 <script setup>
+import AdditionalCountryOfCitizen from '@/Components/EtaApplication/StepPassportInfo/AdditionalCountryOfCitizen.vue';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import LabelNoRequired from '@/Components/ui/label/LabelNoRequired.vue';
@@ -21,30 +22,11 @@ const { messages, lang } = usePage().props;
 
     <!-- <h3 class="text-[18px] font-medium">Additional nationalities</h3> -->
 
-    <FormField v-slot="{ componentField, errors }" name="additionalCitizenship">
-        <FormItem class="form-group">
-            <LabelNoRequired :title="messages.indicate_countries_of_citizenship" />
-            <!-- Indicate which countries/territories you are a citizen of. -->
-
-            <div class="md:max-w-[60%]">
-                <Select v-model="formData.personalDetails.additionalCitizenship" v-bind="componentField">
-                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                        <SelectTrigger>
-                            <SelectValue :placeholder="messages.please_select" />
-                        </SelectTrigger>
-                    </FormControl>
-
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectItem value="105">Japan</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </div>
-
-            <FormMessage />
-        </FormItem>
-    </FormField>
+    <div>
+        <LabelNoRequired :title="messages.indicate_countries_of_citizenship" />
+        <!-- Indicate which countries/territories you are a citizen of. -->
+        <AdditionalCountryOfCitizen />
+    </div>
 
     <FormField v-slot="{ componentField, errors }" name="personalDetails.maritalStatus">
         <FormItem class="form-group">

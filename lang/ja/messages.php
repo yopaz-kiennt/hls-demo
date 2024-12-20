@@ -8,6 +8,7 @@ return [
     'no' => 'いいえ',
     'previous' => '前へ',
     'next' => '次へ',
+    'insert' => '行を挿入',
     'proceed_to_payment' => '支払いへ進む',
     'required' => '必須',
     'this_item_must_be_selected' => 'この項目は必ず選択してください',

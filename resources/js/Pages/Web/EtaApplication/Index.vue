@@ -62,7 +62,13 @@ const scrollToField = (field) => {
                 <div class="overflow-hidden bg-white p-4 shadow-sm dark:bg-gray-800 sm:rounded-lg">
                     <h1 class="mb-[40px] border-b-2 border-red-600 text-[32px] font-medium">eTA登録</h1>
 
-                    <Form ref="formRef" keep-values :validation-schema="formSchema[currentStep]" @submit="nextStep()">
+                    <Form
+                        ref="formRef"
+                        v-slot="{ meta }"
+                        keep-values
+                        :validation-schema="formSchema[currentStep]"
+                        @submit="nextStep()"
+                    >
                         <!-- <div v-if="Object.keys(errors).length > 0">
                             <div v-for="(error, field) in errors" :key="field">
                                 <p>
@@ -105,7 +111,12 @@ const scrollToField = (field) => {
                                     <ArrowRight />
                                 </Button>
 
-                                <Button v-if="currentStep === 2" size="lg" type="submit">
+                                <Button
+                                    v-if="currentStep === 2"
+                                    size="lg"
+                                    type="submit"
+                                    @click="!meta.valid ? scrollToTop() : null"
+                                >
                                     <span>{{ messages.proceed_to_payment }}</span>
                                     <ArrowRight />
                                 </Button>

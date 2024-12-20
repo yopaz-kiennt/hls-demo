@@ -2,12 +2,7 @@
 const ModalTravelDocument = defineAsyncComponent(
     () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalTravelDocument.vue')
 );
-const ModalSelectCodeOnPassport = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalSelectCodeOnPassport.vue')
-);
-const ModalNationalOnPassport = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalNationalOnPassport.vue')
-);
+import ModalSelectCodeOnPassport from '@/Components/EtaApplication/StepPassportInfo/Modals/ModalSelectCodeOnPassport.vue';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import IconWarning from '@/Components/ui/icons/IconWarning.vue';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
@@ -17,6 +12,9 @@ import { usePage } from '@inertiajs/vue3';
 import { CircleHelp } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { defineAsyncComponent, ref } from 'vue';
+const ModalNationalOnPassport = defineAsyncComponent(
+    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalNationalOnPassport.vue')
+);
 
 const etaApplicationStore = useEtaApplicationStore();
 

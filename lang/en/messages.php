@@ -8,6 +8,7 @@ return [
     'no' => 'No',
     'previous' => 'Previous',
     'next' => 'Next',
+    'insert' => 'Insert',
     'proceed_to_payment' => 'Proceed to Payment',
     'required' => 'Required',
     'this_item_must_be_selected' => 'This item must be selected',
