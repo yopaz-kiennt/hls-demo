@@ -20,6 +20,15 @@ const { messages } = usePage().props;
 
 etaApplicationStore.setMessages(messages);
 
+const props = defineProps({
+    occupations: {
+        type: Object,
+        default: () => {},
+    },
+});
+
+etaApplicationStore.setOccupations(props.occupations);
+
 const scrollToTop = () => {
     window.scrollTo({
         top: 0,

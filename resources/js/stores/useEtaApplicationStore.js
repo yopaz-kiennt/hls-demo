@@ -125,6 +125,8 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         },
         loading: false,
         errors: {},
+        occupations: {},
+        jobTitles: {},
     }),
     getters: {
         fieldNames() {
@@ -355,37 +357,37 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         }),
                         title: yup.string().when('occupation', {
                             // 361
-                            is: (value) => {
-                                return value && value != 10;
+                            is: () => {
+                                return state.jobTitles.length;
                             },
                             then: () => yup.string().required(this.messages.this_item_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         companyEmployerSchoolFacilityName: yup.string().when('occupation', {
                             // 362
-                            is: (value) => {
-                                return value && value != 10;
+                            is: () => {
+                                return state.jobTitles.length;
                             },
                             then: () => yup.string().required(this.messages.this_item_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         countryOfEmployment: yup.string().when('occupation', {
-                            is: (value) => {
-                                return value && value != 10;
+                            is: () => {
+                                return state.jobTitles.length;
                             },
                             then: () => yup.string().required(this.messages.this_item_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         cityOfEmployment: yup.string().when('occupation', {
-                            is: (value) => {
-                                return value && value != 10;
+                            is: () => {
+                                return state.jobTitles.length;
                             },
                             then: () => yup.string().required(this.messages.this_item_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         fromDateYear: yup.string().when('occupation', {
-                            is: (value) => {
-                                return value && value != 10;
+                            is: () => {
+                                return state.jobTitles.length;
                             },
                             then: () => yup.string().required(this.messages.this_item_must_be_selected),
                             otherwise: () => yup.string().optional(),
@@ -573,6 +575,19 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         setMessages(messages) {
             this.messages = messages;
         },
+        setOccupations(occupations) {
+            this.occupations = occupations;
+        },
+        getJobTitles() {
+            const occupationId = this.occupations[this.formData.employmentDetails.occupation].id;
+            const selectedOccupation = this.occupations.find((occupation) => occupation.id === occupationId);
+            if (selectedOccupation) {
+                this.jobTitles = selectedOccupation.job_titles;
+            } else {
+                this.jobTitles = [];
+            }
+        },
+
         nextStep() {
             if (this.formData.isRepresentative == 1 && this.currentStep == 0) {
                 // Are you applying on behalf of someone? ==> no
