@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('birthday');
             $table->boolean('is_travel_date_known')->nullable();
             $table->json('data');
-            $table->enum('status', array_column(ApplicationStatus::cases(), 'value'))->default(ApplicationStatus::Pending->value);
+            $table->enum('status', ['pending', 'active', 'inactive'])->default('pending');
             $table->timestamps();
         });
     }
