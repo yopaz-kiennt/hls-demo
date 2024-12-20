@@ -6,6 +6,7 @@ use App\ApplicationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EtaApplication\RegisterRequest;
 use App\Models\Application;
+use App\Models\Occupation;
 use App\Services\RabbitMQService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -14,7 +15,12 @@ class EtaApplicationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Web/EtaApplication/Index');
+
+        $occupations = Occupation::with('jobTitles')->get();
+
+        return Inertia::render('Web/EtaApplication/Index', [
+            'occupations' => $occupations
+        ]);
     }
 
     public function register(RegisterRequest $request)
