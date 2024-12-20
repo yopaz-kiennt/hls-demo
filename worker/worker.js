@@ -3,7 +3,12 @@ const amqp = require("amqplib/callback_api");
 const dayjs = require("dayjs");
 const fs = require("fs");
 const mysql = require("mysql2");
-require("dotenv").config();
+const path = require("path");
+const dotenv = require("dotenv");
+
+dotenv.config({
+  path: path.resolve(__dirname, "../.env"),
+});
 
 let dbConnection;
 connectToDB();
@@ -18,14 +23,10 @@ function connectToDB() {
 }
 
 async function updateToDB(jobId, data) {
-  try {
-    const sql =
-      "UPDATE applications SET screenshots = ?, worker_log = ? WHERE `id` = ? LIMIT 1";
-    const values = [data.screenshots, data.workerLog, jobId];
-    const [result, fields] = await dbConnection.execute(sql, values);
-  } catch (err) {
-    console.error(err);
-  }
+  const sql =
+    "UPDATE applications SET screenshots = ?, worker_log = ?, status = ? WHERE `id` = ? LIMIT 1";
+  const values = [data.screenshots, data.workerLog, data.status, jobId];
+  const [result, fields] = await dbConnection.execute(sql, values);
 }
 
 listenFromQueue();
@@ -40,7 +41,7 @@ function listenFromQueue() {
         throw error1;
       }
 
-      var queue = "application";
+      var queue = process.env.RABBITMQ_QUEUE_NAME;
 
       channel.assertQueue(queue, {
         durable: true,
@@ -66,39 +67,55 @@ function listenFromQueue() {
 
 async function apply(msg) {
   let res = "error";
-  let workerLog = null;
-  let browser;
   let jobId;
 
   try {
     jobId = getJobId(msg);
-
-    browser = await initBrowser();
-    const page = await initPage(browser);
-
-    await step1(page, jobId);
-    await step2(page, jobId);
-    await step3(page, jobId);
-
-    // TODO: payment
-
-    res = "success";
   } catch (err) {
     console.error(err.stack);
+  }
 
-    workerLog = err.stack;
-    res = "error";
-  } finally {
+  if (jobId) {
+    let workerLog = null;
+    let screenshots = null;
+    let browser;
+
+    try {
+      browser = await initBrowser();
+      const page = await initPage(browser);
+      await step1(page, jobId);
+      await step2(page, jobId);
+      await step3(page, jobId);
+      // TODO: payment
+
+      res = "success";
+    } catch (err) {
+      console.error(err.stack);
+
+      workerLog = err.stack;
+      res = "error";
+    }
+
     if (browser) {
       browser.close();
     }
 
-    if (jobId) {
-      const screenshots = getScreenshotPaths(jobId);
-      updateToDB(jobId, {
+    try {
+      screenshots = getScreenshotPaths(jobId);
+    } catch (err) {
+      console.error(err.stack);
+
+      workerLog = workerLog ?? err.stack;
+    }
+
+    try {
+      await updateToDB(jobId, {
         screenshots: screenshots,
         workerLog: workerLog,
+        status: res,
       });
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -108,16 +125,9 @@ async function apply(msg) {
 function getScreenshotPaths(jobId) {
   let res = null;
 
-  const imgPrefix =
-    "/public/screenshot/" + dayjs().format("YYYY-MM-DD") + `/${jobId}`;
-  const folderPath = `..${imgPrefix}`;
-
-  let fileNames;
-  try {
-    fileNames = fs.readdirSync(folderPath);
-  } catch (err) {
-    console.error(err);
-  }
+  const imgPrefix = "screenshot/" + dayjs().format("YYYY-MM-DD") + `/${jobId}`;
+  const folderPath = path.resolve(__dirname, `../public/${imgPrefix}`);
+  const fileNames = fs.readdirSync(folderPath);
 
   if (fileNames && fileNames.length) {
     res = fileNames.map((fileName) => `${imgPrefix}/${fileName}`);
