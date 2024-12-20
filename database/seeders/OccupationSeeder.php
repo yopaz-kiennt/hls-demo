@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -881,6 +882,8 @@ class OccupationSeeder extends Seeder
                 'title_en' => $occupation['title_en'],
                 'title_jp' => $occupation['title_jp'],
                 'value' => $occupationIndex,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
 
             if (!empty($occupation['job_titles'])) {
@@ -890,6 +893,8 @@ class OccupationSeeder extends Seeder
                         'title_en' => $jobTitle['title_en'],
                         'title_jp' => $jobTitle['title_jp'],
                         'value' => $jobIndex,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
                     ]);
                 }
             }
