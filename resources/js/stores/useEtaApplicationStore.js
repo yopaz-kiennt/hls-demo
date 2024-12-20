@@ -574,6 +574,12 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             this.messages = messages;
         },
         nextStep() {
+            if (this.formData.isRepresentative == 1 && this.currentStep == 0) {
+                // Are you applying on behalf of someone? ==> no
+                this.currentStep = 2;
+                return;
+            }
+
             if (this.currentStep === 2) {
                 this.submitForm();
 
@@ -582,6 +588,12 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             this.currentStep++;
         },
         prevStep() {
+            if (this.formData.isRepresentative == 1 && this.currentStep == 2) {
+                // Are you applying on behalf of someone? ==> no
+                this.currentStep = 0;
+                return;
+            }
+
             if (this.currentStep <= 0) {
                 return;
             }
@@ -593,6 +605,134 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             try {
                 this.loading = true;
                 const { data } = await axios.post(this.$route('eta_application.register'), this.formData);
+
+                setTimeout(() => {
+                    this.loading = false;
+                }, 300);
+
+                setTimeout(() => {
+                    notificationStore.triggerNotify({
+                        type: 'success',
+                        message: data.message,
+                    });
+                }, 400);
+
+                setTimeout(() => {
+                    router.visit(this.$route('eta_application.index'));
+                }, 6000);
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    if (error.response && error.response.status === HttpStatusCode.UnprocessableEntity) {
+                        this.errors = error.response.data.errors;
+                    } else {
+                        console.error(error);
+                    }
+                }
+            } finally {
+                setTimeout(() => {
+                    this.loading = false;
+                }, 400);
+            }
+        },
+        async submitFormFake() {
+            let fakeData = {
+                isRepresentative: '0',
+                isApplyingOnBehalfOfMinorChild: '1',
+                representative: {
+                    representativeRelationship: '0',
+                    representativeCompensated: '0',
+                    membershipIdNumber: '',
+                    province: '',
+                    lastName: '111',
+                    firstName: '111',
+                    organizationName: '',
+                    mailingAddress: '111',
+                    phoneNumber: '111',
+                    faxNumber: '',
+                    emailAddress: '',
+                    postalCodeZip: '',
+                    declareContactAndInformationIsTruthy: true,
+                    understandAndAccept: true,
+                },
+                prerequisite: {
+                    travelDocumentType: '2',
+                    countryOfCitizenship: '97',
+                    passportNotedNationality: '87',
+                },
+                personalDetails: {
+                    passportNumber: '111',
+                    passportNumberReEnter: '111',
+                    lastName: '111',
+                    firstName: '111',
+                    dobYear: 2024,
+                    dobMonth: '03',
+                    dobDay: '03',
+                    gender: '0',
+                    countryOfBirth: '107',
+                    cityTownOfBirth: '111',
+                    issueDateYear: 2016,
+                    issueDateMonth: '09',
+                    issueDateDay: '09',
+                    expiryDateYear: 2024,
+                    expiryDateMonth: '02',
+                    expiryDateDay: '03',
+                    additionalCitizenship: '',
+                    maritalStatus: '3',
+                    hasPreviouslyAppliedToCanada: '0',
+                    uci: '',
+                    uciReEnter: '',
+                },
+                employmentDetails: {
+                    occupation: '',
+                    title: '',
+                    companyEmployerSchoolFacilityName: '',
+                    country: '',
+                    city: '',
+                    fromDateYear: '',
+                },
+                contactDetails: {
+                    languageOfPreference: '0',
+                    emailAddress: 'thangpd@yopaz.vn',
+                    emailAddressReEnter: 'thangpd@yopaz.vn',
+                    aptUnit: '',
+                    streetNo: '222',
+                    streetAddress: '222',
+                    streetAddressAlt: '',
+                    city: '222',
+                    country: '105',
+                    district: '',
+                },
+                travelDetails: {
+                    isTravelDateKnown: '1',
+                    travelDateYear: '',
+                    travelDateMonth: '',
+                    travelDateDay: '',
+                    travelDateTimeHour: '',
+                    travelDateTimeMinute: '',
+                    travelDateTimeTimezone: '79',
+                },
+                backgroundQuestions: {
+                    refusedVisaOrPermitOrDeniedEntryToCanada: '',
+                    refusedVisaOrPermitOrDeniedEntryToCanadaDetails: '',
+                    committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere: '',
+                    committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails: '',
+                    inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis: '',
+                    isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker: '',
+                    haveYouEverBeenDiagnosedWithTuberculosis: '1',
+                    doYouHaveOneOfTheseConditions: '',
+                    haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails: '',
+                },
+                consentAndDeclaration: {
+                    inAggreance: true,
+                    fullName: '222',
+                },
+            };
+
+            const notificationStore = useNotificationStore();
+
+            try {
+                this.loading = true;
+                const { data } = await axios.post(this.$route('eta_application.register'), fakeData);
 
                 setTimeout(() => {
                     this.loading = false;
