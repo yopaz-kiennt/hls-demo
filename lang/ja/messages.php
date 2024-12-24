@@ -24,7 +24,7 @@ return [
     'a_member_of_the_chambre_des_notaires_du_quebec' => 'ケベック州公証人協会会員です。',
     'a_travel_agent' => '旅行代理業者です。',
 
-    'are_you_being_paid_to_represent' => '申請者を代表してフォームを完成させるために報酬を受け取っていますか？',
+    'are_you_being_paid_to_represent' => '申請者の代理として有料で申請フォームに入力する作業をしていますか？',
     'membership_id_number' => '会員識別番号',
     'which_province_or_territory' => 'どの州または地域ですか？',
     'surname_last_name' => '姓',
@@ -44,7 +44,7 @@ return [
     'passport_nationality' => '申請者パスポート情報',
     'passport_details_of_applicant' => '申請者パスポート情報',
     'passport_number' => 'パスポート番号 ',
-    'passport_number_re_enter' => 'パスポート番号 ',
+    'passport_number_re_enter' => 'パスポート番号（再入力）',
     'gender' => '性別',
     'country_of_birth' => '出生国・領土',
     'city_of_birth' => '出生市町村',

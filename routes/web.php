@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\EtaApplicationController;
+use App\Http\Controllers\Admin\EtaManagementController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/eta-management', [EtaManagementController::class, 'index'])->name('eta_management.index');
 });
 
 require __DIR__.'/auth.php';
