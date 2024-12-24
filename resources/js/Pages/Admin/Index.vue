@@ -96,6 +96,13 @@ const employmentDetailsOccupationMapping = {
     13: '技能（例：電気技師、配管工、大工）、交通、機械機器操作関連',
     14: '無職',
 };
+
+const doYouHaveOneOfTheseConditionsMapping = {
+    0: '未治療の梅毒',
+    1: '未治療の薬物・アルコール中毒',
+    2: '未治療の精神病（妄想・幻覚を伴う精神障害)',
+    3: '上記のいずれにも該当しない',
+};
 console.log(applications);
 </script>
 
@@ -538,6 +545,110 @@ console.log(applications);
                                                     旅行時刻: {{ item.data.travelDetails.travelDateTimeHour }}-{{
                                                         item.data.travelDetails.travelDateTimeMinute
                                                     }}-{{ item.data.travelDetails.travelDateTimeTimezone }}
+                                                </p>
+                                            </div>
+
+                                            <div
+                                                v-if="
+                                                    item.data.backgroundQuestions
+                                                        .refusedVisaOrPermitOrDeniedEntryToCanada
+                                                "
+                                                class="py-2 text-black"
+                                            >
+                                                <b> 旅行詳細 </b>
+                                                <p>
+                                                    カナダまたは他国で入国拒否歴がありますか？:
+                                                    <span
+                                                        v-if="
+                                                            item.data.backgroundQuestions
+                                                                .refusedVisaOrPermitOrDeniedEntryToCanada == '0'
+                                                        "
+                                                    >
+                                                        はい
+                                                    </span>
+                                                    <span v-else> いいえ </span>
+                                                </p>
+                                                <p
+                                                    v-if="
+                                                        item.data.backgroundQuestions
+                                                            .refusedVisaOrPermitOrDeniedEntryToCanadaDetails
+                                                    "
+                                                >
+                                                    各拒否について、ビザや入国を拒否された国の名前と理由:
+                                                    {{
+                                                        item.data.backgroundQuestions
+                                                            .refusedVisaOrPermitOrDeniedEntryToCanadaDetails
+                                                    }}
+                                                </p>
+                                                <p>
+                                                    犯罪歴がありますか:
+                                                    <span
+                                                        v-if="
+                                                            item.data.backgroundQuestions
+                                                                .committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere ==
+                                                            '0'
+                                                        "
+                                                    >
+                                                        はい
+                                                    </span>
+                                                    <span v-else> いいえ </span>
+                                                </p>
+                                                <p
+                                                    v-if="
+                                                        item.data.backgroundQuestions
+                                                            .committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails
+                                                    "
+                                                >
+                                                    各逮捕、起訴、有罪判決について、場所、時期、犯罪内容、判決内容:
+                                                    {{
+                                                        item.data.backgroundQuestions
+                                                            .committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails
+                                                    }}
+                                                </p>
+                                                <p>
+                                                    過去2年間に、結核と診断されたり、結核患者と接触したことがありますか:
+                                                    <span
+                                                        v-if="
+                                                            item.data.backgroundQuestions
+                                                                .inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis ==
+                                                            '0'
+                                                        "
+                                                    >
+                                                        はい
+                                                    </span>
+                                                    <span v-else> いいえ </span>
+                                                </p>
+                                                <p
+                                                    v-if="
+                                                        item.data.backgroundQuestions
+                                                            .isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker
+                                                    "
+                                                >
+                                                    結核に接した理由は、医療従事者として働いていたからですか:
+                                                    {{
+                                                        item.data.backgroundQuestions
+                                                            .isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker
+                                                    }}
+                                                </p>
+                                                <p>
+                                                    他の健康問題:
+                                                    {{
+                                                        doYouHaveOneOfTheseConditionsMapping[
+                                                            item.data.backgroundQuestions.doYouHaveOneOfTheseConditions
+                                                        ]
+                                                    }}
+                                                </p>
+                                                <p
+                                                    v-if="
+                                                        item.data.backgroundQuestions
+                                                            .haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails
+                                                    "
+                                                >
+                                                    申請に関する追加の詳細:
+                                                    {{
+                                                        item.data.backgroundQuestions
+                                                            .haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails
+                                                    }}
                                                 </p>
                                             </div>
                                         </DialogDescription>
