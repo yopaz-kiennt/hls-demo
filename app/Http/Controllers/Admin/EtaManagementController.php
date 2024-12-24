@@ -16,8 +16,6 @@ class EtaManagementController extends Controller
     {
         $applications = Application::paginate(10);
 
-        // dd($applications);
-
         return Inertia::render('Admin/Index', [
             'applications' => $applications
         ]);
