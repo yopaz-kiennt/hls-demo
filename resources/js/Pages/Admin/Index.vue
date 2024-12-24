@@ -19,7 +19,7 @@ import {
 } from '@/Components/ui/pagination';
 import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { computed } from 'vue';
 
@@ -28,7 +28,17 @@ const formatDate = (dateString) => {
     return format(date, 'yyyy/MM/dd');
 };
 
-const { applications } = usePage().props;
+const props = defineProps({
+    applications: {
+        type: Object,
+        required: true,
+    },
+});
+
+const loadPage = (page) => {
+    const url = props.applications.path + '?page=' + page;
+    router.get(url);
+};
 
 // const updateStatus = (item, newStatus) => {
 //   Inertia.put(`/applications/${item.id}`, {
@@ -103,7 +113,7 @@ const doYouHaveOneOfTheseConditionsMapping = {
     2: '未治療の精神病（妄想・幻覚を伴う精神障害)',
     3: '上記のいずれにも該当しない',
 };
-console.log(applications);
+console.log(props.applications);
 </script>
 
 <template>
@@ -224,7 +234,7 @@ console.log(applications);
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in applications" :key="item.id" class="border-b">
+                    <tr v-for="item in applications.data" :key="item.id" class="border-b">
                         <td class="px-6 py-4">
                             {{ item.id }}
                         </td>
@@ -671,22 +681,37 @@ console.log(applications);
             <ScrollBar orientation="horizontal" />
         </ScrollArea>
 
-        <Pagination v-slot="{ page }" :total="100" :sibling-count="1" show-edges :default-page="2" class="my-4">
+        <Pagination
+            v-slot="{ page }"
+            :total="applications?.total"
+            :sibling-count="1"
+            :default-page="applications?.current_page"
+            class="my-4"
+        >
             <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-                <PaginationFirst />
-                <PaginationPrev />
+                <PaginationFirst @click="loadPage(1)" />
+                <PaginationPrev @click="loadPage(applications?.current_page - 1)" />
 
                 <template v-for="(item, index) in items">
-                    <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                        <Button class="h-10 w-10 p-0" :variant="item.value === page ? 'default' : 'outline'">
+                    <PaginationListItem
+                        v-if="item.type === 'page'"
+                        :key="index"
+                        :value="item.value"
+                        as-child
+                        @click="loadPage(item.value)"
+                    >
+                        <button
+                            class="h-10 w-10 rounded-md p-0"
+                            :class="{ 'bg-black text-white': item.value === page }"
+                        >
                             {{ item.value }}
-                        </Button>
+                        </button>
                     </PaginationListItem>
                     <PaginationEllipsis v-else :key="item.type" :index="index" />
                 </template>
 
-                <PaginationNext />
-                <PaginationLast />
+                <PaginationNext @click="loadPage(applications?.current_page + 1)" />
+                <PaginationLast @click="loadPage(applications?.total)" />
             </PaginationList>
         </Pagination>
     </AdminLayout>
