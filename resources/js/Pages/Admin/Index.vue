@@ -10,12 +10,15 @@ import {
     PaginationPrev,
 } from '@/Components/ui/pagination';
 import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
+import { Toaster } from '@/Components/ui/toast';
+import { useToast } from '@/Components/ui/toast/use-toast';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import ApplicationDetailsModal from '@/Pages/Admin/ApplicationDetailsModal.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { computed } from 'vue';
 
+const { toast } = useToast();
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, 'yyyy/MM/dd');
@@ -41,10 +44,18 @@ const updateStatus = async (item, newStatus) => {
 
         item.status = response.data.status;
 
+        toast({
+            title: '更新成功しました！',
+        });
+
         console.log(`Status updated successfully for item ID: ${item.id}`);
     } catch (error) {
         console.error('Error:', error.response?.data || error.message);
-        alert('更新に失敗しました。もう一度お試しください。');
+        toast({
+            title: '更新に失敗しました！',
+            description: 'ステータスの更新中にエラーが発生しました。もう一度お試しください。',
+            variant: 'destructive',
+        });
     }
 };
 
@@ -256,6 +267,8 @@ console.log(props.applications);
                                 <option value="active">登録完了</option>
                                 <option value="inactive">失敗</option>
                             </select>
+
+                            <Toaster />
                         </td>
                         <td class="flex justify-center py-4">
                             <ApplicationDetailsModal
