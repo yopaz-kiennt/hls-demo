@@ -16,12 +16,26 @@ use Inertia\Response;
 
 class EtaManagementController extends Controller
 {
-    public function index()
-    {
-        $applications = Application::orderBy('created_at', 'desc')->paginate(10);
+    public function index(Request $request)
+    { $query = Application::query();
 
+        if (!empty($request->email)) {
+            $query->whereRaw("JSON_EXTRACT(data, '$.contactDetails.emailAddress') LIKE ?", ['%' . $request->email . '%']);
+        }
+    
+        if (!empty($request->date)) {
+            $query->whereDate('created_at', $request->date);
+        }
+    
+        if (!empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+    
+        $applications = $query->orderBy('created_at', 'desc')->paginate(10);
+    
         return Inertia::render('Admin/Index', [
-            'applications' => $applications
+            'applications' => $applications,
+            'filters' => $request->only('email', 'date', 'status'),
         ]);
     }
 
