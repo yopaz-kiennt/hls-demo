@@ -33,11 +33,20 @@ const loadPage = (page) => {
     router.get(url);
 };
 
-// const updateStatus = (item, newStatus) => {
-//   Inertia.put(`/applications/${item.id}`, {
-//     status: newStatus,
-//   });
-// };
+const updateStatus = async (item, newStatus) => {
+    try {
+        const response = await axios.put(`/admin/eta-management/${item.id}/status`, {
+            status: newStatus,
+        });
+
+        item.status = response.data.status;
+
+        console.log(`Status updated successfully for item ID: ${item.id}`);
+    } catch (error) {
+        console.error('Error:', error.response?.data || error.message);
+        alert('更新に失敗しました。もう一度お試しください。');
+    }
+};
 
 const representativeRelationshipMapping = computed(() => ({
     0: '家族または友人です',
@@ -161,7 +170,6 @@ console.log(props.applications);
                                 <option value="0">登録待ち</option>
                                 <option value="1">登録完了</option>
                                 <option value="2">失敗</option>
-                                <option value="3">却下</option>
                             </select>
                         </td>
                         <td class="py-4">
