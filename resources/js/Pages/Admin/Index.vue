@@ -1,0 +1,426 @@
+<script setup>
+import {
+    Pagination,
+    PaginationEllipsis,
+    PaginationFirst,
+    PaginationLast,
+    PaginationList,
+    PaginationListItem,
+    PaginationNext,
+    PaginationPrev,
+} from '@/Components/ui/pagination';
+import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
+import { Toaster } from '@/Components/ui/toast';
+import { useToast } from '@/Components/ui/toast/use-toast';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import ApplicationDetailsModal from '@/Pages/Admin/ApplicationDetailsModal.vue';
+import { Head, router } from '@inertiajs/vue3';
+import { format } from 'date-fns';
+import { computed, ref } from 'vue';
+
+const { toast } = useToast();
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return format(date, 'yyyy/MM/dd');
+};
+
+const props = defineProps({
+    applications: {
+        type: Object,
+        required: true,
+    },
+    filters: {
+        type: Object,
+        required: true,
+    },
+});
+
+const email = ref(props.filters.email || '');
+const date = ref(props.filters.date || '');
+const paymentStatus = ref(props.filters.payment_status || '');
+const status = ref(props.filters.status || '');
+
+const searchApplications = () => {
+    const params = new URLSearchParams();
+
+    if (email.value) params.append('email', email.value);
+    if (date.value) params.append('date', date.value);
+    if (status.value) params.append('status', status.value);
+    router.get(`/admin/eta-management?${params.toString()}`);
+};
+
+const resetFilters = () => {
+    email.value = '';
+    date.value = '';
+    paymentStatus.value = '';
+    status.value = '';
+
+    router.get('/admin/eta-management');
+};
+
+const loadPage = (page) => {
+    const params = new URLSearchParams({
+        email: email.value,
+        date: date.value,
+        payment_status: paymentStatus.value,
+        status: status.value,
+        page,
+    });
+
+    router.get(`/admin/eta-management?${params.toString()}`);
+};
+
+const updateStatus = async (item, newStatus) => {
+    try {
+        const response = await axios.put(`/admin/eta-management/${item.id}/status`, {
+            status: newStatus,
+        });
+
+        item.status = response.data.status;
+
+        toast({
+            title: '更新成功しました！',
+        });
+
+        console.log(`Status updated successfully for item ID: ${item.id}`);
+    } catch (error) {
+        console.error('Error:', error.response?.data || error.message);
+        toast({
+            title: '更新に失敗しました！',
+            description: 'ステータスの更新中にエラーが発生しました。もう一度お試しください。',
+            variant: 'destructive',
+        });
+    }
+};
+
+const representativeRelationshipMapping = computed(() => ({
+    0: '家族または友人です',
+    1: '非政府団体または宗教団体に属する者です',
+    2: '移民コンサルタント規制評議会（ICCRC）の会員です',
+    3: 'カナダの州または準州の弁護士協会会員です',
+    4: 'ケベック州公証人協会会員です',
+    5: '旅行代理業者です',
+}));
+
+const prerequisiteTravelDocumentTypeMapping = computed(() => ({
+    0: 'パスポート－一般/通常',
+    1: 'パスポート－外交用',
+    2: 'パスポート－公務用',
+    3: 'パスポート－サービス',
+    4: '緊急/臨時渡航文書',
+    5: '難民渡航文書',
+    6: '国民以外の個人に発給された外国人パスポート/渡航文書',
+    7: '米国再入国許可証(I-327)',
+    8: '米国難民渡航文書(I-571)',
+}));
+
+const prerequisiteCountryOfCitizenshipMapping = computed(() => ({
+    97: 'JPN (Japan)',
+}));
+
+const prerequisitePassportNotedNationalityMapping = computed(() => ({
+    87: 'JPN (Japan)',
+}));
+
+const personalDetailsAdditionalCitizenshipMapping = computed(() => ({
+    105: 'JPN (Japan)',
+}));
+
+const personalDetailsMaritalStatusMapping = computed(() => ({
+    0: '既婚',
+    1: '法的別居',
+    2: '離婚',
+    3: '婚姻取消',
+    4: '寡婦・寡夫',
+    5: '事実婚',
+    6: '独身／未婚',
+}));
+
+const employmentDetailsOccupationMapping = {
+    0: '芸術、文化、レクリエーション、スポーツ',
+    1: '金融、管理',
+    2: '教育、法律、社会福祉、地域・行政サービス',
+    3: '保健医療',
+    4: '主婦/主夫',
+    5: '経営管理',
+    6: '製造、公益事業（電気・ガス等）',
+    7: '軍事、防衛',
+    8: '自然、応用科学関連',
+    9: '天然資源、農業および関連生産業',
+    10: '引退後',
+    11: '営業・販売、サービス',
+    12: '学生',
+    13: '技能（例：電気技師、配管工、大工）、交通、機械機器操作関連',
+    14: '無職',
+};
+
+const doYouHaveOneOfTheseConditionsMapping = {
+    0: '未治療の梅毒',
+    1: '未治療の薬物・アルコール中毒',
+    2: '未治療の精神病（妄想・幻覚を伴う精神障害)',
+    3: '上記のいずれにも該当しない',
+};
+console.log(props.applications);
+</script>
+
+<template>
+    <Head title="eTA申請一覧" />
+
+    <AdminLayout>
+        <ScrollArea class="table-container mb-[30px]">
+            <table class="table-hover table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>登録メールアドレス</th>
+                        <th>申請日</th>
+                        <th>支払い状況</th>
+                        <th>登録状況</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4"></td>
+                        <td class="px-6 py-4">
+                            <input
+                                id="search-mail"
+                                v-model="email"
+                                type="text"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                placeholder="メールアドレスを入力"
+                                @keyup.enter="searchApplications"
+                            />
+                        </td>
+                        <td class="px-6 py-4">
+                            <input
+                                id="search-date"
+                                v-model="date"
+                                type="date"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                            />
+                        </td>
+                        <td class="px-6 py-4">
+                            <select
+                                id="payment-status"
+                                v-model="paymentStatus"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                            >
+                                <option value="" disabled selected>状態を選択</option>
+                                <option value="0">支払い済み</option>
+                                <option value="1">未払い</option>
+                            </select>
+                        </td>
+                        <td class="px-6 py-4">
+                            <select
+                                id="registration-status"
+                                v-model="status"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                            >
+                                <option value="" disabled selected>状態を選択</option>
+                                <option value="pending">登録待ち</option>
+                                <option value="active">登録完了</option>
+                                <option value="inactive">失敗</option>
+                            </select>
+                        </td>
+                        <td class="py-4">
+                            <div class="flex h-full items-center justify-center gap-5">
+                                <button @click="searchApplications">
+                                    <svg
+                                        class="h-4 w-4"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                                        />
+                                    </svg>
+                                </button>
+                                <button @click="resetFilters">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        version="1.1"
+                                        class="h-4 w-4"
+                                        viewBox="0 0 256 256"
+                                        xml:space="preserve"
+                                    >
+                                        <defs></defs>
+                                        <g
+                                            style="
+                                                stroke: none;
+                                                stroke-width: 0;
+                                                stroke-dasharray: none;
+                                                stroke-linecap: butt;
+                                                stroke-linejoin: miter;
+                                                stroke-miterlimit: 10;
+                                                fill: none;
+                                                fill-rule: nonzero;
+                                                opacity: 1;
+                                            "
+                                            transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"
+                                        >
+                                            <path
+                                                d="M 81.521 31.109 c -0.86 -1.73 -2.959 -2.438 -4.692 -1.575 c -1.73 0.86 -2.436 2.961 -1.575 4.692 c 2.329 4.685 3.51 9.734 3.51 15.01 C 78.764 67.854 63.617 83 45 83 S 11.236 67.854 11.236 49.236 c 0 -16.222 11.501 -29.805 26.776 -33.033 l -3.129 4.739 c -1.065 1.613 -0.62 3.784 0.992 4.85 c 0.594 0.392 1.264 0.579 1.926 0.579 c 1.136 0 2.251 -0.553 2.924 -1.571 l 7.176 -10.87 c 0.001 -0.001 0.001 -0.002 0.002 -0.003 l 0.018 -0.027 c 0.063 -0.096 0.106 -0.199 0.159 -0.299 c 0.049 -0.093 0.108 -0.181 0.149 -0.279 c 0.087 -0.207 0.152 -0.419 0.197 -0.634 c 0.009 -0.041 0.008 -0.085 0.015 -0.126 c 0.031 -0.182 0.053 -0.364 0.055 -0.547 c 0 -0.014 0.004 -0.028 0.004 -0.042 c 0 -0.066 -0.016 -0.128 -0.019 -0.193 c -0.008 -0.145 -0.018 -0.288 -0.043 -0.431 c -0.018 -0.097 -0.045 -0.189 -0.071 -0.283 c -0.032 -0.118 -0.065 -0.236 -0.109 -0.35 c -0.037 -0.095 -0.081 -0.185 -0.125 -0.276 c -0.052 -0.107 -0.107 -0.211 -0.17 -0.313 c -0.054 -0.087 -0.114 -0.168 -0.175 -0.25 c -0.07 -0.093 -0.143 -0.183 -0.223 -0.27 c -0.074 -0.08 -0.153 -0.155 -0.234 -0.228 c -0.047 -0.042 -0.085 -0.092 -0.135 -0.132 L 36.679 0.775 c -1.503 -1.213 -3.708 -0.977 -4.921 0.53 c -1.213 1.505 -0.976 3.709 0.53 4.921 l 3.972 3.2 C 17.97 13.438 4.236 29.759 4.236 49.236 C 4.236 71.714 22.522 90 45 90 s 40.764 -18.286 40.764 -40.764 C 85.764 42.87 84.337 36.772 81.521 31.109 z"
+                                                style="
+                                                    stroke: none;
+                                                    stroke-width: 1;
+                                                    stroke-dasharray: none;
+                                                    stroke-linecap: butt;
+                                                    stroke-linejoin: miter;
+                                                    stroke-miterlimit: 10;
+                                                    fill: rgb(0, 0, 0);
+                                                    fill-rule: nonzero;
+                                                    opacity: 1;
+                                                "
+                                                transform="matrix(1 0 0 1 0 0)"
+                                                stroke-linecap="round"
+                                            />
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="py-4"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="applications.data.length === 0">
+                        <td colspan="7" class="py-4 text-center">No data</td>
+                    </tr>
+
+                    <tr v-for="item in applications.data" v-else :key="item.id" class="border-b">
+                        <td class="px-6 py-4">
+                            {{ item.id }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ item.data.contactDetails.emailAddress }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ formatDate(item.created_at) }}
+                        </td>
+                        <td class="px-6 py-4">Trạng thái thanh toán</td>
+                        <td class="px-6 py-4">
+                            <select
+                                v-model="item.status"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                @change="updateStatus(item, item.status)"
+                            >
+                                <option value="pending" selected>登録待ち</option>
+                                <option value="active">登録完了</option>
+                                <option value="inactive">失敗</option>
+                            </select>
+
+                            <Toaster />
+                        </td>
+                        <td class="flex justify-center py-4">
+                            <ApplicationDetailsModal
+                                :item="item"
+                                :representativeRelationshipMapping="representativeRelationshipMapping"
+                                :prerequisiteCountryOfCitizenshipMapping="prerequisiteCountryOfCitizenshipMapping"
+                                :employmentDetailsOccupationMapping="employmentDetailsOccupationMapping"
+                                :prerequisitePassportNotedNationalityMapping="
+                                    prerequisitePassportNotedNationalityMapping
+                                "
+                                :prerequisiteTravelDocumentTypeMapping="prerequisiteTravelDocumentTypeMapping"
+                                :personalDetailsAdditionalCitizenshipMapping="
+                                    personalDetailsAdditionalCitizenshipMapping
+                                "
+                                :personalDetailsMaritalStatusMapping="personalDetailsMaritalStatusMapping"
+                                :doYouHaveOneOfTheseConditionsMapping="doYouHaveOneOfTheseConditionsMapping"
+                            />
+                        </td>
+                        <td class="py-4">
+                            <button
+                                type="button"
+                                class="mb-2 me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100"
+                            >
+                                メールを再送する
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+
+        <Pagination
+            v-if="applications.data.length > 0"
+            v-slot="{ page }"
+            :total="applications?.total"
+            :sibling-count="1"
+            :default-page="applications?.current_page"
+            class="my-4"
+        >
+            <PaginationList v-slot="{ items }" class="flex items-center gap-1">
+                <PaginationFirst @click="loadPage(1)" />
+                <PaginationPrev @click="loadPage(applications?.current_page - 1)" />
+
+                <template v-for="(item, index) in items">
+                    <PaginationListItem
+                        v-if="item.type === 'page'"
+                        :key="index"
+                        :value="item.value"
+                        as-child
+                        @click="loadPage(item.value)"
+                    >
+                        <button
+                            class="h-10 w-10 rounded-md p-0"
+                            :class="{ 'bg-black text-white': item.value === page }"
+                        >
+                            {{ item.value }}
+                        </button>
+                    </PaginationListItem>
+                    <PaginationEllipsis v-else :key="item.type" :index="index" />
+                </template>
+
+                <PaginationNext @click="loadPage(applications?.current_page + 1)" />
+                <PaginationLast @click="loadPage(applications?.total)" />
+            </PaginationList>
+        </Pagination>
+    </AdminLayout>
+</template>
+
+<style scoped lang="scss">
+.table-container {
+    width: 100%;
+    overflow: auto;
+
+    table {
+        width: 100%;
+
+        &.table-hover {
+            tr {
+                &:hover {
+                    background-color: #fff;
+                }
+            }
+        }
+
+        tr {
+            border-bottom: 1px solid gainsboro;
+
+            td,
+            th {
+                padding: 12px;
+            }
+        }
+
+        thead {
+            tr {
+                th {
+                    font-size: 13px;
+                    text-align: left;
+                    color: #71717a;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}
+</style>
