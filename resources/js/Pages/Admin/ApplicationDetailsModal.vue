@@ -297,25 +297,11 @@ const props = defineProps({
                         </p>
                     </div>
 
-                    <div v-if="item.data.travelDetails.isTravelDateKnown == '1'" class="border-b py-2 text-black">
-                        <b> 旅行詳細 </b>
-                        <p>
-                            旅行日: {{ item.data.travelDetails.travelDateYear }}-{{
-                                item.data.travelDetails.travelDateMonth
-                            }}-{{ item.data.travelDetails.travelDateDay }}
-                        </p>
-                        <p>
-                            旅行時刻: {{ item.data.travelDetails.travelDateTimeHour }}-{{
-                                item.data.travelDetails.travelDateTimeMinute
-                            }}-{{ item.data.travelDetails.travelDateTimeTimezone }}
-                        </p>
-                    </div>
-
                     <div
                         v-if="item.data.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
                         class="py-2 text-black"
                     >
-                        <b> 旅行詳細 </b>
+                        <b> 申請者の背景に関する情報 </b>
                         <p>
                             カナダまたは他国で入国拒否歴がありますか？:
                             <span v-if="item.data.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada == '0'">
