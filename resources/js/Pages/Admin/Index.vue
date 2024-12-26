@@ -290,7 +290,7 @@ console.log(props.applications);
                 </thead>
                 <tbody>
                     <tr v-if="applications.data.length === 0">
-                        <td colspan="7" class="py-4 text-center">No data</td>
+                        <td colspan="7" class="py-4 text-center">データがありません。</td>
                     </tr>
 
                     <tr v-for="item in applications.data" v-else :key="item.id" class="border-b">
@@ -303,7 +303,7 @@ console.log(props.applications);
                         <td class="px-6 py-4">
                             {{ formatDate(item.created_at) }}
                         </td>
-                        <td class="px-6 py-4">Trạng thái thanh toán</td>
+                        <td class="px-6 py-4">支払い状況</td>
                         <td class="px-6 py-4">
                             <select
                                 v-model="item.status"
