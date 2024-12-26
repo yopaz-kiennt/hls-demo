@@ -81,52 +81,58 @@ require("dotenv").config({
     try {
       jobId = getJobId(msg);
       application = await findApplicationFromDB(jobId);
+      console.log(application);
     } catch (err) {
       console.error(err.stack);
     }
 
-    // if (jobId) {
-    //   let workerLog = null;
-    //   let screenshots = null;
-    //   let browser;
+    if (application) {
+      let workerLog = null;
+      let screenshots = null;
+      let browser;
 
-    //   try {
-    //     browser = await initBrowser();
-    //     const page = await initPage(browser);
-    //     await step1(page, jobId);
-    //     await step2(page, jobId);
-    //     await step3(page, jobId);
-    //     // TODO: payment
+      try {
+        browser = await initBrowser();
+        const page = await initPage(browser);
+        await step1(page, application);
 
-    //     res = ApplicationStatus.SUCCESS;
-    //   } catch (err) {
-    //     console.error(err.stack);
+        if (application.is_representative === 0) {
+          // Yes
+          // await step3(page, jobId);
+        }
 
-    //     workerLog = err.stack;
-    //   }
+        // await step4(page, jobId);
+        // TODO: payment
 
-    //   if (browser) {
-    //     browser.close();
-    //   }
+        res = ApplicationStatus.SUCCESS;
+      } catch (err) {
+        console.error(err.stack);
 
-    //   try {
-    //     screenshots = getScreenshotPaths(jobId);
-    //   } catch (err) {
-    //     console.error(err.stack);
+        workerLog = err.stack;
+      }
 
-    //     workerLog = workerLog ?? err.stack;
-    //   }
+      if (browser) {
+        browser.close();
+      }
 
-    //   try {
-    //     await updataApplicationToDB(jobId, {
-    //       screenshots: screenshots,
-    //       workerLog: workerLog,
-    //       status: res,
-    //     });
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-    // }
+      try {
+        screenshots = getScreenshotPaths(application.id);
+      } catch (err) {
+        console.error(err.stack);
+
+        workerLog = workerLog ?? err.stack;
+      }
+
+      try {
+        await updataApplicationToDB(application.id, {
+          screenshots: screenshots,
+          workerLog: workerLog,
+          status: res,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
     return res;
   }
@@ -140,7 +146,7 @@ require("dotenv").config({
     const values = [applicationId];
     const [rows] = await dbConnection.execute(sql, values);
 
-    if (rows.length == 0) {
+    if (rows.length === 0) {
       throw new Error(`No application found with id ${applicationId}`);
     }
 
@@ -163,7 +169,7 @@ require("dotenv").config({
     return page;
   }
 
-  async function step1(page, jobId) {
+  async function step1(page, application) {
     try {
       await page.goto(
         "https://onlineservices-servicesenligne.cic.gc.ca/eta/welcome?lang=en#/",
@@ -174,23 +180,38 @@ require("dotenv").config({
         throw new Error("Outage interruption");
       }
 
+      // Are you applying on behalf of someone? (required)
       await page.waitForSelector("#welcome_isRepresentative");
-      await page.select("#welcome_isRepresentative", "1");
-      await sleep(300);
+
+      if (application.is_representative === 1) {
+        await page.select("#welcome_isRepresentative", "1"); // No
+        await sleep(300);
+      } else {
+        await page.select("#welcome_isRepresentative", "0"); // Yes
+        await sleep(300);
+
+        // Are you applying on behalf of a minor child? (required)
+        await page.waitForSelector("#welcome_isApplyingOnBehalfOfMinorChild");
+        await page.select(
+          "#welcome_isApplyingOnBehalfOfMinorChild",
+          `${application.is_applying_for_minor}`,
+        );
+        await sleep(300);
+      }
 
       await page.waitForSelector(".btn-next");
-      await screenshot(page, jobId, "step1", false);
+      await screenshot(page, application.id, "step1", false);
 
       await page.click(".btn-next");
       await page.waitForNetworkIdle();
     } catch (err) {
-      await screenshot(page, jobId, "step1", true);
+      await screenshot(page, application.id, "step1", true);
 
       throw new Error(err.stack);
     }
   }
 
-  async function step2(page, jobId) {
+  async function step3(page, jobId) {
     // TODO: cases, data
     try {
       await page.waitForSelector(
@@ -511,7 +532,7 @@ require("dotenv").config({
     }
   }
 
-  async function step3(page, jobId) {
+  async function step4(page, jobId) {
     try {
       await page.waitForSelector("#method");
       await screenshot(page, jobId, "step3", false);
