@@ -21,9 +21,9 @@ defineEmits(['openMobileMenu']);
         </button>
 
         <div class="flex items-center gap-2">
-            <span class="text-sm text-gray-500"> Building Your Application </span>
+            <span class="text-sm text-gray-500"> アドミン </span>
             <ChevronRight class="h-4 w-4 text-gray-400" />
-            <span class="text-sm">Data Fetching</span>
+            <span class="text-sm">登録情報リスト</span>
         </div>
     </header>
 </template>

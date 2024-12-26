@@ -1,6 +1,5 @@
 <script setup>
 import { ScrollArea } from '@/Components/ui/scroll-area';
-import { Link } from '@inertiajs/vue3';
 import {
     Bell,
     Box,
@@ -157,8 +156,8 @@ onUnmounted(() => {
                     </div>
 
                     <div>
-                        <h2 class="font-semibold">Acme Inc</h2>
-                        <p class="text-xs text-gray-500">Enterprise</p>
+                        <h2 class="font-semibold">アドミン</h2>
+                        <!-- <p class="text-xs text-gray-500">Enterprise</p> -->
                     </div>
                 </div>
             </div>
@@ -166,8 +165,8 @@ onUnmounted(() => {
             <!-- Navigation -->
             <ScrollArea class="flex-1 overflow-y-auto">
                 <div class="p-2">
-                    <p class="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Platform</p>
-                    <div class="space-y-1">
+                    <p class="px-3 py-2 text-xs font-semibold uppercase text-gray-500">登録情報リスト</p>
+                    <!-- <div class="space-y-1">
                         <div v-for="(item, index) in menuItems" :key="index">
                             <component
                                 :is="item.children ? 'a' : Link"
@@ -216,7 +215,7 @@ onUnmounted(() => {
                                 </div>
                             </transition>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </ScrollArea>
 
