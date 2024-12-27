@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { ScrollArea } from '@/Components/ui/scroll-area';
 import { getTravelDocuments } from '@/helper';
 import { usePage } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 const { lang, messages } = usePage().props;
 const props = defineProps({
@@ -11,11 +11,17 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    isOpen: {
+        type: Boolean,
+        required: true,
+    },
     occupations: {
         type: Object,
         default: () => {},
     },
 });
+
+defineEmits(['close']);
 
 const travelDocuments = ref(getTravelDocuments(lang));
 
@@ -57,20 +63,22 @@ const representativeRelationshipMapping = ref({
     5: messages.a_travel_agent,
 });
 
-const employmentDetailsOccupationMapping = computed(() => {
-    const mapping = {};
-    if (props.occupations && Array.isArray(props.occupations)) {
-        props.occupations.forEach((occupation) => {
-            mapping[occupation.value] = occupation.title_jp;
-        });
-    }
-    return mapping;
-});
+const employmentDetailsOccupationMapping = ref({});
+
+if (props.occupations && Array.isArray(props.occupations)) {
+    props.occupations.forEach((occupation) => {
+        employmentDetailsOccupationMapping.value[occupation.value] =
+            lang === 'en' ? occupation.title_en : occupation.title_jp;
+    });
+}
 </script>
 
 <template>
-    <Dialog>
-        <DialogContent class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)_auto] p-0 sm:max-w-[625px]">
+    <Dialog :open="props.isOpen">
+        <DialogContent
+            class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)_auto] p-0 sm:max-w-[625px]"
+            @close="$emit('close')"
+        >
             <DialogHeader>
                 <DialogTitle>eTA申請詳細</DialogTitle>
                 <DialogDescription> </DialogDescription>
