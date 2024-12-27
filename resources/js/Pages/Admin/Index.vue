@@ -35,6 +35,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    occupations: {
+        type: Object,
+        default: () => {},
+    },
 });
 
 const email = ref(props.filters.email || '');
@@ -199,7 +203,7 @@ const updateStatus = async (item, newStatus) => {
                             <Toaster />
                         </td>
                         <td class="flex justify-center py-4">
-                            <ApplicationDetailsModal :item="item" />
+                            <ApplicationDetailsModal :item="item" :occupations="occupations" />
                         </td>
                         <td class="py-4">
                             <button

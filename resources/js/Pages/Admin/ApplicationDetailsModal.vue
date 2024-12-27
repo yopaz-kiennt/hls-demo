@@ -1,22 +1,19 @@
 <script setup>
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/Components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
+import { ScrollArea } from '@/Components/ui/scroll-area';
 import { getTravelDocuments } from '@/helper';
 import { usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const { lang, messages } = usePage().props;
-
-defineProps({
+const props = defineProps({
     item: {
         type: Object,
         required: true,
+    },
+    occupations: {
+        type: Object,
+        default: () => {},
     },
 });
 
@@ -60,52 +57,42 @@ const representativeRelationshipMapping = ref({
     5: messages.a_travel_agent,
 });
 
-const employmentDetailsOccupationMapping = ref({
-    0: '芸術、文化、レクリエーション、スポーツ',
-    1: '金融、管理',
-    2: '教育、法律、社会福祉、地域・行政サービス',
-    3: '保健医療',
-    4: '主婦/主夫',
-    5: '経営管理',
-    6: '製造、公益事業（電気・ガス等）',
-    7: '軍事、防衛',
-    8: '自然、応用科学関連',
-    9: '天然資源、農業および関連生産業',
-    10: '引退後',
-    11: '営業・販売、サービス',
-    12: '学生',
-    13: '技能（例：電気技師、配管工、大工）、交通、機械機器操作関連',
-    14: '無職',
+const employmentDetailsOccupationMapping = computed(() => {
+    const mapping = {};
+    if (props.occupations && Array.isArray(props.occupations)) {
+        props.occupations.forEach((occupation) => {
+            mapping[occupation.value] = occupation.title_jp;
+        });
+    }
+    return mapping;
 });
 </script>
 
 <template>
     <Dialog>
-        <DialogTrigger
-            class="mb-2 me-2 rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
-        >
-            詳細
-        </DialogTrigger>
-        <DialogContent>
+        <DialogContent class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)_auto] p-0 sm:max-w-[625px]">
             <DialogHeader>
                 <DialogTitle>eTA申請詳細</DialogTitle>
-                <DialogDescription>
+                <DialogDescription> </DialogDescription>
+            </DialogHeader>
+            <ScrollArea class="grid gap-4 overflow-y-auto px-6 py-2">
+                <div class="block">
                     <div class="border-b py-2 text-black">
                         <b> 代理人情報 </b>
 
                         <p>
                             代理人か:
-                            <span v-if="item.data.isRepresentative == 1"> はい </span>
+                            <span v-if="item.data.isRepresentative == '1'"> はい </span>
                             <span v-else> いいえ </span>
                         </p>
 
-                        <p v-if="item.data.isApplyingOnBehalfOfMinorChild">
+                        <p v-if="item.data.isRepresentative == '1'">
                             未成年者の代理申請か:
-                            <span v-if="item.data.isApplyingOnBehalfOfMinorChild == 1"> はい </span>
+                            <span v-if="item.data.isApplyingOnBehalfOfMinorChild == '1'"> はい </span>
                         </p>
                     </div>
 
-                    <div v-if="item.data.isRepresentative == 1" class="border-b py-2 text-black">
+                    <div v-if="item.data.isRepresentative == '1'" class="border-b py-2 text-black">
                         <b> 代理人の詳細 </b>
                         <p>
                             代理人との関係:
@@ -399,8 +386,8 @@ const employmentDetailsOccupationMapping = ref({
                             }}
                         </p>
                     </div>
-                </DialogDescription>
-            </DialogHeader>
+                </div>
+            </ScrollArea>
         </DialogContent>
     </Dialog>
 </template>
