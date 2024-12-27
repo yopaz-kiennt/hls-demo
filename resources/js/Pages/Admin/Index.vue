@@ -35,7 +35,24 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    occupations: {
+        type: Object,
+        default: () => {},
+    },
 });
+
+const selectedItem = ref(null);
+const isModalOpen = ref(false);
+
+const openDetailsModal = (item) => {
+    selectedItem.value = item;
+    isModalOpen.value = true;
+};
+
+const closeDetailsModal = () => {
+    isModalOpen.value = false;
+    selectedItem.value = null;
+};
 
 const email = ref(props.filters.email || '');
 const date = ref(props.filters.date || '');
@@ -199,7 +216,12 @@ const updateStatus = async (item, newStatus) => {
                             <Toaster />
                         </td>
                         <td class="flex justify-center py-4">
-                            <ApplicationDetailsModal :item="item" />
+                            <button
+                                class="mb-2 me-2 rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
+                                @click="openDetailsModal(item)"
+                            >
+                                詳細
+                            </button>
                         </td>
                         <td class="py-4">
                             <button
@@ -210,6 +232,13 @@ const updateStatus = async (item, newStatus) => {
                             </button>
                         </td>
                     </tr>
+                    <ApplicationDetailsModal
+                        v-if="selectedItem"
+                        :item="selectedItem"
+                        :isOpen="isModalOpen"
+                        :occupations="occupations"
+                        @close="closeDetailsModal"
+                    />
                 </tbody>
             </table>
 
