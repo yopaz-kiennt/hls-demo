@@ -679,7 +679,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                     firstName: 'abca',
                     organizationName: '',
                     mailingAddress: 'abca',
-                    phoneNumber: 'abca',
+                    phoneNumber: '09012345678',
                     faxNumber: '',
                     emailAddress: '',
                     postalCodeZip: '',

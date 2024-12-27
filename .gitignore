@@ -25,3 +25,4 @@ yarn-error.log
 /supervisord.log
 .pnpm-store/*
 /public/screenshot
+.DS_Store
