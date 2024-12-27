@@ -12,6 +12,6 @@ class JobTitle extends Model
         'occupation_id',
         'title_en',
         'title_jp',
-        'value'
+        'value',
     ];
 }

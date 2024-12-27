@@ -19,7 +19,7 @@ class EtaApplicationController extends Controller
         $occupations = Occupation::with('jobTitles')->get();
 
         return Inertia::render('Web/EtaApplication/Index', [
-            'occupations' => $occupations
+            'occupations' => $occupations,
         ]);
     }
 

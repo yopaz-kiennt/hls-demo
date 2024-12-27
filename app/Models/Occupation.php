@@ -12,7 +12,7 @@ class Occupation extends Model
     protected $fillable = [
         'title_en',
         'title_jp',
-        'value'
+        'value',
     ];
 
     public function jobTitles(): HasMany

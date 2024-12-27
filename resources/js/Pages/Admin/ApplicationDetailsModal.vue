@@ -7,56 +7,75 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/Components/ui/dialog';
+import { getTravelDocuments } from '@/helper';
+import { usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
-const props = defineProps({
+const { lang, messages } = usePage().props;
+
+defineProps({
     item: {
         type: Object,
         required: true,
     },
-    representativeRelationshipMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
-    prerequisiteTravelDocumentTypeMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
-    personalDetailsAdditionalCitizenshipMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
-    personalDetailsMaritalStatusMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
+});
 
-    prerequisiteCountryOfCitizenshipMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
+const travelDocuments = ref(getTravelDocuments(lang));
 
-    prerequisitePassportNotedNationalityMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
+const prerequisiteCountryOfCitizenshipMapping = ref({
+    97: 'JPN (Japan)',
+});
 
-    employmentDetailsOccupationMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
+const prerequisitePassportNotedNationalityMapping = ref({
+    87: 'JPN (Japan)',
+});
 
-    doYouHaveOneOfTheseConditionsMapping: {
-        type: Object,
-        required: false,
-        default: () => ({}),
-    },
+const personalDetailsAdditionalCitizenshipMapping = ref({
+    105: 'JPN (Japan)',
+});
+
+const personalDetailsMaritalStatusMapping = ref({
+    0: '既婚',
+    1: '法的別居',
+    2: '離婚',
+    3: '婚姻取消',
+    4: '寡婦・寡夫',
+    5: '事実婚',
+    6: '独身／未婚',
+});
+
+const doYouHaveOneOfTheseConditionsMapping = ref({
+    0: '未治療の梅毒',
+    1: '未治療の薬物・アルコール中毒',
+    2: '未治療の精神病（妄想・幻覚を伴う精神障害)',
+    3: '上記のいずれにも該当しない',
+});
+
+const representativeRelationshipMapping = ref({
+    0: messages.a_family_member_or_friend,
+    1: messages.a_member_of_a_non_governmental_or_religious_organization,
+    2: messages.a_member_of_the_college_of_immigration_and_citizenship_consultants,
+    3: messages.a_member_of_a_canadian_provincial_or_territorial_law_society,
+    4: messages.a_member_of_the_chambre_des_notaires_du_quebec,
+    5: messages.a_travel_agent,
+});
+
+const employmentDetailsOccupationMapping = ref({
+    0: '芸術、文化、レクリエーション、スポーツ',
+    1: '金融、管理',
+    2: '教育、法律、社会福祉、地域・行政サービス',
+    3: '保健医療',
+    4: '主婦/主夫',
+    5: '経営管理',
+    6: '製造、公益事業（電気・ガス等）',
+    7: '軍事、防衛',
+    8: '自然、応用科学関連',
+    9: '天然資源、農業および関連生産業',
+    10: '引退後',
+    11: '営業・販売、サービス',
+    12: '学生',
+    13: '技能（例：電気技師、配管工、大工）、交通、機械機器操作関連',
+    14: '無職',
 });
 </script>
 
@@ -144,12 +163,14 @@ const props = defineProps({
 
                     <div class="border-b py-2 text-black">
                         <b> 旅行書類情報 </b>
-                        <p>
-                            旅行書類情報:
-                            <span>
-                                {{ prerequisiteTravelDocumentTypeMapping[item.data.prerequisite.travelDocumentType] }}
-                            </span>
-                        </p>
+                        <div class="flex">
+                            <span class="mr-2">旅行書類情報:</span>
+                            <p v-for="document in travelDocuments" :key="document.value">
+                                <span v-if="item.data.prerequisite.travelDocumentType === document.value">
+                                    {{ document.title }}
+                                </span>
+                            </p>
+                        </div>
                         <p>
                             パスポートに記載されているコード:
                             <span>
@@ -221,10 +242,6 @@ const props = defineProps({
                                     item.data.personalDetails.additionalCitizenship
                                 ]
                             }}
-                        </p>
-                        <p v-if="item.data.personalDetails.maritalStatus">
-                            婚姻状況:
-                            {{ personalDetailsMaritalStatusMapping[item.data.personalDetails.maritalStatus] }}
                         </p>
                         <p v-if="item.data.personalDetails.maritalStatus">
                             婚姻状況:

@@ -2,37 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\ApplicationStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EtaApplication\RegisterRequest;
 use App\Models\Application;
-use App\Services\RabbitMQService;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Inertia\Response;
+use Inertia\Inertia;
 
 class EtaManagementController extends Controller
 {
     public function index(Request $request)
-    { $query = Application::query();
+    {
+        $query = Application::query();
 
-        if (!empty($request->email)) {
-            $query->whereRaw("JSON_EXTRACT(data, '$.contactDetails.emailAddress') LIKE ?", ['%' . $request->email . '%']);
+        if (! empty($request->email)) {
+            $query->whereRaw("JSON_EXTRACT(data, '$.contactDetails.emailAddress') LIKE ?", ['%'.$request->email.'%']);
         }
-    
-        if (!empty($request->date)) {
+
+        if (! empty($request->date)) {
             $query->whereDate('created_at', $request->date);
         }
-    
-        if (!empty($request->status)) {
+
+        if (! empty($request->status)) {
             $query->where('status', $request->status);
         }
-    
+
         $applications = $query->orderBy('created_at', 'desc')->paginate(10);
-    
+
         return Inertia::render('Admin/Index', [
             'applications' => $applications,
             'filters' => $request->only('email', 'date', 'status'),
@@ -48,5 +42,4 @@ class EtaManagementController extends Controller
 
         return response()->json(['status' => $application->status]);
     }
-
 }

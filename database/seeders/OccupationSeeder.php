@@ -143,7 +143,6 @@ class OccupationSeeder extends Seeder
                 'title_jp' => 'ホームマーケット',
                 'job_titles' => [],
             ],
-            // Thiếu mục Homemarket
             [
                 'title_en' => 'Management occupations',
                 'title_jp' => '経営管理',
@@ -560,7 +559,7 @@ class OccupationSeeder extends Seeder
                         'title_jp' => '武器技術者 / 陸上',
                         'title_en' => 'Weapons Technician / Land',
                     ],
-                ]
+                ],
             ],
             [
                 'title_en' => 'Natural sciences, applied sciences, and related fields',
@@ -886,7 +885,7 @@ class OccupationSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ]);
 
-            if (!empty($occupation['job_titles'])) {
+            if (! empty($occupation['job_titles'])) {
                 foreach ($occupation['job_titles'] as $jobIndex => $jobTitle) {
                     DB::table('job_titles')->insert([
                         'occupation_id' => $occupationId,
