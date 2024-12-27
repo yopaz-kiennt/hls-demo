@@ -96,6 +96,7 @@ require("dotenv").config({
         const page = await initPage(browser);
         await step1(page, application);
 
+        // Are you applying on behalf of someone? (required)
         if (application.is_representative === 0) {
           // Yes
           await step2(page, application);
@@ -214,9 +215,34 @@ require("dotenv").config({
 
   async function step2(page, application) {
     // I am (required)
+    // A family member or friend
     if (application.representative_relationship === 0) {
-      // A family member or friend
       await step2dot1(page, application);
+    }
+
+    // A member of a non-governmental or religious organization
+    if (application.representative_relationship === 1) {
+      await step2dot2(page, application);
+    }
+
+    // A member of the College of Immigration and Citizenship Consultants (CICC)
+    if (application.representative_relationship === 2) {
+      await step2dot3(page, application);
+    }
+
+    // A member of a Canadian provincial or territorial law society
+    if (application.representative_relationship === 3) {
+      await step2dot4(page, application);
+    }
+
+    // A member of the Chambre des notaires du Québec
+    if (application.representative_relationship === 4) {
+      await step2dot5(page, application);
+    }
+
+    // A travel agent
+    if (application.representative_relationship === 5) {
+      await step2dot6(page, application);
     }
   }
 
@@ -224,7 +250,7 @@ require("dotenv").config({
     try {
       // I am (required)
       await page.waitForSelector("#representative_representativeRelationship");
-      await page.select("#representative_representativeRelationship", "0");
+      await page.select("#representative_representativeRelationship", "0"); //
       await sleep(300);
 
       // Are you being paid to represent the applicant and complete the form on their behalf? (required)
@@ -295,13 +321,574 @@ require("dotenv").config({
       await page.click("#representative_understandAndAccept");
       await sleep(300);
 
+      const currentUrl = page.url();
+
       await page.waitForSelector(".btn-next");
       await screenshot(page, application.id, "step2-1", false);
-
       await page.click(".btn-next");
       await page.waitForNetworkIdle();
+
+      if (currentUrl === page.url()) {
+        await screenshot(page, application.id, "step2-1", true);
+      }
     } catch (err) {
       await screenshot(page, application.id, "step2-1", true);
+
+      throw new Error(err.stack);
+    }
+  }
+
+  async function step2dot2(page, application) {
+    try {
+      // I am (required)
+      await page.waitForSelector("#representative_representativeRelationship");
+      await page.select("#representative_representativeRelationship", "1"); //
+      await sleep(300);
+
+      // Are you being paid to represent the applicant and complete the form on their behalf? (required)
+      await page.waitForSelector("#representative_representativeCompensated");
+      await page.select(
+        "#representative_representativeCompensated",
+        application.data.representative.representativeCompensated,
+      );
+      await sleep(300);
+
+      // Surname(s) / last name(s) (required)
+      await page.waitForSelector("#representative_familyName");
+      await page.type(
+        "#representative_familyName",
+        application.data.representative.lastName,
+      );
+      await sleep(300);
+
+      // Given name(s) / first name(s) (required)
+      await page.waitForSelector("#representative_firstName");
+      await page.type(
+        "#representative_firstName",
+        application.data.representative.firstName,
+      );
+      await sleep(300);
+
+      // Name of firm, organization (required)
+      await page.waitForSelector("#representative_organizationName");
+      await page.type(
+        "#representative_organizationName",
+        application.data.representative.organizationName ?? "",
+      );
+      await sleep(300);
+
+      // Mailing address (required)
+      await page.waitForSelector("#representative_mailingAddress");
+      await page.type(
+        "#representative_mailingAddress",
+        application.data.representative.mailingAddress,
+      );
+      await sleep(300);
+
+      // Telephone number (required)
+      await page.waitForSelector("#representative_phoneNumber");
+      await page.type(
+        "#representative_phoneNumber",
+        application.data.representative.phoneNumber,
+      );
+      await sleep(300);
+
+      // Fax number
+      await page.waitForSelector("#representative_faxNumber");
+      await page.type(
+        "#representative_faxNumber",
+        application.data.representative.faxNumber ?? "",
+      );
+      await sleep(300);
+
+      // Email address
+      await page.waitForSelector("#representative_emailAddress");
+      await page.type(
+        "#representative_emailAddress",
+        application.data.representative.emailAddress ?? "",
+      );
+      await sleep(300);
+
+      // Representative's declaration (required)
+      await page.waitForSelector(
+        "#representative_declareContactAndInformationIsTruthy",
+      );
+      await page.click("#representative_declareContactAndInformationIsTruthy");
+      await sleep(300);
+
+      // Representative's authorization (required)
+      await page.waitForSelector("#representative_understandAndAccept");
+      await page.click("#representative_understandAndAccept");
+      await sleep(300);
+
+      const currentUrl = page.url();
+
+      await page.waitForSelector(".btn-next");
+      await screenshot(page, application.id, "step2-2", false);
+      await page.click(".btn-next");
+      await page.waitForNetworkIdle();
+
+      if (currentUrl === page.url()) {
+        await screenshot(page, application.id, "step2-2", true);
+      }
+    } catch (err) {
+      await screenshot(page, application.id, "step2-2", true);
+
+      throw new Error(err.stack);
+    }
+  }
+
+  async function step2dot3(page, application) {
+    try {
+      // I am (required)
+      await page.waitForSelector("#representative_representativeRelationship");
+      await page.select("#representative_representativeRelationship", "2"); //
+      await sleep(300);
+
+      // Are you being paid to represent the applicant and complete the form on their behalf? (required)
+      await page.waitForSelector("#representative_representativeCompensated");
+      await page.select(
+        "#representative_representativeCompensated",
+        application.data.representative.representativeCompensated,
+      );
+      await sleep(300);
+
+      // Membership ID number (required)
+      await page.waitForSelector("#representative_membershipIdNumber");
+      await page.type(
+        "#representative_membershipIdNumber",
+        application.data.representative.membershipIdNumber ?? "",
+      );
+      await sleep(300);
+
+      // Which province or territory? (required)
+      await page.waitForSelector("#representative_province");
+      await page.type(
+        "#representative_province",
+        application.data.representative.province ?? "",
+      );
+      await sleep(300);
+
+      // Surname(s) / last name(s) (required)
+      await page.waitForSelector("#representative_familyName");
+      await page.type(
+        "#representative_familyName",
+        application.data.representative.lastName,
+      );
+      await sleep(300);
+
+      // Given name(s) / first name(s) (required)
+      await page.waitForSelector("#representative_firstName");
+      await page.type(
+        "#representative_firstName",
+        application.data.representative.firstName,
+      );
+      await sleep(300);
+
+      // Name of firm, organization (required)
+      await page.waitForSelector("#representative_organizationName");
+      await page.type(
+        "#representative_organizationName",
+        application.data.representative.organizationName ?? "",
+      );
+      await sleep(300);
+
+      // Mailing address (required)
+      await page.waitForSelector("#representative_mailingAddress");
+      await page.type(
+        "#representative_mailingAddress",
+        application.data.representative.mailingAddress,
+      );
+      await sleep(300);
+
+      // Postal code (required)
+      await page.waitForSelector("#representative_postalCodeZip");
+      await page.type(
+        "#representative_postalCodeZip",
+        application.data.representative.postalCodeZip ?? "",
+      );
+      await sleep(300);
+
+      // Telephone number (required)
+      await page.waitForSelector("#representative_phoneNumber");
+      await page.type(
+        "#representative_phoneNumber",
+        application.data.representative.phoneNumber,
+      );
+      await sleep(300);
+
+      // Fax number
+      await page.waitForSelector("#representative_faxNumber");
+      await page.type(
+        "#representative_faxNumber",
+        application.data.representative.faxNumber ?? "",
+      );
+      await sleep(300);
+
+      // Email address
+      await page.waitForSelector("#representative_emailAddress");
+      await page.type(
+        "#representative_emailAddress",
+        application.data.representative.emailAddress ?? "",
+      );
+      await sleep(300);
+
+      // Representative's declaration (required)
+      await page.waitForSelector(
+        "#representative_declareContactAndInformationIsTruthy",
+      );
+      await page.click("#representative_declareContactAndInformationIsTruthy");
+      await sleep(300);
+
+      // Representative's authorization (required)
+      await page.waitForSelector("#representative_understandAndAccept");
+      await page.click("#representative_understandAndAccept");
+      await sleep(300);
+
+      const currentUrl = page.url();
+
+      await page.waitForSelector(".btn-next");
+      await screenshot(page, application.id, "step2-3", false);
+      await page.click(".btn-next");
+      await page.waitForNetworkIdle();
+
+      if (currentUrl === page.url()) {
+        await screenshot(page, application.id, "step2-3", true);
+      }
+    } catch (err) {
+      await screenshot(page, application.id, "step2-3", true);
+
+      throw new Error(err.stack);
+    }
+  }
+
+  async function step2dot4(page, application) {
+    try {
+      // I am (required)
+      await page.waitForSelector("#representative_representativeRelationship");
+      await page.select("#representative_representativeRelationship", "3"); //
+      await sleep(300);
+
+      // Are you being paid to represent the applicant and complete the form on their behalf? (required)
+      await page.waitForSelector("#representative_representativeCompensated");
+      await page.select(
+        "#representative_representativeCompensated",
+        application.data.representative.representativeCompensated,
+      );
+      await sleep(300);
+
+      // Membership ID number (required)
+      await page.waitForSelector("#representative_membershipIdNumber");
+      await page.type(
+        "#representative_membershipIdNumber",
+        application.data.representative.membershipIdNumber ?? "",
+      );
+      await sleep(300);
+
+      // Which province or territory? (required)
+      await page.waitForSelector("#representative_province");
+      await page.type(
+        "#representative_province",
+        application.data.representative.province ?? "",
+      );
+      await sleep(300);
+
+      // Surname(s) / last name(s) (required)
+      await page.waitForSelector("#representative_familyName");
+      await page.type(
+        "#representative_familyName",
+        application.data.representative.lastName,
+      );
+      await sleep(300);
+
+      // Given name(s) / first name(s) (required)
+      await page.waitForSelector("#representative_firstName");
+      await page.type(
+        "#representative_firstName",
+        application.data.representative.firstName,
+      );
+      await sleep(300);
+
+      // Name of firm, organization (required)
+      await page.waitForSelector("#representative_organizationName");
+      await page.type(
+        "#representative_organizationName",
+        application.data.representative.organizationName ?? "",
+      );
+      await sleep(300);
+
+      // Mailing address (required)
+      await page.waitForSelector("#representative_mailingAddress");
+      await page.type(
+        "#representative_mailingAddress",
+        application.data.representative.mailingAddress,
+      );
+      await sleep(300);
+
+      // Postal code (required)
+      await page.waitForSelector("#representative_postalCodeZip");
+      await page.type(
+        "#representative_postalCodeZip",
+        application.data.representative.postalCodeZip ?? "",
+      );
+      await sleep(300);
+
+      // Telephone number (required)
+      await page.waitForSelector("#representative_phoneNumber");
+      await page.type(
+        "#representative_phoneNumber",
+        application.data.representative.phoneNumber,
+      );
+      await sleep(300);
+
+      // Fax number
+      await page.waitForSelector("#representative_faxNumber");
+      await page.type(
+        "#representative_faxNumber",
+        application.data.representative.faxNumber ?? "",
+      );
+      await sleep(300);
+
+      // Email address
+      await page.waitForSelector("#representative_emailAddress");
+      await page.type(
+        "#representative_emailAddress",
+        application.data.representative.emailAddress ?? "",
+      );
+      await sleep(300);
+
+      // Representative's declaration (required)
+      await page.waitForSelector(
+        "#representative_declareContactAndInformationIsTruthy",
+      );
+      await page.click("#representative_declareContactAndInformationIsTruthy");
+      await sleep(300);
+
+      // Representative's authorization (required)
+      await page.waitForSelector("#representative_understandAndAccept");
+      await page.click("#representative_understandAndAccept");
+      await sleep(300);
+
+      const currentUrl = page.url();
+
+      await page.waitForSelector(".btn-next");
+      await screenshot(page, application.id, "step2-4", false);
+      await page.click(".btn-next");
+      await page.waitForNetworkIdle();
+
+      if (currentUrl === page.url()) {
+        await screenshot(page, application.id, "step2-4", true);
+      }
+    } catch (err) {
+      await screenshot(page, application.id, "step2-4", true);
+
+      throw new Error(err.stack);
+    }
+  }
+
+  async function step2dot5(page, application) {
+    try {
+      // I am (required)
+      await page.waitForSelector("#representative_representativeRelationship");
+      await page.select("#representative_representativeRelationship", "4"); //
+      await sleep(300);
+
+      // Are you being paid to represent the applicant and complete the form on their behalf? (required)
+      await page.waitForSelector("#representative_representativeCompensated");
+      await page.select(
+        "#representative_representativeCompensated",
+        application.data.representative.representativeCompensated,
+      );
+      await sleep(300);
+
+      // Membership ID number (required)
+      await page.waitForSelector("#representative_membershipIdNumber");
+      await page.type(
+        "#representative_membershipIdNumber",
+        application.data.representative.membershipIdNumber ?? "",
+      );
+      await sleep(300);
+
+      // Surname(s) / last name(s) (required)
+      await page.waitForSelector("#representative_familyName");
+      await page.type(
+        "#representative_familyName",
+        application.data.representative.lastName,
+      );
+      await sleep(300);
+
+      // Given name(s) / first name(s) (required)
+      await page.waitForSelector("#representative_firstName");
+      await page.type(
+        "#representative_firstName",
+        application.data.representative.firstName,
+      );
+      await sleep(300);
+
+      // Name of firm, organization (required)
+      await page.waitForSelector("#representative_organizationName");
+      await page.type(
+        "#representative_organizationName",
+        application.data.representative.organizationName ?? "",
+      );
+      await sleep(300);
+
+      // Mailing address (required)
+      await page.waitForSelector("#representative_mailingAddress");
+      await page.type(
+        "#representative_mailingAddress",
+        application.data.representative.mailingAddress,
+      );
+      await sleep(300);
+
+      // Telephone number (required)
+      await page.waitForSelector("#representative_phoneNumber");
+      await page.type(
+        "#representative_phoneNumber",
+        application.data.representative.phoneNumber,
+      );
+      await sleep(300);
+
+      // Fax number
+      await page.waitForSelector("#representative_faxNumber");
+      await page.type(
+        "#representative_faxNumber",
+        application.data.representative.faxNumber ?? "",
+      );
+      await sleep(300);
+
+      // Email address
+      await page.waitForSelector("#representative_emailAddress");
+      await page.type(
+        "#representative_emailAddress",
+        application.data.representative.emailAddress ?? "",
+      );
+      await sleep(300);
+
+      // Representative's declaration (required)
+      await page.waitForSelector(
+        "#representative_declareContactAndInformationIsTruthy",
+      );
+      await page.click("#representative_declareContactAndInformationIsTruthy");
+      await sleep(300);
+
+      // Representative's authorization (required)
+      await page.waitForSelector("#representative_understandAndAccept");
+      await page.click("#representative_understandAndAccept");
+      await sleep(300);
+
+      const currentUrl = page.url();
+
+      await page.waitForSelector(".btn-next");
+      await screenshot(page, application.id, "step2-5", false);
+      await page.click(".btn-next");
+      await page.waitForNetworkIdle();
+
+      if (currentUrl === page.url()) {
+        await screenshot(page, application.id, "step2-5", true);
+      }
+    } catch (err) {
+      await screenshot(page, application.id, "step2-5", true);
+
+      throw new Error(err.stack);
+    }
+  }
+
+  async function step2dot6(page, application) {
+    try {
+      // I am (required)
+      await page.waitForSelector("#representative_representativeRelationship");
+      await page.select("#representative_representativeRelationship", "5"); //
+      await sleep(300);
+
+      // Are you being paid to represent the applicant and complete the form on their behalf? (required)
+      await page.waitForSelector("#representative_representativeCompensated");
+      await page.select(
+        "#representative_representativeCompensated",
+        application.data.representative.representativeCompensated,
+      );
+      await sleep(300);
+
+      // Surname(s) / last name(s) (required)
+      await page.waitForSelector("#representative_familyName");
+      await page.type(
+        "#representative_familyName",
+        application.data.representative.lastName,
+      );
+      await sleep(300);
+
+      // Given name(s) / first name(s) (required)
+      await page.waitForSelector("#representative_firstName");
+      await page.type(
+        "#representative_firstName",
+        application.data.representative.firstName,
+      );
+      await sleep(300);
+
+      // Name of firm, organization (required)
+      await page.waitForSelector("#representative_organizationName");
+      await page.type(
+        "#representative_organizationName",
+        application.data.representative.organizationName ?? "",
+      );
+      await sleep(300);
+
+      // Mailing address (required)
+      await page.waitForSelector("#representative_mailingAddress");
+      await page.type(
+        "#representative_mailingAddress",
+        application.data.representative.mailingAddress,
+      );
+      await sleep(300);
+
+      // Telephone number (required)
+      await page.waitForSelector("#representative_phoneNumber");
+      await page.type(
+        "#representative_phoneNumber",
+        application.data.representative.phoneNumber,
+      );
+      await sleep(300);
+
+      // Fax number
+      await page.waitForSelector("#representative_faxNumber");
+      await page.type(
+        "#representative_faxNumber",
+        application.data.representative.faxNumber ?? "",
+      );
+      await sleep(300);
+
+      // Email address
+      await page.waitForSelector("#representative_emailAddress");
+      await page.type(
+        "#representative_emailAddress",
+        application.data.representative.emailAddress ?? "",
+      );
+      await sleep(300);
+
+      // Representative's declaration (required)
+      await page.waitForSelector(
+        "#representative_declareContactAndInformationIsTruthy",
+      );
+      await page.click("#representative_declareContactAndInformationIsTruthy");
+      await sleep(300);
+
+      // Representative's authorization (required)
+      await page.waitForSelector("#representative_understandAndAccept");
+      await page.click("#representative_understandAndAccept");
+      await sleep(300);
+
+      const currentUrl = page.url();
+
+      await page.waitForSelector(".btn-next");
+      await screenshot(page, application.id, "step2-6", false);
+      await page.click(".btn-next");
+      await page.waitForNetworkIdle();
+
+      if (currentUrl === page.url()) {
+        await screenshot(page, application.id, "step2-6", true);
+      }
+    } catch (err) {
+      await screenshot(page, application.id, "step2-6", true);
 
       throw new Error(err.stack);
     }
