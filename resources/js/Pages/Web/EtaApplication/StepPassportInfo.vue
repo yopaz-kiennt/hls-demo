@@ -38,7 +38,7 @@ const { checkAgeOfPersonalDetails, formData, minAgeRequired } = storeToRefs(etaA
         <FormPersonalDetailsOfApplicant />
 
         <!-- Employment information -->
-        <FormEmploymentInformation v-if="checkAgeOfPersonalDetails > minAgeRequired" />
+        <FormEmploymentInformation v-if="checkAgeOfPersonalDetails >= minAgeRequired" />
 
         <!-- Contact information -->
         <FormContactInformation />
@@ -50,7 +50,7 @@ const { checkAgeOfPersonalDetails, formData, minAgeRequired } = storeToRefs(etaA
         <FormTravelInformation />
 
         <!-- Background Questions -->
-        <FormBackgroundQuestion v-if="checkAgeOfPersonalDetails > minAgeRequired" />
+        <FormBackgroundQuestion v-if="checkAgeOfPersonalDetails >= minAgeRequired" />
 
         <!-- Privacy notice -->
         <FormPrivacyNotice />

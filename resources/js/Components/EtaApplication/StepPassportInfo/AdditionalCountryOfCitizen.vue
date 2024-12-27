@@ -273,7 +273,13 @@ const countryOptions = ref([
             </FormField>
         </div>
 
-        <Button class="button flex" size="lg" type="button" @click="addAdditionalCitizenship">
+        <Button
+            class="button flex"
+            size="lg"
+            type="button"
+            :disabled="additionalCitizenship == null"
+            @click="addAdditionalCitizenship"
+        >
             <Plus />
             <span>{{ messages.insert }}</span>
         </Button>

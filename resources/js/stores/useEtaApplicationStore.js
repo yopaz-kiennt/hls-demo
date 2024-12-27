@@ -82,7 +82,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 uciReEnter: '',
             },
             employmentDetails: {
-                // checkAgeOfPersonalDetails (birthday) > 18
+                // checkAgeOfPersonalDetails (birthday) >= 18
                 occupation: '',
                 title: '',
                 companyEmployerSchoolFacilityName: '',
@@ -112,7 +112,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 travelDateTimeTimezone: '79', // Japan Time
             },
             backgroundQuestions: {
-                // checkAgeOfPersonalDetails (birthday) > 18
+                // checkAgeOfPersonalDetails (birthday) >= 18
                 refusedVisaOrPermitOrDeniedEntryToCanada: '',
                 refusedVisaOrPermitOrDeniedEntryToCanadaDetails: '',
                 committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere: '',
@@ -558,16 +558,15 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             return schemas;
         },
         checkAgeOfPersonalDetails(state) {
-            const dobYear = state.formData.personalDetails.dobYear;
-            const dobMonth = state.formData.personalDetails.dobMonth;
-            const dobDay = state.formData.personalDetails.dobDay;
+            const { dobYear, dobMonth, dobDay } = state.formData.personalDetails;
 
             if (!dobYear || !dobMonth || !dobDay) return 0;
 
             const today = new Date();
-            let age = today.getFullYear() - dobYear;
+            const dob = new Date(dobYear, dobMonth - 1, dobDay);
+            let age = today.getFullYear() - dob.getFullYear();
 
-            if (today.getMonth() + 1 < dobMonth || (today.getMonth() + 1 === dobMonth && today.getDate() < dobDay)) {
+            if (today < new Date(today.getFullYear(), dob.getMonth(), dob.getDate())) {
                 age--;
             }
 

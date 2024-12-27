@@ -1,26 +1,24 @@
 <script setup>
+import { Button } from '@/Components/ui/button';
 import IconReset from '@/Components/ui/icons/IconReset.vue';
 import IconSearch from '@/Components/ui/icons/IconSearch.vue';
-import {
-    Pagination,
-    PaginationEllipsis,
-    PaginationFirst,
-    PaginationLast,
-    PaginationList,
-    PaginationListItem,
-    PaginationNext,
-    PaginationPrev,
-} from '@/Components/ui/pagination';
+import { Input } from '@/Components/ui/input';
 import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { Toaster } from '@/Components/ui/toast';
 import { useToast } from '@/Components/ui/toast/use-toast';
+import VuePagination from '@/Components/VuePagination.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import ApplicationDetailsModal from '@/Pages/Admin/ApplicationDetailsModal.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import { format } from 'date-fns';
+import { Info, Send } from 'lucide-vue-next';
 import { ref } from 'vue';
 
+const { lang, messages } = usePage().props;
+
 const { toast } = useToast();
+
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, 'yyyy/MM/dd');
@@ -59,7 +57,7 @@ const date = ref(props.filters.date || '');
 const paymentStatus = ref(props.filters.payment_status || '');
 const status = ref(props.filters.status || '');
 
-const searchApplications = () => {
+const search = () => {
     const params = new URLSearchParams();
 
     if (email.value) params.append('email', email.value);
@@ -68,7 +66,7 @@ const searchApplications = () => {
     router.get(`/admin/eta-management?${params.toString()}`);
 };
 
-const resetFilters = () => {
+const reset = () => {
     email.value = '';
     date.value = '';
     paymentStatus.value = '';
@@ -100,8 +98,6 @@ const updateStatus = async (item, newStatus) => {
         toast({
             title: '更新成功しました！',
         });
-
-        console.log(`Status updated successfully for item ID: ${item.id}`);
     } catch (error) {
         console.error('Error:', error.response?.data || error.message);
         toast({
@@ -122,63 +118,69 @@ const updateStatus = async (item, newStatus) => {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>登録メールアドレス</th>
-                        <th>申請日</th>
-                        <th>支払い状況</th>
-                        <th>登録状況</th>
+                        <th>{{ messages.registered_email }}</th>
+                        <th>{{ messages.register_date }}</th>
+                        <th class="min-w-[140px]">{{ messages.payment_status }}</th>
+                        <th class="min-w-[140px]">{{ messages.register_status }}</th>
                         <th></th>
                         <th></th>
                     </tr>
                     <tr>
                         <td class="px-6 py-4"></td>
                         <td class="px-6 py-4">
-                            <input
-                                id="search-mail"
+                            <Input
                                 v-model="email"
-                                type="text"
-                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                type="email"
                                 placeholder="メールアドレスを入力"
-                                @keyup.enter="searchApplications"
+                                @keyup.enter="search"
                             />
                         </td>
-                        <td class="px-6 py-4">
-                            <input
-                                id="search-date"
-                                v-model="date"
-                                type="date"
-                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                            />
+                        <td class="px-3 py-4">
+                            <Input id="search-date" v-model="date" type="date" class="block w-full" />
+                            <!-- <Datepicker v-model="date" /> -->
                         </td>
                         <td class="px-6 py-4">
-                            <select
-                                id="payment-status"
-                                v-model="paymentStatus"
-                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                            >
-                                <option value="" disabled selected>状態を選択</option>
-                                <option value="0">支払い済み</option>
-                                <option value="1">未払い</option>
-                            </select>
+                            <Select v-model="paymentStatus">
+                                <SelectTrigger>
+                                    <SelectValue :placeholder="messages.please_select" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value="0">支払い済み</SelectItem>
+                                        <SelectItem value="1">未払い</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </td>
                         <td class="px-6 py-4">
-                            <select
-                                id="registration-status"
-                                v-model="status"
-                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                            >
-                                <option value="" disabled selected>状態を選択</option>
-                                <option value="pending">登録待ち</option>
-                                <option value="active">登録完了</option>
-                                <option value="inactive">失敗</option>
-                            </select>
+                            <Select v-model="status">
+                                <SelectTrigger>
+                                    <SelectValue :placeholder="messages.please_select" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value="pending">
+                                            {{ lang == 'en' ? 'Pending' : '登録待ち' }}
+                                        </SelectItem>
+                                        <SelectItem value="active">
+                                            {{ lang == 'en' ? 'Active' : '登録完了' }}
+                                        </SelectItem>
+                                        <SelectItem value="inactive">
+                                            {{ lang == 'en' ? 'Inactive' : '失敗' }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </td>
                         <td class="py-4">
                             <div class="flex h-full items-center justify-center gap-5">
-                                <button @click="searchApplications">
+                                <button @click="search">
                                     <IconSearch />
                                 </button>
 
-                                <button @click="resetFilters">
+                                <button @click="reset">
                                     <IconReset />
                                 </button>
                             </div>
@@ -203,86 +205,67 @@ const updateStatus = async (item, newStatus) => {
                         </td>
                         <td class="px-6 py-4">支払い状況</td>
                         <td class="px-6 py-4">
-                            <select
-                                v-model="item.status"
-                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                                @change="updateStatus(item, item.status)"
-                            >
-                                <option value="pending" selected>登録待ち</option>
-                                <option value="active">登録完了</option>
-                                <option value="inactive">失敗</option>
-                            </select>
+                            <Select v-model="item.status" @update:modelValue="updateStatus(item, item.status)">
+                                <SelectTrigger>
+                                    <SelectValue :placeholder="messages.please_select" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem value="pending">
+                                            {{ lang == 'en' ? 'Pending' : '登録待ち' }}
+                                        </SelectItem>
+                                        <SelectItem value="active">
+                                            {{ lang == 'en' ? 'Active' : '登録完了' }}
+                                        </SelectItem>
+                                        <SelectItem value="inactive">
+                                            {{ lang == 'en' ? 'Inactive' : '失敗' }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
 
                             <Toaster />
                         </td>
                         <td class="flex justify-center py-4">
-                            <button
-                                class="mb-2 me-2 rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                class="bg-blue-500 font-normal text-white hover:bg-blue-700 hover:text-white"
                                 @click="openDetailsModal(item)"
                             >
-                                詳細
-                            </button>
+                                <Info />
+                                <span>{{ messages.detail }}</span>
+                            </Button>
                         </td>
                         <td class="py-4">
-                            <button
-                                type="button"
-                                class="mb-2 me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100"
-                            >
-                                メールを再送する
-                            </button>
+                            <Button type="button" variant="outline" size="lg" class="font-normal hover:text-blue-500">
+                                <Send />
+                                <span>{{ messages.resend_email }}</span>
+                            </Button>
                         </td>
                     </tr>
-                    <ApplicationDetailsModal
-                        v-if="selectedItem"
-                        :item="selectedItem"
-                        :isOpen="isModalOpen"
-                        :occupations="occupations"
-                        @close="closeDetailsModal"
-                    />
                 </tbody>
             </table>
 
             <ScrollBar orientation="horizontal" />
         </ScrollArea>
 
-        <Pagination
-            v-if="applications.data.length > 0"
-            v-slot="{ page }"
-            :total="applications?.total"
-            :sibling-count="1"
-            :default-page="applications?.current_page"
-            class="my-4"
-        >
-            <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-                <PaginationFirst @click="loadPage(1)" />
-                <PaginationPrev @click="loadPage(applications?.current_page - 1)" />
+        <template v-if="applications.data.length > 0">
+            <VuePagination
+                :total-page="applications?.total"
+                :current-page="applications?.current_page"
+                @click="loadPage"
+            />
+        </template>
 
-                <template v-for="(item, index) in items">
-                    <PaginationListItem
-                        v-if="item.type === 'page'"
-                        :key="index"
-                        :value="item.value"
-                        as-child
-                        @click="loadPage(item.value)"
-                    >
-                        <button
-                            class="h-10 w-10 rounded-md p-0"
-                            :class="
-                                item.value === page
-                                    ? 'bg-black text-white'
-                                    : 'border border-input bg-white text-black hover:bg-accent hover:text-accent-foreground'
-                            "
-                        >
-                            {{ item.value }}
-                        </button>
-                    </PaginationListItem>
-
-                    <PaginationEllipsis v-else :key="item.type" :index="index" />
-                </template>
-
-                <PaginationNext @click="loadPage(applications?.current_page + 1)" />
-                <PaginationLast @click="loadPage(applications?.total)" />
-            </PaginationList>
-        </Pagination>
+        <ApplicationDetailsModal
+            v-if="selectedItem"
+            :item="selectedItem"
+            :isOpen="isModalOpen"
+            :occupations="occupations"
+            @close="closeDetailsModal"
+        />
     </AdminLayout>
 </template>

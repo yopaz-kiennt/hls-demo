@@ -101,4 +101,10 @@ return [
     'declaration_contact_info' => '上記に入力した連絡先および個人情報が真実であり、完全かつ正確であることを宣言します。',
     'declaration_authorization' => '申請者またはスポンサーの代理人として、カナダ移民・難民・市民権省（IRCC）およびカナダ国境サービス庁（CBSA）との業務を行うことを承諾し、承諾します。',
     'tuberculosis_diagnosed' => '結核と診断されたことがありますか？',
+    'payment_status' => '支払い状況',
+    'register_status' => '登録状況',
+    'register_date' => '申請日',
+    'registered_email' => '登録メールアドレス',
+    'resend_email' => 'メールを再送する',
+    'detail' => '詳細',
 ];

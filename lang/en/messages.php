@@ -101,4 +101,10 @@ return [
     'declaration_contact_info' => 'I declare that my contact and personal information above is truthful, complete and correct.',
     'declaration_authorization' => 'I understand and accept that I am the person appointed by the applicant to conduct business on the applicant or sponsor\'s behalf with Immigration, Refugees and Citizenship Canada and the Canada Border Services Agency.',
     'tuberculosis_diagnosed' => 'Have you ever been diagnosed with tuberculosis?',
+    'payment_status' => 'Payment status',
+    'register_status' => 'Status',
+    'register_date' => 'Date',
+    'registered_email' => 'Registered email',
+    'resend_email' => 'Resend email',
+    'detail' => 'Detail',
 ];
