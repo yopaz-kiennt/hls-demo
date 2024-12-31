@@ -2,20 +2,32 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 
 export const useNotificationStore = defineStore('notification', {
     state: () => ({
+        notifications: [],
         showNotify: false,
-        message: '',
+        title: '',
+        description: '',
         type: null,
     }),
     actions: {
-        triggerNotify({ type, message }) {
+        addNotification(type, title, description = '') {
+            const id = Date.now();
+            this.notifications.push({ id, type, title, description, showNotify: true, position: 20 });
+
+            setTimeout(() => {
+                this.resetNotify();
+            }, 5000);
+        },
+        triggerNotify({ type, title, description }) {
             this.type = type;
-            this.message = message;
-            this.showNotify = true;
+            this.title = title;
+            this.description = description;
         },
         resetNotify() {
-            this.showNotify = false;
-            this.message = '';
+            this.title = '';
+            this.description = '';
             this.type = null;
+            this.showNotify = false;
+            this.notifications = [];
         },
     },
 });

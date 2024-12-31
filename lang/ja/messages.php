@@ -107,4 +107,9 @@ return [
     'registered_email' => '登録メールアドレス',
     'resend_email' => 'メールを再送する',
     'detail' => '詳細',
+    'screenshots' => 'スクリーンショット',
+    'enter_your_email_address' => 'メールアドレスを入力',
+    'registration_information_list' => '登録情報リスト',
+    'choose_a_date' => '日付を選択する',
+    'home' => 'ホーム',
 ];

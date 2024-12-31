@@ -33,11 +33,13 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/', [DashboardController::class, 'index']);
+    // Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/', function () {
+        return redirect(route('admin.eta_management.index'));
+    });
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/eta-management', [EtaManagementController::class, 'index'])->name('eta_management.index');
     Route::put('/eta-management/{id}/status', [EtaManagementController::class, 'updateStatus']);
-
 });
 
 require __DIR__.'/auth.php';

@@ -8,6 +8,7 @@ import { createPinia } from 'pinia';
 import { createApp, h } from 'vue';
 import { route as ziggyRoute } from 'ziggy-js';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import toast from './plugins/toast';
 import ZiggyPlugin from './plugins/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -27,6 +28,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .use(pinia)
             .use(ZiggyPlugin)
+            .use(toast)
             .mount(el);
     },
     progress: {

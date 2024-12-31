@@ -3,10 +3,12 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import CommonNotify from '@/Components/ui/notify/CommonNotify.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const showingNavigationDropdown = ref(false);
+
+const { messages } = usePage().props;
 </script>
 
 <template>
@@ -29,7 +31,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    ホーム
+                                    {{ messages.home }}
                                 </NavLink>
                             </div>
 
@@ -39,6 +41,12 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('eta_application.index')"
                                 >
                                     eTA登録
+                                </NavLink>
+                            </div>
+
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('admin.eta_management.index')">
+                                    {{ messages.registration_information_list }}
                                 </NavLink>
                             </div>
                         </div>

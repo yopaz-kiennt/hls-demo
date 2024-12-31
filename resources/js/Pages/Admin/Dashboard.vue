@@ -56,7 +56,7 @@ import { Head } from '@inertiajs/vue3';
             <ScrollBar orientation="horizontal" />
         </ScrollArea>
 
-        <Pagination v-slot="{ page }" :total="100" :sibling-count="1" show-edges :default-page="2" class="mb-4">
+        <Pagination v-slot="{ page }" :total="42" :sibling-count="1" show-edges :default-page="2" class="mb-4">
             <PaginationList v-slot="{ items }" class="flex items-center gap-1">
                 <PaginationFirst />
                 <PaginationPrev />
