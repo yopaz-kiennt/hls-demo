@@ -126,7 +126,12 @@ const { messages } = usePage().props;
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input v-model="formData.consentAndDeclaration.fullName" type="text" v-bind="componentField" />
+                    <Input
+                        v-model="formData.consentAndDeclaration.fullName"
+                        type="text"
+                        v-bind="componentField"
+                        maxlength="160"
+                    />
                 </FormControl>
             </div>
 

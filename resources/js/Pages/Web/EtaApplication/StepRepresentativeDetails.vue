@@ -97,13 +97,13 @@ const { formData } = storeToRefs(etaApplicationStore);
 
     <FormStepRepresentativeDetails />
 
-    <FormField v-slot="{ componentField }" name="representative.faxNumber">
+    <FormField v-slot="{ componentField, errors }" name="representative.faxNumber">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.fax_number" />
             <!-- Fax number -->
 
             <div class="md:max-w-[60%]">
-                <FormControl>
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
                         id="representative.faxNumber"
@@ -118,13 +118,13 @@ const { formData } = storeToRefs(etaApplicationStore);
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="representative.emailAddress">
+    <FormField v-slot="{ componentField, errors }" name="representative.emailAddress">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.email_address" />
             <!-- Email address -->
 
             <div class="md:max-w-[60%]">
-                <FormControl>
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
                         id="representative.emailAddress"

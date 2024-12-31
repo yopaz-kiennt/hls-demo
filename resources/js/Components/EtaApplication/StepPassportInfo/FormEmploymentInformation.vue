@@ -156,7 +156,7 @@ const updateJobTitles = () => {
                             v-model="formData.employmentDetails.city"
                             v-bind="componentField"
                             type="text"
-                            maxlength="75"
+                            maxlength="50"
                         />
                     </FormControl>
                 </div>

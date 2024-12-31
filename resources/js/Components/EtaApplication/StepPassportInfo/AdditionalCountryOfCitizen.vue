@@ -12,7 +12,7 @@ const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
 
-const { messages } = usePage().props;
+const { messages, lang } = usePage().props;
 
 const additionalCitizenship = ref(null);
 
@@ -249,7 +249,7 @@ const countryOptions = ref([
 
 <template>
     <div class="flex w-[60%] justify-between">
-        <div class="w-[81%]">
+        <div :class="lang === 'en' ? 'w-[81%]' : 'w-[78%]'">
             <FormField v-slot="{ errors }" name="additionalCitizenship">
                 <FormItem>
                     <Select v-model="additionalCitizenship">

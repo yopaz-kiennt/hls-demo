@@ -1,4 +1,5 @@
 <script setup>
+import InputError from '@/Components/InputError.vue';
 import DateSelector from '@/Components/ui/dateselector/DateSelector.vue';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
@@ -16,7 +17,7 @@ const ModalDateOfExpiryOfPassport = defineAsyncComponent(() => import('./Modals/
 
 const etaApplicationStore = useEtaApplicationStore();
 
-const { formData } = storeToRefs(etaApplicationStore);
+const { formData, validateDatesOfPassport } = storeToRefs(etaApplicationStore);
 
 const { messages, lang } = usePage().props;
 
@@ -48,8 +49,9 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.personalDetails.passportNumber"
                         v-bind="componentField"
+                        id="personalDetails.passportNumber"
+                        v-model="formData.personalDetails.passportNumber"
                         type="text"
                         maxlength="12"
                     />
@@ -70,8 +72,9 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.personalDetails.passportNumberReEnter"
                         v-bind="componentField"
+                        id="personalDetails.passportNumberReEnter"
+                        v-model="formData.personalDetails.passportNumberReEnter"
                         type="text"
                         maxlength="12"
                     />
@@ -111,7 +114,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
     <FormField v-slot="{ componentField, errors }" name="personalDetails.firstNameOfPassport">
         <FormItem class="form-group">
             <LabelRequired :title="messages.given_first_name" />
-            <!-- Surname(s) / last name(s) -->
+            <!-- Given name(s) / first name(s) -->
 
             <!-- <p>Please enter exactly as shown on your passport or identity document.</p> -->
 
@@ -239,6 +242,10 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             inputMonth="personalDetails.issueDateMonth"
             inputDay="personalDetails.issueDateDay"
         />
+
+        <div v-if="validateDatesOfPassport">
+            <InputError :message="validateDatesOfPassport" />
+        </div>
     </div>
 
     <div class="form-group">
@@ -258,6 +265,10 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             inputDay="personalDetails.expiryDateDay"
             :end-year="2066"
         />
+
+        <div v-if="validateDatesOfPassport">
+            <InputError :message="validateDatesOfPassport" />
+        </div>
     </div>
 
     <ModalPassportNumber :open="isOpenModalPassportNumber" @close="isOpenModalPassportNumber = false" />

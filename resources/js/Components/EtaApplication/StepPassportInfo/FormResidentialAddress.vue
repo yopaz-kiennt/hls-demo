@@ -21,7 +21,7 @@ const { messages } = usePage().props;
 
     <!-- <p>Enter your permanent home address. Do not enter an address where you live temporarily.</p> -->
 
-    <FormField v-slot="{ componentField }" name="aptUnit">
+    <FormField v-slot="{ componentField }" name="contactDetails.aptUnit">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.apartment_unit_number" />
             <!-- Apartment/unit number (if applicable) -->
@@ -141,7 +141,7 @@ const { messages } = usePage().props;
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="district">
+    <FormField v-slot="{ componentField }" name="contactDetails.district">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.district_or_region" />
             <!-- District/region -->

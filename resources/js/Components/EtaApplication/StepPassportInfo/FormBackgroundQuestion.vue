@@ -306,13 +306,16 @@ const untreatedConditions = ref([
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails">
+    <FormField
+        v-slot="{ componentField, errors }"
+        name="backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
+    >
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.additional_details" />
             <!-- Please briefly indicate if there are additional details pertinent to your application. For example, an urgent need to travel to Canada. Provide relevant details to avoid delays in the processing of your application. -->
 
             <div class="md:max-w-[60%]">
-                <FormControl>
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Textarea
                         v-model="
                             formData.backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails
