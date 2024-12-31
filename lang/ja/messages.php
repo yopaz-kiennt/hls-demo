@@ -112,4 +112,9 @@ return [
     'registration_information_list' => '登録情報リスト',
     'choose_a_date' => '日付を選択する',
     'home' => 'ホーム',
+    'failed_to_send_mail' => 'メールの送信に失敗しました',
+    'mail_sent_successfully' => 'メールが正常に送信されました',
+    'update_failed' => '更新に失敗しました',
+    'update_successful' => '更新成功しました',
+    'an_error_occured_while_updating_your_status' => 'ステータスの更新中にエラーが発生しました。もう一度お試しください。',
 ];

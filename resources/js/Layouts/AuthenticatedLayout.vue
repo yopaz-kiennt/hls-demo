@@ -3,12 +3,17 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import CommonNotify from '@/Components/ui/notify/CommonNotify.vue';
+import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const showingNavigationDropdown = ref(false);
 
 const { messages } = usePage().props;
+
+const etaApplicationStore = useEtaApplicationStore();
+
+etaApplicationStore.setMessages(messages);
 </script>
 
 <template>

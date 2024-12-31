@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ApplicationStatus;
 use App\Http\Controllers\Controller;
+use App\Mail\ApprovedApplicationInfoMail;
+use App\Mail\RejectApplicationInfoMail;
 use App\Models\Application;
 use App\Models\Occupation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class EtaManagementController extends Controller
@@ -39,13 +43,39 @@ class EtaManagementController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $application = Application::findOrFail($id);
+        $status = $request->get('status');
 
-        $application->status = $request->input('status');
-        $application->save();
+        $application = Application::findOrFail($id);
+        $application->update(['status' => $status]);
+
+        $emailCustomer = $application->data['contactDetails']['emailAddress'];
+
+        $this->sendMail($emailCustomer, $status);
 
         return $this->responseSuccess([
             'status' => $application->status,
         ]);
+    }
+
+    public function resendEmail($id)
+    {
+        $application = Application::findOrFail($id);
+
+        $emailCustomer = $application->data['contactDetails']['emailAddress'];
+
+        $this->sendMail($emailCustomer, $application->status);
+
+        return $this->responseSuccess(null, __('messages.mail_sent_successfully'));
+    }
+
+    private function sendMail($email, $status)
+    {
+        if ($status === ApplicationStatus::Success->value) {
+            Mail::to($email)->send(new ApprovedApplicationInfoMail);
+        }
+
+        if ($status === ApplicationStatus::Error->value) {
+            Mail::to($email)->send(new RejectApplicationInfoMail);
+        }
     }
 }

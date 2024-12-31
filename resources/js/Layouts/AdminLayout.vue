@@ -5,8 +5,16 @@ import Header from '@/Components/Layouts/Header.vue';
 import Sidebar from '@/Components/Layouts/Sidebar.vue';
 import CommonNotify from '@/Components/ui/notify/CommonNotify.vue';
 import { ScrollArea } from '@/Components/ui/scroll-area';
+import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
+import { usePage } from '@inertiajs/vue3';
 
 const isMobileMenuOpen = ref(false);
+
+const { messages } = usePage().props;
+
+const etaApplicationStore = useEtaApplicationStore();
+
+etaApplicationStore.setMessages(messages);
 </script>
 
 <template>

@@ -5,7 +5,6 @@ import {
     Bell,
     ChevronDown,
     CreditCard,
-    FileMinus,
     HomeIcon,
     LayoutDashboard,
     LogOut,
@@ -39,13 +38,6 @@ const menuItems = ref([
         children: null,
         isOpen: false,
         routeName: 'admin.eta_management.index',
-    },
-    {
-        title: 'eTA登録',
-        icon: FileMinus,
-        children: null,
-        isOpen: false,
-        routeName: 'eta_application.index',
     },
     // {
     //     title: 'Playground',

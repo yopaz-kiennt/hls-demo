@@ -18,8 +18,6 @@ const { formSchema, formData, currentStep, loading, fieldNames } = storeToRefs(e
 
 const { messages } = usePage().props;
 
-etaApplicationStore.setMessages(messages);
-
 const props = defineProps({
     occupations: {
         type: Object,

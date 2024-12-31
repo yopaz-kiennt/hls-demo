@@ -593,6 +593,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         setSelectedItem(item) {
             this.selectedItem = item;
         },
+        setLoading(value) {
+            this.loading = value;
+        },
         deleteCountryOfCitizen(value) {
             const index = this.formData.personalDetails.additionalCountriesOfCitizenship.findIndex(
                 (item) => item.value === value
@@ -641,10 +644,6 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             try {
                 this.loading = true;
                 const { data } = await axios.post(this.$route('eta_application.register'), this.formData);
-
-                setTimeout(() => {
-                    this.loading = false;
-                }, 300);
 
                 setTimeout(() => {
                     window.$toast({
@@ -774,10 +773,6 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 const { data } = await axios.post(this.$route('eta_application.register'), fakeData);
 
                 setTimeout(() => {
-                    this.loading = false;
-                }, 300);
-
-                setTimeout(() => {
                     window.$toast({
                         type: 'success',
                         title: data.message,
@@ -803,7 +798,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         },
         async updateStatus(item, newStatus) {
             try {
-                await axios.put(`/admin/eta-management/${item.id}/status`, {
+                this.loading = true;
+
+                await axios.post(this.$route('admin.eta_management.update_status', item.id), {
                     status: newStatus,
                 });
 
@@ -811,15 +808,40 @@ export const useEtaApplicationStore = defineStore('eta_application', {
 
                 window.$toast({
                     type: 'success',
-                    title: '更新成功しました！',
+                    title: this.messages.update_successful,
                 });
             } catch (error) {
-                console.error('Error:', error.response?.data || error.message);
                 window.$toast({
                     type: 'error',
-                    title: '更新に失敗しました！',
-                    description: 'ステータスの更新中にエラーが発生しました。もう一度お試しください。',
+                    title: this.messages.update_failed,
+                    description: this.messages.an_error_occured_while_updating_your_status,
                 });
+            } finally {
+                setTimeout(() => {
+                    this.loading = false;
+                }, 200);
+            }
+        },
+        async resendEmail(id) {
+            try {
+                this.loading = true;
+                const { data } = await axios.post(this.$route('admin.eta_management.resend_email', id));
+
+                setTimeout(() => {
+                    window.$toast({
+                        type: 'success',
+                        title: data.message,
+                    });
+                }, 400);
+            } catch (error) {
+                window.$toast({
+                    type: 'error',
+                    title: this.messages.failed_to_send_mail,
+                });
+            } finally {
+                setTimeout(() => {
+                    this.loading = false;
+                }, 400);
             }
         },
     },
