@@ -223,6 +223,17 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             };
         },
         formSchema(state) {
+            const conditionalPassportNotedNationality = (passportNotedNationality, schemaCallback) =>
+                yup.string().when([], {
+                    is: () => true,
+                    then: (schema) => {
+                        if (passportNotedNationality === '87') {
+                            return schemaCallback();
+                        }
+                        return schema;
+                    },
+                });
+
             const schemas = [
                 // Step 01
                 yup.object({
@@ -392,65 +403,44 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                     }),
                     // =============================== Passport details of applicant ===============================
                     personalDetails: yup.object().shape({
-                        passportNumber: yup.string().when([], {
-                            is: () => true,
-                            then: (schema) => {
-                                const passportNotedNationality = state.formData.prerequisite.passportNotedNationality;
-                                if (passportNotedNationality === '87') {
-                                    return yup
-                                        .string()
-                                        .max(12, this.messages.max_length_12_characters)
-                                        .matches(/^[a-zA-Z0-9]*$/, this.messages.only_number_or_alphanumeric_characters)
-                                        .required(this.messages.please_be_sure_to_enter_this_item);
-                                }
-
-                                return schema;
-                            },
-                        }),
-                        passportNumberReEnter: yup.string().when([], {
-                            is: () => true,
-                            then: (schema) => {
-                                const passportNotedNationality = state.formData.prerequisite.passportNotedNationality;
-                                if (passportNotedNationality === '87') {
-                                    return yup
-                                        .string()
-                                        .max(12, this.messages.max_length_12_characters)
-                                        .oneOf(
-                                            [yup.ref('passportNumber')],
-                                            this.messages.the_passport_number_do_not_match
-                                        )
-                                        .required(this.messages.please_be_sure_to_enter_this_item);
-                                }
-
-                                return schema;
-                            },
-                        }),
-                        lastNameOfPassport: yup.string().when([], {
-                            is: () => true,
-                            then: (schema) => {
-                                const passportNotedNationality = state.formData.prerequisite.passportNotedNationality;
-                                if (passportNotedNationality === '87') {
-                                    return yup
-                                        .string()
-                                        .max(50, this.messages.max_length_50_characters)
-                                        .test(
-                                            'no-hyphen-apostrophe-space-start',
-                                            this.messages.cannot_start_with_a_hyphen,
-                                            (value) => {
-                                                return value ? !/^[\s'-]/.test(value) : true;
-                                            }
-                                        )
-                                        .test(
-                                            'english-french-characters',
-                                            this.messages.english_french_characters,
-                                            (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
-                                        )
-                                        .required(this.messages.please_be_sure_to_enter_this_item);
-                                }
-
-                                return schema;
-                            },
-                        }),
+                        passportNumber: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(12, this.messages.max_length_12_characters)
+                                    .matches(/^[a-zA-Z0-9]*$/, this.messages.only_number_or_alphanumeric_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        passportNumberReEnter: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(12, this.messages.max_length_12_characters)
+                                    .oneOf([yup.ref('passportNumber')], this.messages.the_passport_number_do_not_match)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        lastNameOfPassport: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(50, this.messages.max_length_50_characters)
+                                    .test(
+                                        'no-hyphen-apostrophe-space-start',
+                                        this.messages.cannot_start_with_a_hyphen,
+                                        (value) => {
+                                            return value ? !/^[\s'-]/.test(value) : true;
+                                        }
+                                    )
+                                    .test(
+                                        'english-french-characters',
+                                        this.messages.english_french_characters,
+                                        (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                    )
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
                         firstNameOfPassport: yup
                             .string()
                             .max(50, this.messages.max_length_50_characters)
