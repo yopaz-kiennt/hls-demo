@@ -8,7 +8,7 @@ import * as yup from 'yup';
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
         messages: {},
-        currentStep: 2,
+        currentStep: 0,
         steps: [
             {
                 step: 1,

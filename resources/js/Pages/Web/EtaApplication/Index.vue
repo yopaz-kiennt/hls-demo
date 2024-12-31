@@ -62,12 +62,12 @@ const scrollToField = (field) => {
 
                     <Form
                         ref="formRef"
-                        v-slot="{ meta, errors }"
+                        v-slot="{ meta }"
                         keep-values
                         :validation-schema="formSchema[currentStep]"
                         @submit="nextStep()"
                     >
-                        <div v-if="Object.keys(errors).length > 0">
+                        <!-- <div v-if="Object.keys(errors).length > 0">
                             <div v-for="(error, field) in errors" :key="field">
                                 <p>
                                     <a :href="`#${field}`" class="href-custom" @click.prevent="scrollToField(field)">{{
@@ -76,7 +76,7 @@ const scrollToField = (field) => {
                                     >: {{ error }}
                                 </p>
                             </div>
-                        </div>
+                        </div> -->
 
                         <StepApplicantType v-if="currentStep === 0" />
                         <StepRepresentativeDetails v-if="currentStep === 1" />
