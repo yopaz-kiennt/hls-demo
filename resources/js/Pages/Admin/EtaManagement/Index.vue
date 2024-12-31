@@ -21,8 +21,7 @@ import { ref } from 'vue';
 const { lang, messages } = usePage().props;
 
 const etaApplicationStore = useEtaApplicationStore();
-const { isOpenModalDetails, selectedItem } = storeToRefs(etaApplicationStore);
-const loading = ref(false);
+const { isOpenModalDetails, selectedItem, loading } = storeToRefs(etaApplicationStore);
 
 const props = defineProps({
     applications: {
@@ -58,6 +57,7 @@ const formSearch = ref({
 
 const search = () => {
     loading.value = true;
+    etaApplicationStore.setLoading(true);
     router.get(`/admin/eta-management?${buildUrlParams({ ...formSearch.value })}`);
 };
 
@@ -69,7 +69,7 @@ const reset = () => {
         status: '',
     };
 
-    loading.value = true;
+    etaApplicationStore.setLoading(true);
     router.get('/admin/eta-management');
 };
 
@@ -216,7 +216,14 @@ const loadPage = (page) => {
                             </Button>
                         </td>
                         <td>
-                            <Button type="button" variant="outline" size="lg" class="font-normal hover:text-blue-500">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                class="font-normal hover:text-blue-500"
+                                :disabled="loading"
+                                @click="etaApplicationStore.resendEmail(item.id)"
+                            >
                                 <Send />
                                 <span>{{ messages.resend_email }}</span>
                             </Button>

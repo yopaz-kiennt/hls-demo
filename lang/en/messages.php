@@ -112,4 +112,9 @@ return [
     'registration_information_list' => 'Registration information list',
     'choose_a_date' => 'Choose a date',
     'home' => 'Home',
+    'failed_to_send_mail' => 'Failed to send mail',
+    'mail_sent_successfully' => 'Mail sent successfully',
+    'update_failed' => 'Update failed',
+    'update_successful' => 'Update successful',
+    'an_error_occured_while_updating_your_status' => 'An error occurred while updating your status. Please try again.',
 ];
