@@ -1,20 +1,18 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { storeToRefs } from 'pinia';
 import Notify from './Notify.vue';
 
 const notificationStore = useNotificationStore();
+const { notifications } = storeToRefs(notificationStore);
 
 const page = usePage();
 const notify = computed(() => {
     return page.props.session_flash;
 });
-
-const showNotify = ref(false);
-const message = ref('');
-const type = ref(null);
 
 watch(notify, () => {
     handleNotify();
@@ -24,11 +22,11 @@ watch(
     () => notificationStore.showNotify,
     (newValue) => {
         if (newValue) {
-            message.value = notificationStore.message;
-            type.value = notificationStore.type;
-            showNotify.value = true;
-
-            setTimeout(() => notificationStore.resetNotify(), 5000);
+            notificationStore.addNotification(
+                notificationStore.type,
+                notificationStore.title,
+                notificationStore.description
+            );
         }
     }
 );
@@ -38,18 +36,23 @@ onMounted(() => {
 });
 
 const handleNotify = () => {
-    if (notify.value.alert_success) {
-        type.value = 'success';
-        showNotify.value = true;
-        message.value = notify.value.alert_success;
-    } else if (notify.value.alert_error) {
-        type.value = 'error';
-        showNotify.value = true;
-        message.value = notify.value.alert_error;
+    const alertType = notify.value.alert_success ? 'success' : notify.value.alert_error ? 'error' : null;
+
+    if (alertType) {
+        const message = notify.value[`alert_${alertType}`];
+        console.log(message, alertType);
+        notificationStore.addNotification(alertType, message);
     }
 };
 </script>
 
 <template>
-    <Notify v-model="showNotify" :message="message" :type="type" />
+    <div v-for="notification in notifications" :key="notification.id">
+        <Notify
+            v-model="notification.showNotify"
+            :title="notification.title"
+            :description="notification.description"
+            :type="notification.type"
+        />
+    </div>
 </template>

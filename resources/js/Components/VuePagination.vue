@@ -21,6 +21,11 @@ defineProps({
         default: 1,
         required: true,
     },
+    lastPage: {
+        type: Number,
+        default: 1,
+        required: true,
+    },
 });
 
 const emit = defineEmits(['click']);
@@ -31,7 +36,14 @@ const loadPage = (page) => {
 </script>
 
 <template>
-    <Pagination v-slot="{ page }" :total="totalPage" :sibling-count="1" :default-page="currentPage" class="my-4">
+    <Pagination
+        v-slot="{ page }"
+        :total="totalPage"
+        :sibling-count="1"
+        show-edges
+        :default-page="currentPage"
+        class="my-4"
+    >
         <PaginationList v-slot="{ items }" class="flex items-center gap-1">
             <PaginationFirst @click="loadPage(1)" />
             <PaginationPrev @click="loadPage(currentPage - 1)" />
@@ -48,7 +60,7 @@ const loadPage = (page) => {
                         class="h-10 w-10 rounded-md p-0"
                         :class="
                             item.value === page
-                                ? 'bg-black text-white'
+                                ? 'bg-[#3b82f6] text-white'
                                 : 'border border-input bg-white text-black hover:bg-accent hover:text-accent-foreground'
                         "
                     >
@@ -60,7 +72,7 @@ const loadPage = (page) => {
             </template>
 
             <PaginationNext @click="loadPage(currentPage + 1)" />
-            <PaginationLast @click="loadPage(totalPage)" />
+            <PaginationLast @click="loadPage(lastPage)" />
         </PaginationList>
     </Pagination>
 </template>

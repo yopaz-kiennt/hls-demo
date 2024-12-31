@@ -1,28 +1,28 @@
 <script setup>
+import ModalDetails from '@/Components/EtaManagement/ModalDetails.vue';
+import Screenshots from '@/Components/EtaManagement/Screenshots.vue';
 import { Button } from '@/Components/ui/button';
+import Datepicker from '@/Components/ui/datepicker/Datepicker.vue';
 import IconReset from '@/Components/ui/icons/IconReset.vue';
 import IconSearch from '@/Components/ui/icons/IconSearch.vue';
 import { Input } from '@/Components/ui/input';
+import Loading from '@/Components/ui/loading/Loading.vue';
 import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { Toaster } from '@/Components/ui/toast';
-import { useToast } from '@/Components/ui/toast/use-toast';
 import VuePagination from '@/Components/VuePagination.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import ApplicationDetailsModal from '@/Pages/Admin/ApplicationDetailsModal.vue';
+import { buildUrlParams, formatDate } from '@/lib/utils';
+import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { Head, router, usePage } from '@inertiajs/vue3';
-import { format } from 'date-fns';
 import { Info, Send } from 'lucide-vue-next';
+import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
 const { lang, messages } = usePage().props;
 
-const { toast } = useToast();
-
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return format(date, 'yyyy/MM/dd');
-};
+const etaApplicationStore = useEtaApplicationStore();
+const { isOpenModalDetails, selectedItem } = storeToRefs(etaApplicationStore);
+const loading = ref(false);
 
 const props = defineProps({
     applications: {
@@ -39,73 +39,42 @@ const props = defineProps({
     },
 });
 
-const selectedItem = ref(null);
-const isModalOpen = ref(false);
-
-const openDetailsModal = (item) => {
-    selectedItem.value = item;
-    isModalOpen.value = true;
+const openModalDetails = (item) => {
+    etaApplicationStore.setSelectedItem(item);
+    etaApplicationStore.setOpenModalDetails(true);
 };
 
-const closeDetailsModal = () => {
-    isModalOpen.value = false;
-    selectedItem.value = null;
+const closeModalDetails = () => {
+    etaApplicationStore.setSelectedItem(null);
+    etaApplicationStore.setOpenModalDetails(false);
 };
 
-const email = ref(props.filters.email || '');
-const date = ref(props.filters.date || '');
-const paymentStatus = ref(props.filters.payment_status || '');
-const status = ref(props.filters.status || '');
+const formSearch = ref({
+    email: props.filters.email || '',
+    date: props.filters.date || '',
+    paymentStatus: props.filters.payment_status || '',
+    status: props.filters.status || '',
+});
 
 const search = () => {
-    const params = new URLSearchParams();
-
-    if (email.value) params.append('email', email.value);
-    if (date.value) params.append('date', date.value);
-    if (status.value) params.append('status', status.value);
-    router.get(`/admin/eta-management?${params.toString()}`);
+    loading.value = true;
+    router.get(`/admin/eta-management?${buildUrlParams({ ...formSearch.value })}`);
 };
 
 const reset = () => {
-    email.value = '';
-    date.value = '';
-    paymentStatus.value = '';
-    status.value = '';
+    formSearch.value = {
+        email: '',
+        date: '',
+        paymentStatus: '',
+        status: '',
+    };
 
+    loading.value = true;
     router.get('/admin/eta-management');
 };
 
 const loadPage = (page) => {
-    const params = new URLSearchParams({
-        email: email.value,
-        date: date.value,
-        payment_status: paymentStatus.value,
-        status: status.value,
-        page,
-    });
-
-    router.get(`/admin/eta-management?${params.toString()}`);
-};
-
-const updateStatus = async (item, newStatus) => {
-    try {
-        const response = await axios.put(`/admin/eta-management/${item.id}/status`, {
-            status: newStatus,
-        });
-
-        item.status = response.data.status;
-
-        toast({
-            title: '更新成功しました！',
-        });
-    } catch (error) {
-        console.error('Error:', error.response?.data || error.message);
-        toast({
-            title: '更新に失敗しました！',
-            description: 'ステータスの更新中にエラーが発生しました。もう一度お試しください。',
-            variant: 'destructive',
-        });
-    }
+    router.get(`/admin/eta-management?${buildUrlParams({ ...formSearch.value, page })}`);
 };
 </script>
 
@@ -118,29 +87,29 @@ const updateStatus = async (item, newStatus) => {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>{{ messages.registered_email }}</th>
-                        <th>{{ messages.register_date }}</th>
+                        <th class="w-[250px]">{{ messages.registered_email }}</th>
+                        <th class="w-[200px]">{{ messages.register_date }}</th>
                         <th class="min-w-[140px]">{{ messages.payment_status }}</th>
                         <th class="min-w-[140px]">{{ messages.register_status }}</th>
+                        <th class="min-w-[140px]">{{ messages.screenshots }}</th>
                         <th></th>
                         <th></th>
                     </tr>
                     <tr>
-                        <td class="px-6 py-4"></td>
-                        <td class="px-6 py-4">
+                        <td></td>
+                        <td>
                             <Input
-                                v-model="email"
+                                v-model="formSearch.email"
                                 type="email"
-                                placeholder="メールアドレスを入力"
+                                :placeholder="messages.enter_your_email_address"
                                 @keyup.enter="search"
                             />
                         </td>
-                        <td class="px-3 py-4">
-                            <Input id="search-date" v-model="date" type="date" class="block w-full" />
-                            <!-- <Datepicker v-model="date" /> -->
+                        <td class="max-w-[120px]">
+                            <Datepicker v-model="formSearch.date" classes="w-[160px]" />
                         </td>
-                        <td class="px-6 py-4">
-                            <Select v-model="paymentStatus">
+                        <td>
+                            <Select v-model="formSearch.paymentStatus">
                                 <SelectTrigger>
                                     <SelectValue :placeholder="messages.please_select" />
                                 </SelectTrigger>
@@ -153,8 +122,8 @@ const updateStatus = async (item, newStatus) => {
                                 </SelectContent>
                             </Select>
                         </td>
-                        <td class="px-6 py-4">
-                            <Select v-model="status">
+                        <td>
+                            <Select v-model="formSearch.status">
                                 <SelectTrigger>
                                     <SelectValue :placeholder="messages.please_select" />
                                 </SelectTrigger>
@@ -164,48 +133,54 @@ const updateStatus = async (item, newStatus) => {
                                         <SelectItem value="pending">
                                             {{ lang == 'en' ? 'Pending' : '登録待ち' }}
                                         </SelectItem>
-                                        <SelectItem value="active">
-                                            {{ lang == 'en' ? 'Active' : '登録完了' }}
+                                        <SelectItem value="success">
+                                            {{ lang == 'en' ? 'Success' : '登録完了' }}
                                         </SelectItem>
-                                        <SelectItem value="inactive">
-                                            {{ lang == 'en' ? 'Inactive' : '失敗' }}
+                                        <SelectItem value="error">
+                                            {{ lang == 'en' ? 'Error' : '失敗' }}
                                         </SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </td>
-                        <td class="py-4">
-                            <div class="flex h-full items-center justify-center gap-5">
-                                <button @click="search">
+                        <td></td>
+                        <td>
+                            <div class="flex h-full justify-center gap-1">
+                                <button class="p-2 hover:text-blue-500" @click="search">
                                     <IconSearch />
                                 </button>
-
-                                <button @click="reset">
+                                <button class="p-2" @click="reset">
                                     <IconReset />
                                 </button>
                             </div>
                         </td>
-                        <td class="py-4"></td>
+                        <td></td>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr v-if="applications.data.length === 0">
-                        <td colspan="7" class="py-4 text-center">データがありません。</td>
-                    </tr>
+                    <template v-if="!applications.data.length">
+                        <tr>
+                            <td colspan="8" class="text-center">データがありません。</td>
+                        </tr>
+                    </template>
 
                     <tr v-for="item in applications.data" v-else :key="item.id" class="border-b">
-                        <td class="px-6 py-4">
+                        <td>
                             {{ item.id }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td>
                             {{ item.data.contactDetails.emailAddress }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td>
                             {{ formatDate(item.created_at) }}
                         </td>
-                        <td class="px-6 py-4">支払い状況</td>
-                        <td class="px-6 py-4">
-                            <Select v-model="item.status" @update:modelValue="updateStatus(item, item.status)">
+                        <td>支払い状況</td>
+                        <td>
+                            <Select
+                                v-model="item.status"
+                                @update:modelValue="etaApplicationStore.updateStatus(item, item.status)"
+                            >
                                 <SelectTrigger>
                                     <SelectValue :placeholder="messages.please_select" />
                                 </SelectTrigger>
@@ -215,31 +190,32 @@ const updateStatus = async (item, newStatus) => {
                                         <SelectItem value="pending">
                                             {{ lang == 'en' ? 'Pending' : '登録待ち' }}
                                         </SelectItem>
-                                        <SelectItem value="active">
-                                            {{ lang == 'en' ? 'Active' : '登録完了' }}
+                                        <SelectItem value="success">
+                                            {{ lang == 'en' ? 'Success' : '登録完了' }}
                                         </SelectItem>
-                                        <SelectItem value="inactive">
-                                            {{ lang == 'en' ? 'Inactive' : '失敗' }}
+                                        <SelectItem value="error">
+                                            {{ lang == 'en' ? 'Error' : '失敗' }}
                                         </SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-
-                            <Toaster />
                         </td>
-                        <td class="flex justify-center py-4">
+                        <td>
+                            <Screenshots v-if="item.screenshots" :screenshots="item.screenshots" />
+                        </td>
+                        <td class="text-center">
                             <Button
                                 type="button"
                                 variant="outline"
                                 size="lg"
                                 class="bg-blue-500 font-normal text-white hover:bg-blue-700 hover:text-white"
-                                @click="openDetailsModal(item)"
+                                @click="openModalDetails(item)"
                             >
                                 <Info />
                                 <span>{{ messages.detail }}</span>
                             </Button>
                         </td>
-                        <td class="py-4">
+                        <td>
                             <Button type="button" variant="outline" size="lg" class="font-normal hover:text-blue-500">
                                 <Send />
                                 <span>{{ messages.resend_email }}</span>
@@ -256,16 +232,21 @@ const updateStatus = async (item, newStatus) => {
             <VuePagination
                 :total-page="applications?.total"
                 :current-page="applications?.current_page"
+                :last-page="applications?.last_page"
                 @click="loadPage"
             />
         </template>
 
-        <ApplicationDetailsModal
+        <ModalDetails
             v-if="selectedItem"
             :item="selectedItem"
-            :isOpen="isModalOpen"
+            :isOpen="isOpenModalDetails"
             :occupations="occupations"
-            @close="closeDetailsModal"
+            @close="closeModalDetails"
         />
+
+        <div v-if="loading" class="loading-overlay">
+            <Loading />
+        </div>
     </AdminLayout>
 </template>

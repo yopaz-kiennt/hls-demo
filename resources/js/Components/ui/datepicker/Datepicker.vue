@@ -1,22 +1,43 @@
 <script setup>
 import { Button } from '@/Components/ui/button';
 import { Calendar } from '@/Components/ui/calendar';
-
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { cn } from '@/lib/utils';
-import { DateFormatter, getLocalTimeZone } from '@internationalized/date';
+import { usePage } from '@inertiajs/vue3';
+import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date';
+import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const df = new DateFormatter('ja-JP', {
-    dateStyle: 'long',
-});
+const { messages, lang } = usePage().props;
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return format(date, 'yyyy/MM/dd');
+};
+
+const df = {
+    format(date, lang) {
+        if (lang === 'en') {
+            return formatDate(date);
+        } else {
+            const formatter = new DateFormatter('ja-JP', {
+                dateStyle: 'long',
+            });
+            return formatter.format(date);
+        }
+    },
+};
 
 const value = ref();
 const isPopoverOpen = ref(false);
 
-defineProps({
+const props = defineProps({
     modelValue: {
+        type: String,
+        default: '',
+    },
+    classes: {
         type: String,
         default: '',
     },
@@ -24,12 +45,20 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+onMounted(() => {
+    value.value = parseStringToDateValue(props.modelValue);
+});
+
+const parseStringToDateValue = (dateString) => {
+    if (!dateString) return null;
+    const [year, month, day] = dateString.split('/').map(Number);
+    return new CalendarDate(year, month, day);
+};
+
 const handleDateSelect = (selectedDate) => {
     value.value = selectedDate;
     isPopoverOpen.value = false;
-
-    const dateFormatted = `${selectedDate.year}/${selectedDate.month}/${selectedDate.day}`;
-    emit('update:modelValue', dateFormatted);
+    emit('update:modelValue', formatDate(selectedDate));
 };
 </script>
 
@@ -38,15 +67,21 @@ const handleDateSelect = (selectedDate) => {
         <PopoverTrigger as-child>
             <Button
                 variant="outline"
-                :class="cn('w-[280px] justify-start text-left font-normal', !value && 'text-muted-foreground')"
+                :class="
+                    cn(
+                        'max-w-[280px] justify-between text-left font-normal',
+                        !value && 'text-muted-foreground',
+                        classes
+                    )
+                "
             >
-                <CalendarIcon class="mr-2 h-4 w-4" />
-                {{ value ? df.format(value.toDate(getLocalTimeZone())) : 'Pick a date' }}
+                {{ value ? df.format(value.toDate(getLocalTimeZone()), lang) : messages.choose_a_date }}
+                <CalendarIcon class="h-4 w-4" />
             </Button>
         </PopoverTrigger>
 
         <PopoverContent class="w-auto p-0">
-            <Calendar v-model="value" initial-focus @update:modelValue="handleDateSelect" />
+            <Calendar v-model="value" :locale="lang" initial-focus @update:modelValue="handleDateSelect" />
         </PopoverContent>
     </Popover>
 </template>

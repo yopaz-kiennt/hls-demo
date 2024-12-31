@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
             },
             'messages' => Lang::get('messages'),
             'lang' => env('APP_LOCALE', 'ja'),
+            'url' => env('APP_URL', 'localhost'),
         ];
     }
 }

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
-use Illuminate\Http\Request;
 use App\Models\Occupation;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class EtaManagementController extends Controller
@@ -27,10 +27,10 @@ class EtaManagementController extends Controller
         }
 
         $applications = $query->orderBy('created_at', 'desc')->paginate(10);
-        
+
         $occupations = Occupation::with('jobTitles')->get();
 
-        return Inertia::render('Admin/Index', [
+        return Inertia::render('Admin/EtaManagement/Index', [
             'applications' => $applications,
             'filters' => $request->only('email', 'date', 'status'),
             'occupations' => $occupations,
@@ -44,6 +44,8 @@ class EtaManagementController extends Controller
         $application->status = $request->input('status');
         $application->save();
 
-        return response()->json(['status' => $application->status]);
+        return $this->responseSuccess([
+            'status' => $application->status,
+        ]);
     }
 }

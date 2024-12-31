@@ -40,7 +40,7 @@
 }
 
 .loading-overlay {
-    @apply fixed left-0 top-0 flex h-[100%] w-[100%] items-center justify-center bg-[#14101014];
+    @apply fixed left-0 top-0 z-[31] flex h-[100%] w-[100%] items-center justify-center bg-[#14101014];
 }
 
 .table-container {
@@ -59,11 +59,11 @@
         }
 
         tr {
-            border-bottom: 1px solid gainsboro;
+            border-bottom: 1px solid #e7e7e7;
 
             td,
             th {
-                padding: 12px;
+                padding: 10px 12px;
                 font-size: 14px;
             }
         }

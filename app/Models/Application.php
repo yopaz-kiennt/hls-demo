@@ -22,5 +22,6 @@ class Application extends Model
 
     protected $casts = [
         'data' => 'array',
+        'screenshots' => 'array',
     ];
 }

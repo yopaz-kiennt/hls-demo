@@ -1,20 +1,22 @@
 <script setup>
 import { ScrollArea } from '@/Components/ui/scroll-area';
+import { Link, usePage } from '@inertiajs/vue3';
 import {
     Bell,
-    Box,
     ChevronDown,
     CreditCard,
-    FileText,
+    FileMinus,
     HomeIcon,
     LayoutDashboard,
     LogOut,
-    PlaySquare,
     Sparkles,
+    SquareChartGantt,
     User,
 } from 'lucide-vue-next';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { route } from 'ziggy-js';
+
+const { messages } = usePage().props;
 
 defineProps({
     isMobileMenuOpen: {
@@ -25,65 +27,79 @@ defineProps({
 
 const menuItems = ref([
     {
-        title: 'Dashboard',
+        title: messages.home,
         icon: HomeIcon,
         children: null,
         isOpen: false,
-        routeName: 'admin.dashboard',
+        routeName: 'dashboard',
     },
     {
-        title: 'Playground',
-        icon: PlaySquare,
-        children: [
-            {
-                title: 'Settings',
-                routeName: '',
-            },
-            {
-                title: 'Starred',
-                routeName: '',
-            },
-        ],
+        title: messages.registration_information_list,
+        icon: SquareChartGantt,
+        children: null,
         isOpen: false,
+        routeName: 'admin.eta_management.index',
     },
     {
-        title: 'Models',
-        icon: Box,
-        children: [
-            {
-                title: 'History',
-                routeName: '',
-            },
-            {
-                title: 'Explorer',
-                routeName: '',
-            },
-            {
-                title: 'Quantum',
-                routeName: '',
-            },
-        ],
+        title: 'eTA登録',
+        icon: FileMinus,
+        children: null,
         isOpen: false,
+        routeName: 'eta_application.index',
     },
-    {
-        title: 'Documentation',
-        icon: FileText,
-        children: [
-            {
-                title: 'Introduction',
-                routeName: '',
-            },
-            {
-                title: 'API Reference',
-                routeName: '',
-            },
-            {
-                title: 'Examples',
-                routeName: '',
-            },
-        ],
-        isOpen: false,
-    },
+    // {
+    //     title: 'Playground',
+    //     icon: PlaySquare,
+    //     children: [
+    //         {
+    //             title: 'Settings',
+    //             routeName: '',
+    //         },
+    //         {
+    //             title: 'Starred',
+    //             routeName: '',
+    //         },
+    //     ],
+    //     isOpen: false,
+    // },
+    // {
+    //     title: 'Models',
+    //     icon: Box,
+    //     children: [
+    //         {
+    //             title: 'History',
+    //             routeName: '',
+    //         },
+    //         {
+    //             title: 'Explorer',
+    //             routeName: '',
+    //         },
+    //         {
+    //             title: 'Quantum',
+    //             routeName: '',
+    //         },
+    //     ],
+    //     isOpen: false,
+    // },
+    // {
+    //     title: 'Documentation',
+    //     icon: FileText,
+    //     children: [
+    //         {
+    //             title: 'Introduction',
+    //             routeName: '',
+    //         },
+    //         {
+    //             title: 'API Reference',
+    //             routeName: '',
+    //         },
+    //         {
+    //             title: 'Examples',
+    //             routeName: '',
+    //         },
+    //     ],
+    //     isOpen: false,
+    // },
 ]);
 
 const profileMenu = [
@@ -151,7 +167,7 @@ onUnmounted(() => {
 
             <div class="flex items-center justify-between border-b p-4">
                 <div class="flex items-center gap-3">
-                    <div class="rounded-lg bg-black p-2 text-white">
+                    <div class="rounded-lg bg-[#50b0c7] p-2 text-white">
                         <LayoutDashboard class="h-5 w-5" />
                     </div>
 
@@ -165,8 +181,7 @@ onUnmounted(() => {
             <!-- Navigation -->
             <ScrollArea class="flex-1 overflow-y-auto">
                 <div class="p-2">
-                    <p class="px-3 py-2 text-xs font-semibold uppercase text-gray-500">登録情報リスト</p>
-                    <!-- <div class="space-y-1">
+                    <div class="space-y-1">
                         <div v-for="(item, index) in menuItems" :key="index">
                             <component
                                 :is="item.children ? 'a' : Link"
@@ -215,7 +230,7 @@ onUnmounted(() => {
                                 </div>
                             </transition>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </ScrollArea>
 

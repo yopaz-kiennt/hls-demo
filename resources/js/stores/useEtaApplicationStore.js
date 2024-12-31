@@ -3,7 +3,6 @@ import { router } from '@inertiajs/vue3';
 import { AxiosError, HttpStatusCode } from 'axios';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import * as yup from 'yup';
-import { useNotificationStore } from './useNotificationStore';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
@@ -133,6 +132,8 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         errors: {},
         occupations: {},
         jobTitles: {},
+        selectedItem: null,
+        isOpenModalDetails: false,
     }),
     getters: {
         fieldNames() {
@@ -586,6 +587,12 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         addCountriesOfCitizen(item) {
             this.formData.personalDetails.additionalCountriesOfCitizenship.push(item);
         },
+        setOpenModalDetails(value) {
+            this.isOpenModalDetails = value;
+        },
+        setSelectedItem(item) {
+            this.selectedItem = item;
+        },
         deleteCountryOfCitizen(value) {
             const index = this.formData.personalDetails.additionalCountriesOfCitizenship.findIndex(
                 (item) => item.value === value
@@ -604,7 +611,6 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 this.jobTitles = [];
             }
         },
-
         nextStep() {
             if (this.formData.isRepresentative == 1 && this.currentStep == 0) {
                 // Are you applying on behalf of someone? ==> no
@@ -632,8 +638,6 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             this.currentStep--;
         },
         async submitForm() {
-            const notificationStore = useNotificationStore();
-
             try {
                 this.loading = true;
                 const { data } = await axios.post(this.$route('eta_application.register'), this.formData);
@@ -643,9 +647,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 }, 300);
 
                 setTimeout(() => {
-                    notificationStore.triggerNotify({
+                    window.$toast({
                         type: 'success',
-                        message: data.message,
+                        title: data.message,
                     });
                 }, 400);
 
@@ -765,8 +769,6 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 },
             };
 
-            const notificationStore = useNotificationStore();
-
             try {
                 this.loading = true;
                 const { data } = await axios.post(this.$route('eta_application.register'), fakeData);
@@ -776,9 +778,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 }, 300);
 
                 setTimeout(() => {
-                    notificationStore.triggerNotify({
+                    window.$toast({
                         type: 'success',
-                        message: data.message,
+                        title: data.message,
                     });
                 }, 400);
 
@@ -797,6 +799,27 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 setTimeout(() => {
                     this.loading = false;
                 }, 400);
+            }
+        },
+        async updateStatus(item, newStatus) {
+            try {
+                await axios.put(`/admin/eta-management/${item.id}/status`, {
+                    status: newStatus,
+                });
+
+                item.status = newStatus;
+
+                window.$toast({
+                    type: 'success',
+                    title: '更新成功しました！',
+                });
+            } catch (error) {
+                console.error('Error:', error.response?.data || error.message);
+                window.$toast({
+                    type: 'error',
+                    title: '更新に失敗しました！',
+                    description: 'ステータスの更新中にエラーが発生しました。もう一度お試しください。',
+                });
             }
         },
     },

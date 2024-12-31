@@ -107,4 +107,9 @@ return [
     'registered_email' => 'Registered email',
     'resend_email' => 'Resend email',
     'detail' => 'Detail',
+    'screenshots' => 'Screenshots',
+    'enter_your_email_address' => 'Enter your email address',
+    'registration_information_list' => 'Registration information list',
+    'choose_a_date' => 'Choose a date',
+    'home' => 'Home',
 ];
