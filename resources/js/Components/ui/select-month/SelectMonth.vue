@@ -4,7 +4,9 @@ import { usePage } from '@inertiajs/vue3';
 
 const { messages } = usePage().props;
 
-const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+// const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+
+const months = Array.from({ length: 12 }, (_, i) => new Date(0, i).toLocaleString('en-US', { month: 'long' }));
 
 const model = defineModel();
 

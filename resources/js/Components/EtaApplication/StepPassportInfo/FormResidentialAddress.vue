@@ -21,13 +21,13 @@ const { messages } = usePage().props;
 
     <!-- <p>Enter your permanent home address. Do not enter an address where you live temporarily.</p> -->
 
-    <FormField v-slot="{ componentField }" name="contactDetails.aptUnit">
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.aptUnit">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.apartment_unit_number" />
             <!-- Apartment/unit number (if applicable) -->
 
             <div class="md:max-w-[60%]">
-                <FormControl>
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
                         id="contactDetails.aptUnit"

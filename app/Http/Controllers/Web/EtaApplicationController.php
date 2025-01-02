@@ -26,7 +26,21 @@ class EtaApplicationController extends Controller
     public function register(RegisterRequest $request)
     {
         $dob = $request->get('personalDetails');
-        $birthday = sprintf('%04d-%02d-%02d', $dob['dobYear'], $dob['dobMonth'], $dob['dobDay']);
+        $monthMapping = [
+            'January' => 1,
+            'February' => 2,
+            'March' => 3,
+            'April' => 4,
+            'May' => 5,
+            'June' => 6,
+            'July' => 7,
+            'August' => 8,
+            'September' => 9,
+            'October' => 10,
+            'November' => 11,
+            'December' => 12,
+        ];
+        $birthday = sprintf('%04d-%02d-%02d', $dob['dobYear'], $monthMapping[$dob['dobMonth']], $dob['dobDay']);
 
         $applicationCreated = Application::create([
             'user_id' => Auth::user()->id,

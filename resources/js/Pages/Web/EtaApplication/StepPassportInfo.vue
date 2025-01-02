@@ -24,6 +24,8 @@ const { checkAgeOfPersonalDetails, formData, minAgeRequired } = storeToRefs(etaA
     <!-- Complete the application form -->
     <FormContentComplete />
 
+    <!-- <FormTravelInformation /> -->
+
     <template
         v-if="
             formData.prerequisite.passportNotedNationality &&

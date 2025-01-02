@@ -13,6 +13,12 @@ const etaApplicationStore = useEtaApplicationStore();
 const { formData } = storeToRefs(etaApplicationStore);
 
 const { messages } = usePage().props;
+
+const changeTravelDateKnown = (value) => {
+    if (value == 1) {
+        etaApplicationStore.changeTravelDateKnown();
+    }
+};
 </script>
 
 <template>
@@ -34,6 +40,7 @@ const { messages } = usePage().props;
                     v-bind="componentField"
                     id="travelDetails.isTravelDateKnown"
                     v-model="formData.travelDetails.isTravelDateKnown"
+                    @update:modelValue="changeTravelDateKnown"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>

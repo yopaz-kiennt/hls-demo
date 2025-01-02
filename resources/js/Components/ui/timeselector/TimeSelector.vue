@@ -2,7 +2,6 @@
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { usePage } from '@inertiajs/vue3';
-import { onMounted, ref } from 'vue';
 
 const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
 
@@ -177,7 +176,7 @@ const timezone = defineModel('timezone');
 
 const { messages } = usePage().props;
 
-const props = defineProps({
+defineProps({
     inputHour: {
         type: String,
         default: '',
@@ -197,7 +196,7 @@ const props = defineProps({
     <div class="mt-1 flex justify-between md:max-w-[60%]">
         <div class="w-[33%] md:w-[32%]">
             <FormField v-slot="{ componentField, errors }" :name="inputHour">
-                <FormItem :classes="errors.length > 0 ? 'select-invalid' : ''">
+                <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
                     <FormControl>
                         <Select v-model="hour" v-bind="componentField">
                             <SelectTrigger>
@@ -221,9 +220,9 @@ const props = defineProps({
 
         <div class="w-[33%] md:w-[32%]">
             <FormField v-slot="{ componentField, errors }" :name="inputMinute">
-                <FormItem :classes="errors.length > 0 ? 'select-invalid' : ''">
-                    <FormControl>
-                        <Select v-model="minute" v-bind="componentField">
+                <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
+                    <FormControl v-bind="componentField">
+                        <Select v-model="minute">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.select_minute" />
                             </SelectTrigger>
@@ -249,7 +248,7 @@ const props = defineProps({
 
         <div class="w-[33%] md:w-[32%]">
             <FormField v-slot="{ errors }" :name="inputTimezone">
-                <FormItem :classes="errors.length > 0 ? 'select-invalid' : ''">
+                <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
                     <FormControl>
                         <Select v-model="timezone">
                             <SelectTrigger>

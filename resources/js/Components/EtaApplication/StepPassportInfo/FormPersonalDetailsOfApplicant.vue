@@ -11,9 +11,15 @@ import { storeToRefs } from 'pinia';
 
 const etaApplicationStore = useEtaApplicationStore();
 
-const { formData } = storeToRefs(etaApplicationStore);
+const { formData, checkAgeOfPersonalDetails, minAgeRequired } = storeToRefs(etaApplicationStore);
 
 const { messages, lang } = usePage().props;
+
+const changeHasPreviouslyAppliedToCanada = (value) => {
+    if (value == 1) {
+        etaApplicationStore.changeHasPreviouslyAppliedToCanada();
+    }
+};
 </script>
 
 <template>
@@ -28,7 +34,11 @@ const { messages, lang } = usePage().props;
         <AdditionalCountryOfCitizen />
     </div>
 
-    <FormField v-slot="{ componentField, errors }" name="personalDetails.maritalStatus">
+    <FormField
+        v-if="checkAgeOfPersonalDetails >= minAgeRequired"
+        v-slot="{ componentField, errors }"
+        name="personalDetails.maritalStatus"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.marital_status" />
             <!-- Marital status -->
@@ -87,6 +97,7 @@ const { messages, lang } = usePage().props;
                     v-bind="componentField"
                     id="personalDetails.hasPreviouslyAppliedToCanada"
                     v-model="formData.personalDetails.hasPreviouslyAppliedToCanada"
+                    @update:modelValue="changeHasPreviouslyAppliedToCanada"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
