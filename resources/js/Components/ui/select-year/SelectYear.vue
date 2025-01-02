@@ -17,7 +17,6 @@ const props = defineProps({
     },
 });
 
-// Init years
 const currentYear = new Date().getFullYear();
 let years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => 1900 + i).reverse();
 if (props.endYear) {

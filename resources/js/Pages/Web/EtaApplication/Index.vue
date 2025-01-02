@@ -1,5 +1,4 @@
 <script setup>
-import FormErrors from '@/Components/EtaApplication/FormErrors.vue';
 import { Button } from '@/Components/ui/button';
 import Loading from '@/Components/ui/loading/Loading.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -55,12 +54,12 @@ onBeforeUnmount(() => {
 
                     <Form
                         ref="formRef"
-                        v-slot="{ meta, errors }"
+                        v-slot="{ meta }"
                         keep-values
                         :validation-schema="formSchema[currentStep]"
                         @submit="nextStep()"
                     >
-                        <FormErrors :errors="errors" />
+                        <!-- <FormErrors :errors="errors" /> -->
 
                         <StepApplicantType v-if="currentStep === 0" />
                         <StepRepresentativeDetails v-if="currentStep === 1" />

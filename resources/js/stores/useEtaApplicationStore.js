@@ -8,7 +8,7 @@ import * as yup from 'yup';
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
         messages: {},
-        currentStep: 0,
+        currentStep: 2,
         steps: [
             {
                 step: 1,
@@ -479,15 +479,15 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         // Date of birth
                         dobYear: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
                         ),
                         dobMonth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
                         ),
                         dobDay: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
                         ),
                         cityTownOfBirth: conditionalPassportNotedNationality(
                             // (maxlength 50)
