@@ -36,6 +36,7 @@ defineProps({
                     <FormControl>
                         <SelectYear
                             v-bind="componentField"
+                            :id="inputYear"
                             v-model="year"
                             :classes="errors.length > 0 ? 'select-invalid' : ''"
                             :end-year="endYear"
@@ -53,6 +54,7 @@ defineProps({
                     <FormControl>
                         <SelectMonth
                             v-bind="componentField"
+                            :id="inputMonth"
                             v-model="month"
                             :classes="errors.length > 0 ? 'select-invalid' : ''"
                         />
@@ -69,6 +71,7 @@ defineProps({
                     <FormControl>
                         <SelectDay
                             v-bind="componentField"
+                            :id="inputDay"
                             v-model="day"
                             :classes="errors.length > 0 ? 'select-invalid' : ''"
                         />

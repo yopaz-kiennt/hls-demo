@@ -50,6 +50,9 @@ return [
     'country_of_birth' => '出生国・領土',
     'city_of_birth' => '出生市町村',
     'date_of_birth' => '生年月日',
+    'year_of_birth' => '出生年',
+    'month_of_birth' => '出生月',
+    'day_of_birth' => '出生日',
     'date_of_issue_of_passport' => 'パスポート発行日',
     'date_of_expiry_of_passport' => 'パスポート有効期間満了日',
     'select_year' => '年を選択',
@@ -135,4 +138,5 @@ return [
     'must_only_contain_alphanumeric_characters_or_a_space' => '英数字またはスペースのみを含める必要があります。',
     'must_only_contain_alphanumeric_characters_or_punctuation_marks' => '英数字または句読点のみを含める必要があります。',
     'must_only_contain_numbers_and_spaces' => '数字とスペースのみを含める必要があります。',
+    'the_form_could_not_be_submitted_because_errors_were_found' => 'フォームにエラーが見つかったため、送信できませんでした。',
 ];

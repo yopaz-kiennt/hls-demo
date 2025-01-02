@@ -50,6 +50,9 @@ return [
     'country_of_birth' => 'Country/territory of birth',
     'city_of_birth' => 'City/town of birth',
     'date_of_birth' => 'Date of birth',
+    'year_of_birth' => 'Year of birth',
+    'month_of_birth' => 'Month of birth',
+    'day_of_birth' => 'Day of birth',
     'date_of_issue_of_passport' => 'Date of issue of passport',
     'date_of_expiry_of_passport' => 'Date of expiry of passport',
     'select_year' => 'Select year',
@@ -134,4 +137,5 @@ return [
     'must_only_contain_alphanumeric_characters_or_a_space' => 'Must only contain alphanumeric characters or a space',
     'must_only_contain_alphanumeric_characters_or_punctuation_marks' => 'Must only contain alphanumeric characters or punctuation marks.',
     'must_only_contain_numbers_and_spaces' => 'Must contain only numbers and spaces.',
+    'the_form_could_not_be_submitted_because_errors_were_found' => 'The form could not be submitted because errors were found.',
 ];

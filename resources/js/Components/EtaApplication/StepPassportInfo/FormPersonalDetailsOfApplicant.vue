@@ -34,7 +34,11 @@ const { messages, lang } = usePage().props;
             <!-- Marital status -->
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.personalDetails.maritalStatus" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="personalDetails.maritalStatus"
+                    v-model="formData.personalDetails.maritalStatus"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -79,7 +83,11 @@ const { messages, lang } = usePage().props;
             <!-- Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada? -->
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.personalDetails.hasPreviouslyAppliedToCanada" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="personalDetails.hasPreviouslyAppliedToCanada"
+                    v-model="formData.personalDetails.hasPreviouslyAppliedToCanada"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -115,8 +123,9 @@ const { messages, lang } = usePage().props;
                 <div class="md:max-w-[60%]">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
-                            v-model="formData.personalDetails.uci"
                             v-bind="componentField"
+                            id="personalDetails.uci"
+                            v-model="formData.personalDetails.uci"
                             type="text"
                             maxlength="20"
                         />
@@ -135,8 +144,9 @@ const { messages, lang } = usePage().props;
                 <div class="md:max-w-[60%]">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
-                            v-model="formData.personalDetails.uciReEnter"
                             v-bind="componentField"
+                            id="personalDetails.uciReEnter"
+                            v-model="formData.personalDetails.uciReEnter"
                             type="text"
                             maxlength="20"
                         />

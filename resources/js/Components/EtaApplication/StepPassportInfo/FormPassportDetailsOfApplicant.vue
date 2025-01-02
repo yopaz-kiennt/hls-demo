@@ -99,8 +99,9 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.personalDetails.lastName"
                         v-bind="componentField"
+                        id="personalDetails.lastNameOfPassport"
+                        v-model="formData.personalDetails.lastName"
                         type="text"
                         maxlength="50"
                     />
@@ -121,8 +122,9 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.personalDetails.firstName"
                         v-bind="componentField"
+                        id="personalDetails.firstNameOfPassport"
+                        v-model="formData.personalDetails.firstName"
                         type="text"
                         maxlength="50"
                     />
@@ -153,7 +155,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <!-- Gender -->
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.personalDetails.gender" v-bind="componentField">
+                <Select v-bind="componentField" id="personalDetails.gender" v-model="formData.personalDetails.gender">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -182,7 +184,11 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <!-- Country/territory of birth -->
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.personalDetails.countryOfBirth" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="personalDetails.countryOfBirth"
+                    v-model="formData.personalDetails.countryOfBirth"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -214,8 +220,9 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.personalDetails.cityTownOfBirth"
                         v-bind="componentField"
+                        id="personalDetails.cityTownOfBirth"
+                        v-model="formData.personalDetails.cityTownOfBirth"
                         type="text"
                         maxlength="50"
                     />

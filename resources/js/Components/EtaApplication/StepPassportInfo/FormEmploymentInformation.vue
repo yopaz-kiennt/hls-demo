@@ -32,8 +32,9 @@ const updateJobTitles = () => {
 
             <div class="md:max-w-[60%]">
                 <Select
-                    v-model="formData.employmentDetails.occupation"
                     v-bind="componentField"
+                    id="employmentDetails.occupation"
+                    v-model="formData.employmentDetails.occupation"
                     @update:modelValue="updateJobTitles"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
@@ -71,7 +72,11 @@ const updateJobTitles = () => {
                 <!-- <p>Select the option that best describes your job.</p> -->
 
                 <div class="md:max-w-[60%]">
-                    <Select v-model="formData.employmentDetails.title" v-bind="componentField">
+                    <Select
+                        v-bind="componentField"
+                        id="employmentDetails.title"
+                        v-model="formData.employmentDetails.title"
+                    >
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.please_select" />
@@ -106,8 +111,9 @@ const updateJobTitles = () => {
                 <div class="md:max-w-[60%]">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
-                            v-model="formData.employmentDetails.companyEmployerSchoolFacilityName"
                             v-bind="componentField"
+                            id="employmentDetails.companyEmployerSchoolFacilityName"
+                            v-model="formData.employmentDetails.companyEmployerSchoolFacilityName"
                             type="text"
                             maxlength="75"
                         />
@@ -124,7 +130,11 @@ const updateJobTitles = () => {
                 <!-- Country/territory -->
 
                 <div class="md:max-w-[60%]">
-                    <Select v-model="formData.employmentDetails.country" v-bind="componentField">
+                    <Select
+                        v-bind="componentField"
+                        id="employmentDetails.countryOfEmployment"
+                        v-model="formData.employmentDetails.country"
+                    >
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.please_select" />
@@ -153,8 +163,9 @@ const updateJobTitles = () => {
                 <div class="md:max-w-[60%]">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
-                            v-model="formData.employmentDetails.city"
                             v-bind="componentField"
+                            id="employmentDetails.cityOfEmployment"
+                            v-model="formData.employmentDetails.city"
                             type="text"
                             maxlength="50"
                         />

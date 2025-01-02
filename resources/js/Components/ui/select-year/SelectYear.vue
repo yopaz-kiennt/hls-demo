@@ -11,6 +11,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    id: {
+        type: String,
+        default: '',
+    },
 });
 
 // Init years
@@ -27,7 +31,7 @@ const { messages } = usePage().props;
 
 <template>
     <div class="w-[100%]" :class="classes">
-        <Select v-model="model">
+        <Select :id="id" v-model="model">
             <SelectTrigger>
                 <SelectValue :placeholder="messages.select_year" />
             </SelectTrigger>
