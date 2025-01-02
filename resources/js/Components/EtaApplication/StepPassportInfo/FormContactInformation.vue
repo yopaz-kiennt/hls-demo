@@ -25,8 +25,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.contactDetails.emailAddress"
                         v-bind="componentField"
+                        id="contactDetails.emailAddressOfContactDetails"
+                        v-model="formData.contactDetails.emailAddress"
                         type="email"
                         maxlength="100"
                     />
@@ -45,8 +46,9 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
-                        v-model="formData.contactDetails.emailAddressReEnter"
                         v-bind="componentField"
+                        id="contactDetails.emailAddressReEnterOfContactDetails"
+                        v-model="formData.contactDetails.emailAddressReEnter"
                         type="email"
                         maxlength="100"
                     />

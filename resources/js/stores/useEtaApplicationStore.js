@@ -1,13 +1,14 @@
 import { representativeRelationship } from '@/helper';
 import { router } from '@inertiajs/vue3';
 import { AxiosError, HttpStatusCode } from 'axios';
+import { isAfter, parse } from 'date-fns';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import * as yup from 'yup';
 
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
         messages: {},
-        currentStep: 0,
+        currentStep: 2,
         steps: [
             {
                 step: 1,
@@ -161,11 +162,13 @@ export const useEtaApplicationStore = defineStore('eta_application', {
 
                 'personalDetails.passportNumber': this.messages.passport_number,
                 'personalDetails.passportNumberReEnter': this.messages.passport_number_re_enter,
+                'personalDetails.lastNameOfPassport': this.messages.surname_last_name,
+                'personalDetails.firstNameOfPassport': this.messages.given_first_name,
                 'personalDetails.lastName': this.messages.surname_last_name,
                 'personalDetails.firstName': this.messages.given_first_name,
-                'personalDetails.dobYear': this.messages.date_of_birth,
-                'personalDetails.dobMonth': this.messages.date_of_birth,
-                'personalDetails.dobDay': this.messages.date_of_birth,
+                'personalDetails.dobYear': this.messages.year_of_birth,
+                'personalDetails.dobMonth': this.messages.month_of_birth,
+                'personalDetails.dobDay': this.messages.day_of_birth,
                 'personalDetails.gender': this.messages.gender,
                 'personalDetails.countryOfBirth': this.messages.country_of_birth,
                 'personalDetails.cityTownOfBirth': this.messages.city_of_birth,
@@ -191,9 +194,14 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 'contactDetails.aptUnit': this.messages.apartment_unit_number,
                 'contactDetails.streetNo': this.messages.street_civic_number_or_house_name,
                 'contactDetails.streetAddress': this.messages.street_address_or_name,
+                'contactDetails.streetAddressAlt': this.messages.street_address_or_name_line_2,
+                'contactDetails.cityOfContactDetails': this.messages.city_or_town,
+                'contactDetails.countryOfContactDetails': this.messages.country_or_territory,
                 'contactDetails.city': this.messages.city_or_town,
                 'contactDetails.country': this.messages.country_or_territory,
                 'contactDetails.district': this.messages.district_or_region,
+                'contactDetails.emailAddressOfContactDetails': this.messages.email_address,
+                'contactDetails.emailAddressReEnterOfContactDetails': this.messages.email_address_re_enter,
 
                 'travelDetails.isTravelDateKnown': this.messages.travel_date_question,
                 'travelDetails.travelDateYear': this.messages.travel_plan_question,
@@ -217,11 +225,22 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 'backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis': this.messages.tuberculosis_diagnosed,
                 'backgroundQuestions.doYouHaveOneOfTheseConditions': this.messages.health_condition_check,
 
-                'consentAndDeclaration.doYouHaveOneOfTheseConditions': this.messages.i_agree,
-                'consentAndDeclaration.fullName': this.messages.signature_of_applicant,
+                'consentAndDeclaration.inAggreance': this.messages.i_agree,
+                'consentAndDeclaration.fullNameOfConsent': this.messages.signature_of_applicant,
             };
         },
         formSchema(state) {
+            const conditionalPassportNotedNationality = (passportNotedNationality, schemaCallback) =>
+                yup.string().when([], {
+                    is: () => true,
+                    then: (schema) => {
+                        if (passportNotedNationality === '87') {
+                            return schemaCallback();
+                        }
+                        return schema;
+                    },
+                });
+
             const schemas = [
                 // Step 01
                 yup.object({
@@ -247,52 +266,122 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     representativeRelationship.memberOfChampre,
                                 ].includes(value);
                             },
-                            then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
-                        }),
-                        province: yup.string().when('representativeRelationship', {
-                            // 107 (maxlength 50)
-                            is: (value) => {
-                                return [
-                                    representativeRelationship.memberOfCollege,
-                                    representativeRelationship.memberOfCanadian,
-                                ].includes(value);
-                            },
-                            then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
-                        }),
-                        lastName: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 108 (maxlength 50, regex)
-                        firstName: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 109 (maxlength 50, regex)
-                        organizationName: yup.string().when('representativeRelationship', {
-                            // 110 (maxlength 75)
-                            is: (value) => {
-                                return [
-                                    representativeRelationship.memberOfNonGovernmental,
-                                    representativeRelationship.memberOfCollege,
-                                    representativeRelationship.memberOfCanadian,
-                                    representativeRelationship.memberOfChampre,
-                                    representativeRelationship.travelAgent,
-                                ].includes(value);
-                            },
-                            then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
-                        }),
-
-                        mailingAddress: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 112 (maxlength 30)
-                        postalCodeZip: yup.string().when('representativeRelationship', {
-                            // 112 (maxlength 30)
-                            is: (value) => {
-                                return [
-                                    representativeRelationship.memberOfCollege,
-                                    representativeRelationship.memberOfCanadian,
-                                ].includes(value);
-                            },
                             then: () =>
                                 yup
                                     .string()
+                                    .max(50, this.messages.max_length_50_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
-                                    .matches(/^[0-9]+$/, 'Must be numeric'),
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    ),
                         }),
-                        phoneNumber: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 113 (maxlength 20, regex)
-                        // faxNumber: yup.string(), // 114 (maxlength 20, regex)
-                        emailAddress: yup.string().email(this.messages.email_valid), // 115
+                        province: yup // 107
+                            .string()
+                            .when('representativeRelationship', {
+                                is: (value) => {
+                                    return [
+                                        representativeRelationship.memberOfCollege,
+                                        representativeRelationship.memberOfCanadian,
+                                    ].includes(value);
+                                },
+                                then: () =>
+                                    yup
+                                        .string()
+                                        .max(50, this.messages.max_length_50_characters)
+                                        .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .matches(
+                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                        ),
+                            }),
+                        lastName: yup // 108
+                            .string()
+                            .max(50, this.messages.max_length_50_characters)
+                            .test(
+                                'no-hyphen-apostrophe-space-start',
+                                this.messages.cannot_start_with_a_hyphen,
+                                (value) => {
+                                    return value ? !/^[\s'-]/.test(value) : true;
+                                }
+                            )
+                            .test('english-french-characters', this.messages.english_french_characters, (value) =>
+                                /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                            )
+                            .required(this.messages.please_be_sure_to_enter_this_item),
+                        firstName: yup // 109
+                            .string()
+                            .max(50, this.messages.max_length_50_characters)
+                            .test(
+                                'no-hyphen-apostrophe-space-start',
+                                this.messages.cannot_start_with_a_hyphen,
+                                (value) => {
+                                    return value ? !/^[\s'-]/.test(value) : true;
+                                }
+                            )
+                            .test('english-french-characters', this.messages.english_french_characters, (value) =>
+                                /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                            )
+                            .required(this.messages.please_be_sure_to_enter_this_item),
+                        organizationName: yup // 110
+                            .string()
+                            .max(75, this.messages.max_length_75_characters)
+                            .when('representativeRelationship', {
+                                is: (value) => {
+                                    return [
+                                        representativeRelationship.memberOfNonGovernmental,
+                                        representativeRelationship.memberOfCollege,
+                                        representativeRelationship.memberOfCanadian,
+                                        representativeRelationship.memberOfChampre,
+                                        representativeRelationship.travelAgent,
+                                    ].includes(value);
+                                },
+                                then: () =>
+                                    yup
+                                        .string()
+                                        .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .matches(
+                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                        ),
+                            }),
+                        mailingAddress: yup
+                            .string()
+                            .max(200, this.messages.max_length_200_characters)
+                            .required(this.messages.please_be_sure_to_enter_this_item)
+                            .matches(
+                                /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                            ),
+                        postalCodeZip: yup // 112 (maxlength 30)
+                            .string()
+                            .max(30, this.messages.max_length_30_characters)
+                            .when('representativeRelationship', {
+                                is: (value) => {
+                                    return [
+                                        representativeRelationship.memberOfCollege,
+                                        representativeRelationship.memberOfCanadian,
+                                    ].includes(value);
+                                },
+                                then: () =>
+                                    yup
+                                        .string()
+                                        .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .matches(/^[0-9]+$/, 'Must be numeric'),
+                            }),
+                        phoneNumber: yup
+                            .string()
+                            .max(20, this.messages.max_length_20_characters)
+                            .required(this.messages.please_be_sure_to_enter_this_item)
+                            .matches(/^[0-9 ]*$/, this.messages.must_only_contain_numbers_and_spaces),
+                        faxNumber: yup
+                            .string()
+                            .max(20, this.messages.max_length_20_characters)
+                            .matches(/^[0-9 ]*$/, this.messages.must_only_contain_numbers_and_spaces),
+                        emailAddress: yup
+                            .string()
+                            .max(100, this.messages.max_length_100_characters)
+                            .email(this.messages.email_valid), // 115
                         declareContactAndInformationIsTruthy: yup // 116
                             .boolean()
                             .oneOf([true], this.messages.this_item_must_be_selected)
@@ -321,34 +410,142 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                     }),
                     // =============================== Passport details of applicant ===============================
                     personalDetails: yup.object().shape({
-                        passportNumber: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 246 (maxlength 12)
-                        passportNumberReEnter: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 247 (maxlength 12, regex)
-                        lastNameOfPassport: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 248 (maxlength 50, regex)
-                        firstNameOfPassport: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 249 (maxlength 50, regex)
-                        gender: yup.string().required(this.messages.this_item_must_be_selected),
-                        countryOfBirth: yup.string().required(this.messages.this_item_must_be_selected),
+                        passportNumber: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(12, this.messages.max_length_12_characters)
+                                    .matches(/^[a-zA-Z0-9]*$/, this.messages.only_number_or_alphanumeric_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        passportNumberReEnter: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(12, this.messages.max_length_12_characters)
+                                    .oneOf([yup.ref('passportNumber')], this.messages.the_passport_number_do_not_match)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        lastNameOfPassport: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(50, this.messages.max_length_50_characters)
+                                    .test(
+                                        'no-hyphen-apostrophe-space-start',
+                                        this.messages.cannot_start_with_a_hyphen,
+                                        (value) => {
+                                            return value ? !/^[\s'-]/.test(value) : true;
+                                        }
+                                    )
+                                    .test(
+                                        'english-french-characters',
+                                        this.messages.english_french_characters,
+                                        (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                    )
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        firstNameOfPassport: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(50, this.messages.max_length_50_characters)
+                                    .test(
+                                        'no-hyphen-apostrophe-space-start',
+                                        this.messages.cannot_start_with_a_hyphen,
+                                        (value) => {
+                                            return value ? !/^[\s'-]/.test(value) : true;
+                                        }
+                                    )
+                                    .test(
+                                        'english-french-characters',
+                                        this.messages.english_french_characters,
+                                        (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                    )
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        gender: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                        ),
+                        countryOfBirth: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                        ),
                         // Date of birth
-                        dobYear: yup.number().required(this.messages.this_item_must_be_selected),
-                        dobMonth: yup.number().required(this.messages.this_item_must_be_selected),
-                        dobDay: yup.number().required(this.messages.this_item_must_be_selected),
-                        cityTownOfBirth: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // (maxlength 50)
+                        dobYear: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
+                        dobMonth: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
+                        dobDay: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
+                        cityTownOfBirth: conditionalPassportNotedNationality(
+                            // (maxlength 50)
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(50, this.messages.max_length_50_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    )
+                        ),
                         // Date of issue of passport
-                        issueDateYear: yup.number().required(this.messages.this_item_must_be_selected),
-                        issueDateMonth: yup.number().required(this.messages.this_item_must_be_selected),
-                        issueDateDay: yup.number().required(this.messages.this_item_must_be_selected),
+                        issueDateYear: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
+                        issueDateMonth: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
+                        issueDateDay: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
                         // Date of expiry of passport
-                        expiryDateYear: yup.number().required(this.messages.this_item_must_be_selected),
-                        expiryDateMonth: yup.number().required(this.messages.this_item_must_be_selected),
-                        expiryDateDay: yup.number().required(this.messages.this_item_must_be_selected),
+                        expiryDateYear: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
+                        expiryDateMonth: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
+                        expiryDateDay: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.number().required(this.messages.this_item_must_be_selected)
+                        ),
                         // ===============================
 
                         // =============================== Personal details of applicant ===============================
-                        maritalStatus: yup.string().required(this.messages.please_be_sure_to_enter_this_item), // 284
-                        hasPreviouslyAppliedToCanada: yup // 285
+                        maritalStatus: conditionalPassportNotedNationality(
+                            // 284
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.string().required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        hasPreviouslyAppliedToCanada: conditionalPassportNotedNationality(
+                            // 285
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.string().required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
+                        uci: yup.string().max(20, this.messages.max_length_20_characters),
+                        uciReEnter: yup
                             .string()
-                            .required(this.messages.please_be_sure_to_enter_this_item),
-                        uci: yup.string(),
-                        uciReEnter: yup.string().oneOf([yup.ref('uci')], '値が一致する必要があります'),
+                            .max(20, this.messages.max_length_20_characters)
+                            .oneOf([yup.ref('uci')], this.messages.values_must_match),
                     }),
                     // ===============================
 
@@ -375,7 +572,15 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             is: () => {
                                 return state.jobTitles.length;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () =>
+                                yup
+                                    .string()
+                                    .max(75, this.messages.max_length_75_characters)
+                                    .required(this.messages.this_item_must_be_selected)
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    ),
                             otherwise: () => yup.string().optional(),
                         }),
                         countryOfEmployment: yup.string().when('occupation', {
@@ -389,7 +594,15 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             is: () => {
                                 return state.jobTitles.length;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () =>
+                                yup
+                                    .string()
+                                    .max(50, this.messages.max_length_50_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    ),
                             otherwise: () => yup.string().optional(),
                         }),
                         fromDateYear: yup.string().when('occupation', {
@@ -404,26 +617,102 @@ export const useEtaApplicationStore = defineStore('eta_application', {
 
                     // =============================== Contact information ===============================
                     contactDetails: yup.object().shape({
-                        emailAddressOfContactDetails: yup // 388 (regex)
-                            .string()
-                            .required(this.messages.please_be_sure_to_enter_this_item)
-                            .email(this.messages.email_valid),
-                        emailAddressReEnterOfContactDetails: yup // 389 (regex)
-                            .string()
-                            .required(this.messages.please_be_sure_to_enter_this_item)
-                            .email(this.messages.email_valid)
-                            .oneOf([yup.ref('emailAddressOfContactDetails')], '値が一致する必要があります'),
+                        emailAddressOfContactDetails: conditionalPassportNotedNationality(
+                            // 388
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(100, this.messages.max_length_100_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .email(this.messages.email_valid)
+                        ),
+                        emailAddressReEnterOfContactDetails: conditionalPassportNotedNationality(
+                            // 389
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(100, this.messages.max_length_100_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .email(this.messages.email_valid)
+                                    .oneOf([yup.ref('emailAddressOfContactDetails')], this.messages.values_must_match)
+                        ),
                         // =============================== Residential address ===============================
-                        streetNo: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
-                        streetAddress: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
-                        cityOfContactDetails: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
-                        countryOfContactDetails: yup.string().required(this.messages.this_item_must_be_selected),
+                        aptUnit: yup
+                            .string()
+                            .max(10, this.messages.max_length_10_characters)
+                            .matches(
+                                /^[a-zA-Z0-9 ]*$/,
+                                this.messages.must_only_contain_alphanumeric_characters_or_a_space
+                            ),
+                        streetNo: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(30, this.messages.max_length_30_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    )
+                        ),
+                        streetAddress: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(100, this.messages.max_length_100_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    )
+                        ),
+                        streetAddressAlt: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(100, this.messages.max_length_100_characters)
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    )
+                        ),
+                        cityOfContactDetails: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(50, this.messages.max_length_50_characters)
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .matches(
+                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                    )
+                        ),
+                        countryOfContactDetails: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                        ),
+                        district: yup
+                            .string()
+                            .max(50, this.messages.max_length_50_characters)
+                            .matches(
+                                /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                            ),
                     }),
                     // ===============================
 
                     // =============================== Travel information ===============================
                     travelDetails: yup.object().shape({
-                        isTravelDateKnown: yup.string().required(this.messages.this_item_must_be_selected),
+                        isTravelDateKnown: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                        ),
                         // When do you plan to travel to Canada? // 465
                         travelDateYear: yup.string().when('isTravelDateKnown', {
                             is: (value) => {
@@ -491,7 +780,14 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                 is: (value) => {
                                     return value && value == 0;
                                 },
-                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                then: () =>
+                                    yup
+                                        .string()
+                                        .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .matches(
+                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                        ),
                                 otherwise: () => yup.string().optional(),
                             }),
                         committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere: yup.string().when([], {
@@ -507,7 +803,14 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                 is: (value) => {
                                     return value && value == 0;
                                 },
-                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                then: () =>
+                                    yup
+                                        .string()
+                                        .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .matches(
+                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                                        ),
                                 otherwise: () => yup.string().optional(),
                             }),
                         inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis: yup.string().when([], {
@@ -542,16 +845,45 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             then: () => yup.string().required(this.messages.this_item_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
+                        haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails: yup
+                            .string()
+                            .matches(
+                                /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
+                            ),
                     }),
                     // ===============================
 
                     // =============================== Privacy notice ===============================
                     consentAndDeclaration: yup.object().shape({
-                        inAggreance: yup
-                            .boolean()
-                            .oneOf([true], this.messages.this_item_must_be_selected)
-                            .required(this.messages.this_item_must_be_selected),
-                        fullNameOfConsent: yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                        inAggreance: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .boolean()
+                                    .oneOf([true], this.messages.this_item_must_be_selected)
+                                    .required(this.messages.this_item_must_be_selected)
+                        ),
+                        fullNameOfConsent: conditionalPassportNotedNationality(
+                            state.formData.prerequisite.passportNotedNationality,
+                            () =>
+                                yup
+                                    .string()
+                                    .max(160, this.messages.max_length_160_characters)
+                                    .test(
+                                        'no-hyphen-apostrophe-space-start',
+                                        this.messages.cannot_start_with_a_hyphen,
+                                        (value) => {
+                                            return value ? !/^[\s'-]/.test(value) : true;
+                                        }
+                                    )
+                                    .test(
+                                        'english-french-characters',
+                                        this.messages.english_french_characters,
+                                        (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                    )
+                                    .required(this.messages.please_be_sure_to_enter_this_item)
+                        ),
                     }),
                     // ===============================
                 }),
@@ -575,6 +907,18 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         },
         minAgeRequired() {
             return 18;
+        },
+        validateDatesOfPassport(state) {
+            const { issueDateYear, issueDateMonth, issueDateDay, expiryDateYear, expiryDateMonth, expiryDateDay } =
+                state.formData.personalDetails;
+            const issue = parse(`${issueDateYear}-${issueDateMonth}-${issueDateDay}`, 'yyyy-MM-dd', new Date());
+            const expiry = parse(`${expiryDateYear}-${expiryDateMonth}-${expiryDateDay}`, 'yyyy-MM-dd', new Date());
+
+            if (isAfter(issue, expiry)) {
+                return '発行日が有効期限前の日付である必要があります。';
+            }
+
+            return null;
         },
     },
     actions: {

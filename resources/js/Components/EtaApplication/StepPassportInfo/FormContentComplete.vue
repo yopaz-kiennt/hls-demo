@@ -79,7 +79,11 @@ const isOpenModalNationalOnPassport = ref(false);
             </div>
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.prerequisite.travelDocumentType" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="prerequisite.travelDocumentType"
+                    v-model="formData.prerequisite.travelDocumentType"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -111,7 +115,11 @@ const isOpenModalNationalOnPassport = ref(false);
                 </div>
 
                 <div class="md:max-w-[60%]">
-                    <Select v-model="formData.prerequisite.countryOfCitizenship" v-bind="componentField">
+                    <Select
+                        v-bind="componentField"
+                        id="prerequisite.countryOfCitizenship"
+                        v-model="formData.prerequisite.countryOfCitizenship"
+                    >
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.please_select" />
@@ -144,7 +152,11 @@ const isOpenModalNationalOnPassport = ref(false);
                 </div>
 
                 <div class="md:max-w-[60%]">
-                    <Select v-model="formData.prerequisite.passportNotedNationality" v-bind="componentField">
+                    <Select
+                        v-bind="componentField"
+                        id="prerequisite.passportNotedNationality"
+                        v-model="formData.prerequisite.passportNotedNationality"
+                    >
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.please_select" />

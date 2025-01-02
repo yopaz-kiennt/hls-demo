@@ -12,7 +12,7 @@ const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
 
-const { messages } = usePage().props;
+const { messages, lang } = usePage().props;
 
 const additionalCitizenship = ref(null);
 
@@ -248,8 +248,8 @@ const countryOptions = ref([
 </script>
 
 <template>
-    <div class="flex w-[60%] justify-between">
-        <div class="w-[81%]">
+    <div class="flex justify-between md:w-[60%]">
+        <div class="w-[calc(100%-140px)]">
             <FormField v-slot="{ errors }" name="additionalCitizenship">
                 <FormItem>
                     <Select v-model="additionalCitizenship">
@@ -274,7 +274,7 @@ const countryOptions = ref([
         </div>
 
         <Button
-            class="button flex"
+            class="button sm:-w-[135px] flex"
             size="lg"
             type="button"
             :disabled="additionalCitizenship == null"
@@ -285,7 +285,7 @@ const countryOptions = ref([
         </Button>
     </div>
 
-    <div class="mt-3 w-[60%]">
+    <div class="mt-3 md:w-[60%]">
         <div
             v-for="(item, index) in formData.personalDetails.additionalCountriesOfCitizenship"
             :key="index"
@@ -305,3 +305,7 @@ const countryOptions = ref([
         </div>
     </div>
 </template>
+
+<!-- <style scoped lang="scss">
+.
+</style> -->

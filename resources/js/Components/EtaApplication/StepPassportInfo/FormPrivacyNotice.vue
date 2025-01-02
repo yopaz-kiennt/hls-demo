@@ -103,7 +103,7 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl>
                     <FormInputCheckbox
-                        id="inAggreance"
+                        id="consentAndDeclaration.inAggreance"
                         v-model="formData.consentAndDeclaration.inAggreance"
                         value="true"
                         :label="messages.i_agree"
@@ -126,7 +126,13 @@ const { messages } = usePage().props;
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input v-model="formData.consentAndDeclaration.fullName" type="text" v-bind="componentField" />
+                    <Input
+                        v-bind="componentField"
+                        id="consentAndDeclaration.fullNameOfConsent"
+                        v-model="formData.consentAndDeclaration.fullName"
+                        type="text"
+                        maxlength="160"
+                    />
                 </FormControl>
             </div>
 

@@ -29,6 +29,10 @@
 
 .input-invalid {
     @apply border-red-500;
+
+    &:focus {
+        @apply border-red-500;
+    }
 }
 
 .select-invalid button {

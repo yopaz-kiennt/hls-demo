@@ -49,8 +49,9 @@ const untreatedConditions = ref([
 
             <div class="md:max-w-[60%]">
                 <Select
-                    v-model="formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
                     v-bind="componentField"
+                    id="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
+                    v-model="formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -88,9 +89,10 @@ const untreatedConditions = ref([
                 <div class="md:max-w-[60%]">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Textarea
+                            v-bind="componentField"
+                            id="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
                             v-model="formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
                             class="min-h-[150px]"
-                            v-bind="componentField"
                             maxlength="500"
                         />
                     </FormControl>
@@ -111,10 +113,11 @@ const untreatedConditions = ref([
 
             <div class="md:max-w-[60%]">
                 <Select
+                    v-bind="componentField"
+                    id="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
                     v-model="
                         formData.backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere
                     "
-                    v-bind="componentField"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -152,12 +155,13 @@ const untreatedConditions = ref([
                 <div class="md:max-w-[60%]">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Textarea
+                            v-bind="componentField"
+                            id="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails"
                             v-model="
                                 formData.backgroundQuestions
                                     .committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails
                             "
                             class="min-h-[150px]"
-                            v-bind="componentField"
                             maxlength="500"
                         />
                     </FormControl>
@@ -178,10 +182,11 @@ const untreatedConditions = ref([
 
             <div class="md:max-w-[60%]">
                 <Select
+                    v-bind="componentField"
+                    id="backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
                     v-model="
                         formData.backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis
                     "
-                    v-bind="componentField"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -218,10 +223,11 @@ const untreatedConditions = ref([
 
                 <div class="md:max-w-[60%]">
                     <Select
+                        v-bind="componentField"
+                        id="backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker"
                         v-model="
                             formData.backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker
                         "
-                        v-bind="componentField"
                     >
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
@@ -256,8 +262,9 @@ const untreatedConditions = ref([
 
                 <div class="md:max-w-[60%]">
                     <Select
-                        v-model="formData.backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
                         v-bind="componentField"
+                        id="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
+                        v-model="formData.backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
                     >
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
@@ -285,7 +292,11 @@ const untreatedConditions = ref([
             <!-- Do you have one of these conditions? -->
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.backgroundQuestions.doYouHaveOneOfTheseConditions" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="backgroundQuestions.doYouHaveOneOfTheseConditions"
+                    v-model="formData.backgroundQuestions.doYouHaveOneOfTheseConditions"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -306,18 +317,22 @@ const untreatedConditions = ref([
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails">
+    <FormField
+        v-slot="{ componentField, errors }"
+        name="backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
+    >
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.additional_details" />
             <!-- Please briefly indicate if there are additional details pertinent to your application. For example, an urgent need to travel to Canada. Provide relevant details to avoid delays in the processing of your application. -->
 
             <div class="md:max-w-[60%]">
-                <FormControl>
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Textarea
+                        v-bind="componentField"
+                        id="backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
                         v-model="
                             formData.backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails
                         "
-                        v-bind="componentField"
                         class="min-h-[150px]"
                         maxlength="250"
                     />

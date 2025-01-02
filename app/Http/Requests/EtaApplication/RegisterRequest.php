@@ -24,6 +24,15 @@ class RegisterRequest extends FormRequest
         return [
             'isRepresentative' => 'required',
             'isApplyingOnBehalfOfMinorChild' => 'required_if:isRepresentative,=,0',
+            'representative.representativeRelationship' => 'required',
+            'prerequisite.travelDocumentType' => 'required',
+
+            // birthday
+            'personalDetails.dobYear' => 'required',
+            'personalDetails.dobMonth' => 'required',
+            'personalDetails.dobDay' => 'required',
+
+            'travelDetails.isTravelDateKnown' => 'required',
         ];
     }
 }

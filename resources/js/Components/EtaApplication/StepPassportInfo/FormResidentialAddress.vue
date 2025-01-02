@@ -21,7 +21,7 @@ const { messages } = usePage().props;
 
     <!-- <p>Enter your permanent home address. Do not enter an address where you live temporarily.</p> -->
 
-    <FormField v-slot="{ componentField }" name="aptUnit">
+    <FormField v-slot="{ componentField }" name="contactDetails.aptUnit">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.apartment_unit_number" />
             <!-- Apartment/unit number (if applicable) -->
@@ -29,9 +29,10 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl>
                     <Input
+                        v-bind="componentField"
+                        id="contactDetails.aptUnit"
                         v-model="formData.contactDetails.aptUnit"
                         type="text"
-                        v-bind="componentField"
                         maxlength="10"
                     />
                 </FormControl>
@@ -49,9 +50,10 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
+                        v-bind="componentField"
+                        id="contactDetails.streetNo"
                         v-model="formData.contactDetails.streetNo"
                         type="text"
-                        v-bind="componentField"
                         maxlength="30"
                     />
                 </FormControl>
@@ -69,9 +71,10 @@ const { messages } = usePage().props;
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
+                        v-bind="componentField"
+                        id="contactDetails.streetAddress"
                         v-model="formData.contactDetails.streetAddress"
                         type="text"
-                        v-bind="componentField"
                         maxlength="100"
                     />
                 </FormControl>
@@ -81,17 +84,18 @@ const { messages } = usePage().props;
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="streetAddressAlt">
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.streetAddressAlt">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.street_address_or_name_line_2" />
             <!-- Street address/name line 2 (if applicable) -->
 
             <div class="md:max-w-[60%]">
-                <FormControl>
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
+                        v-bind="componentField"
+                        id="contactDetails.streetAddressAlt"
                         v-model="formData.contactDetails.streetAddressAlt"
                         type="text"
-                        v-bind="componentField"
                         maxlength="100"
                     />
                 </FormControl>
@@ -108,7 +112,13 @@ const { messages } = usePage().props;
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input v-model="formData.contactDetails.city" type="text" v-bind="componentField" maxlength="50" />
+                    <Input
+                        v-bind="componentField"
+                        id="contactDetails.cityOfContactDetails"
+                        v-model="formData.contactDetails.city"
+                        type="text"
+                        maxlength="50"
+                    />
                 </FormControl>
             </div>
 
@@ -122,7 +132,11 @@ const { messages } = usePage().props;
             <!-- Country/territory -->
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.contactDetails.country" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="contactDetails.countryOfContactDetails"
+                    v-model="formData.contactDetails.country"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -141,17 +155,18 @@ const { messages } = usePage().props;
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="district">
+    <FormField v-slot="{ componentField, errors }" name="contactDetails.district">
         <FormItem class="form-group">
             <LabelNoRequired :title="messages.district_or_region" />
             <!-- District/region -->
 
             <div class="md:max-w-[60%]">
-                <FormControl>
+                <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
+                        v-bind="componentField"
+                        id="contactDetails.district"
                         v-model="formData.contactDetails.district"
                         type="text"
-                        v-bind="componentField"
                         maxlength="50"
                     />
                 </FormControl>

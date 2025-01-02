@@ -13,12 +13,16 @@ defineProps({
         type: String,
         default: '',
     },
+    id: {
+        type: String,
+        default: '',
+    },
 });
 </script>
 
 <template>
     <div class="w-[100%]" :class="classes">
-        <Select v-model="model">
+        <Select :id="id" v-model="model">
             <SelectTrigger>
                 <SelectValue :placeholder="messages.select_day" />
             </SelectTrigger>

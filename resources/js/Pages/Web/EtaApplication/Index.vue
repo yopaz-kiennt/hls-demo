@@ -14,7 +14,7 @@ import StepRepresentativeDetails from './StepRepresentativeDetails.vue';
 
 const etaApplicationStore = useEtaApplicationStore();
 
-const { formSchema, formData, currentStep, loading, fieldNames } = storeToRefs(etaApplicationStore);
+const { formSchema, formData, currentStep, loading } = storeToRefs(etaApplicationStore);
 
 const { messages } = usePage().props;
 
@@ -41,14 +41,6 @@ const nextStep = () => {
 onBeforeUnmount(() => {
     etaApplicationStore.$reset();
 });
-
-const scrollToField = (field) => {
-    const targetElement = document.getElementById(field);
-    if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        targetElement.focus();
-    }
-};
 </script>
 
 <template>
@@ -67,16 +59,7 @@ const scrollToField = (field) => {
                         :validation-schema="formSchema[currentStep]"
                         @submit="nextStep()"
                     >
-                        <!-- <div v-if="Object.keys(errors).length > 0">
-                            <div v-for="(error, field) in errors" :key="field">
-                                <p>
-                                    <a :href="`#${field}`" class="href-custom" @click.prevent="scrollToField(field)">{{
-                                        fieldNames[field] || field
-                                    }}</a
-                                    >: {{ error }}
-                                </p>
-                            </div>
-                        </div> -->
+                        <!-- <FormErrors :errors="errors" /> -->
 
                         <StepApplicantType v-if="currentStep === 0" />
                         <StepRepresentativeDetails v-if="currentStep === 1" />
@@ -84,9 +67,10 @@ const scrollToField = (field) => {
 
                         <div
                             v-if="
-                                !formData.prerequisite.travelDocumentType ||
+                                (!formData.prerequisite.travelDocumentType && currentStep < 2) ||
                                 (formData.prerequisite.travelDocumentType &&
-                                    formData.prerequisite.travelDocumentType <= 4)
+                                    formData.prerequisite.travelDocumentType <= 4 &&
+                                    formData.prerequisite.passportNotedNationality)
                             "
                             class="mt-4 flex items-center justify-between"
                         >

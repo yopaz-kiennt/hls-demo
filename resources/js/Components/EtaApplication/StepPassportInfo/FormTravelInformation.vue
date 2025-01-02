@@ -30,7 +30,11 @@ const { messages } = usePage().props;
             </p> -->
 
             <div class="md:max-w-[60%]">
-                <Select v-model="formData.travelDetails.isTravelDateKnown" v-bind="componentField">
+                <Select
+                    v-bind="componentField"
+                    id="travelDetails.isTravelDateKnown"
+                    v-model="formData.travelDetails.isTravelDateKnown"
+                >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
