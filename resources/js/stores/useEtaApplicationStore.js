@@ -1052,7 +1052,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         async submitFormFake() {
             let fakeData = {
                 isRepresentative: '0',
-                isApplyingOnBehalfOfMinorChild: '0',
+                isApplyingOnBehalfOfMinorChild: '1',
                 representative: {
                     representativeRelationship: '0',
                     representativeCompensated: '0',

@@ -81,7 +81,7 @@ require("dotenv").config({
     try {
       jobId = getJobId(msg);
       application = await findApplicationFromDB(jobId);
-      console.log(application);
+      console.log(application); // TODO: remove after testing
     } catch (err) {
       console.error(err.stack);
     }
@@ -102,8 +102,8 @@ require("dotenv").config({
           await step2(page, application);
         }
 
-        // await step3(page, application);
-        // await step4(page, jobId);
+        await step3(page, application);
+        await step4(page, jobId);
         // TODO: payment
 
         res = ApplicationStatus.SUCCESS;
@@ -221,6 +221,8 @@ require("dotenv").config({
     // https://onlineservices-servicesenligne.cic.gc.ca/eta/welcome?lang=en#/representative
 
     try {
+      // -- Parent/guardian or representative details --
+
       // I am (required)
       // A family member or friend
       if (application.representative_relationship === 0) {
@@ -645,6 +647,7 @@ require("dotenv").config({
     // https://onlineservices-servicesenligne.cic.gc.ca/eta/welcome?lang=en#/application
 
     try {
+      // -- Complete the application form --
       // What travel document do you plan to use to travel to Canada? (required)
       await page.waitForSelector(
         "#applicationDetails\\.prerequisite_travelDocumentType",
@@ -674,6 +677,8 @@ require("dotenv").config({
         application.data.prerequisite.passportNotedNationality,
       );
       await sleep(300);
+
+      // -- Passport details of applicant --
 
       // Passport number (required)
       await page.waitForSelector(
@@ -719,30 +724,42 @@ require("dotenv").config({
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_dobYear",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_dobYear",
+      const dobYear = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_dobYear",
         `${application.data.personalDetails.dobYear}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_dobYear",
+        dobYear,
+      );
       await sleep(300);
 
       // Date of birth (required)
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_dobMonth",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_dobMonth",
+      const dobMonth = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_dobMonth",
         `${application.data.personalDetails.dobMonth}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_dobMonth",
+        dobMonth,
+      );
       await sleep(300);
 
       // Date of birth (required)
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_dobDay",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_dobDay",
+      const dobDay = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_dobDay",
         `${application.data.personalDetails.dobDay}`,
       );
+      await page.select("#applicationDetails\\.personalDetails_dobDay", dobDay);
       await sleep(300);
 
       // Gender (required)
@@ -779,61 +796,93 @@ require("dotenv").config({
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_issueDateYear",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_issueDateYear",
+      const issueDateYear = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_issueDateYear",
         `${application.data.personalDetails.issueDateYear}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_issueDateYear",
+        issueDateYear,
+      );
       await sleep(300);
 
       // Date of issue of passport (required)
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_issueDateMonth",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_issueDateMonth",
+      const issueDateMonth = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_issueDateMonth",
         `${application.data.personalDetails.issueDateMonth}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_issueDateMonth",
+        issueDateMonth,
+      );
       await sleep(300);
 
       // Date of issue of passport (required)
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_issueDateDay",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_issueDateDay",
+      const issueDateDay = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_issueDateDay",
         `${application.data.personalDetails.issueDateDay}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_issueDateDay",
+        issueDateDay,
+      );
       await sleep(300);
 
       // Date of expiry of passport (required)
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_expiryDateYear",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_expiryDateYear",
+      const expiryDateYear = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_expiryDateYear",
         `${application.data.personalDetails.expiryDateYear}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_expiryDateYear",
+        expiryDateYear,
+      );
       await sleep(300);
 
       // Date of expiry of passport (required)
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_expiryDateMonth",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_expiryDateMonth",
+      const expiryDateMonth = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_expiryDateMonth",
         `${application.data.personalDetails.expiryDateMonth}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_expiryDateMonth",
+        expiryDateMonth,
+      );
       await sleep(300);
 
       // Date of expiry of passport (required)
       await page.waitForSelector(
         "#applicationDetails\\.personalDetails_expiryDateDay",
       );
-      await page.select(
-        "#applicationDetails\\.personalDetails_expiryDateDay",
+      const expiryDateDay = await findOptionValueByText(
+        page,
+        "applicationDetails.personalDetails_expiryDateDay",
         `${application.data.personalDetails.expiryDateDay}`,
       );
+      await page.select(
+        "#applicationDetails\\.personalDetails_expiryDateDay",
+        expiryDateDay,
+      );
       await sleep(300);
+
+      // -- Personal details of applicant --
 
       // Additional nationalities
       await page.waitForSelector(
@@ -870,11 +919,49 @@ require("dotenv").config({
       ) {
         await step3dot1(page, application);
       }
+
+      await page.waitForSelector(".btn-next");
+      await screenshot(page, application.id, "step3", false);
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: "networkidle0" }),
+        page.click(".btn-next"),
+      ]);
+      await page.waitForNetworkIdle();
     } catch (err) {
       await screenshot(page, application.id, "step3", true);
 
       throw new Error(err.stack);
     }
+  }
+
+  async function findOptionValueByText(page, selectId, text) {
+    const value = await page.evaluate(
+      (selectId, text) => {
+        const element = document.getElementById(selectId);
+        if (!element) {
+          return null;
+        }
+
+        const options = element.options;
+        for (let i = 0; i < options.length; i++) {
+          if (options[i].text === text) {
+            return options[i].value;
+          }
+        }
+
+        return null;
+      },
+      selectId,
+      text,
+    );
+
+    if (!value) {
+      throw new Error(
+        `No select tag found with id ${selectId} and text ${text}`,
+      );
+    }
+
+    return value;
   }
 
   function isAdult(dateOfBirth) {
@@ -939,6 +1026,8 @@ require("dotenv").config({
       await sleep(300);
     }
 
+    // -- Employment information --
+
     // Occupation (required)
     await page.waitForSelector(
       "#applicationDetails\\.employmentDetails_occupation",
@@ -949,16 +1038,18 @@ require("dotenv").config({
     );
     await page.waitForNetworkIdle();
 
-    // Homemaker / Retired / Unemployed
-    // "4", "10", "14"
-    if (![4, 10, 14].includes(application.data.employmentDetails.occupation)) {
-      // await step3dot1dot1(page, application);
+    // Student
+    if (application.data.employmentDetails.occupation === 12) {
+      await step3dot1dot1(page, application);
+    } else if (
+      ![4, 10, 14].includes(application.data.employmentDetails.occupation)
+    ) {
+      // !(Homemaker / Retired / Unemployed)
+      await step3dot1dot2(page, application);
     }
 
-    await step3dot1dot2(page, application);
-  }
+    // -- Contact information --
 
-  async function step3dot1dot2(page, application) {
     // Preferred language to contact you (required)
     await page.waitForSelector(
       "#applicationDetails\\.contactDetails_languageOfPreference",
@@ -988,6 +1079,8 @@ require("dotenv").config({
       application.data.contactDetails.emailAddressReEnter,
     );
     await sleep(300);
+
+    // -- Residential address --
 
     // Apartment/unit number (if applicable)
     await page.waitForSelector("#applicationDetails\\.contactDetails_aptUnit");
@@ -1045,9 +1138,11 @@ require("dotenv").config({
     await page.waitForSelector("#applicationDetails\\.contactDetails_district");
     await page.type(
       "#applicationDetails\\.contactDetails_district",
-      application.data.contactDetails.district,
+      application.data.contactDetails.district ?? "",
     );
     await sleep(300);
+
+    // -- Travel information --
 
     // Do you know when you will travel to Canada? (required)
     await page.waitForSelector(
@@ -1121,6 +1216,8 @@ require("dotenv").config({
       );
       await sleep(300);
     }
+
+    // -- Background Questions --
 
     // Have you ever been refused a visa or permit, denied entry to, or ordered to leave Canada or any other country/territory? (required)
     await page.waitForSelector(
@@ -1241,9 +1338,11 @@ require("dotenv").config({
     await page.type(
       "#applicationDetails\\.backgroundQuestions_haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails",
       application.data.backgroundQuestions
-        .haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails,
+        .haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails ?? "",
     );
     await sleep(300);
+
+    // -- Privacy notice --
 
     // I Agree (required)
     await page.waitForSelector(
@@ -1261,30 +1360,107 @@ require("dotenv").config({
       application.data.consentAndDeclaration.fullName,
     );
     await sleep(300);
-
-    await page.waitForSelector(".btn-next");
-    await screenshot(page, jobId, "step2", false);
-
-    await Promise.all([
-      page.waitForNavigation({ waitUntil: "networkidle0" }),
-      page.click(".btn-next"),
-    ]);
-    await page.waitForNetworkIdle();
   }
 
-  // async function step4(page, jobId) {
-  //   try {
-  //     await page.waitForSelector("#method");
-  //     await screenshot(page, jobId, "step3", false);
+  async function step3dot1dot1(page, application) {
+    // Name of employer or school, as appropriate. (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.employmentDetails_companyEmployerSchoolFacilityName",
+    );
+    await page.type(
+      "#applicationDetails\\.employmentDetails_companyEmployerSchoolFacilityName",
+      application.data.employmentDetails.companyEmployerSchoolFacilityName,
+    );
+    await sleep(300);
 
-  //     await page.click("#method");
-  //     await page.waitForNetworkIdle();
-  //   } catch (err) {
-  //     await screenshot(page, jobId, "step3", true);
+    // Country/territory (required)
+    await page.waitForSelector("#applicationDetails\\.contactDetails_country");
+    await page.select(
+      "#applicationDetails\\.contactDetails_country",
+      application.data.contactDetails.country,
+    );
+    await sleep(300);
 
-  //     throw new Error(err.stack);
-  //   }
-  // }
+    // City/town (required)
+    await page.waitForSelector("#applicationDetails\\.contactDetails_city");
+    await page.type(
+      "#applicationDetails\\.contactDetails_city",
+      application.data.contactDetails.city,
+    );
+    await sleep(300);
+
+    // Since what year? (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.employmentDetails_fromDateYear",
+    );
+    await page.select(
+      "#applicationDetails\\.employmentDetails_fromDateYear",
+      `${application.data.employmentDetails.fromDateYear}`,
+    );
+    await sleep(300);
+  }
+
+  async function step3dot1dot2(page, application) {
+    // Job title (required)
+    await page.waitForSelector("#applicationDetails\\.employmentDetails_title");
+    await page.select(
+      "#applicationDetails\\.employmentDetails_title",
+      `${application.data.employmentDetails.title}`,
+    );
+    await sleep(300);
+
+    // Name of employer or school, as appropriate. (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.employmentDetails_companyEmployerSchoolFacilityName",
+    );
+    await page.type(
+      "#applicationDetails\\.employmentDetails_companyEmployerSchoolFacilityName",
+      application.data.employmentDetails.companyEmployerSchoolFacilityName,
+    );
+    await sleep(300);
+
+    // Country/territory (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.employmentDetails_country",
+    );
+    await page.select(
+      "#applicationDetails\\.employmentDetails_country",
+      application.data.employmentDetails.country,
+    );
+    await sleep(300);
+
+    // City/town (required)
+    await page.waitForSelector("#applicationDetails\\.employmentDetails_city");
+    await page.type(
+      "#applicationDetails\\.employmentDetails_city",
+      application.data.employmentDetails.city,
+    );
+    await sleep(300);
+
+    // Since what year? (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.employmentDetails_fromDateYear",
+    );
+    await page.select(
+      "#applicationDetails\\.employmentDetails_fromDateYear",
+      `${application.data.employmentDetails.fromDateYear}`,
+    );
+    await sleep(300);
+  }
+
+  async function step4(page, jobId) {
+    try {
+      await page.waitForSelector("#method");
+      await screenshot(page, jobId, "step4", false);
+
+      await page.click("#method");
+      await page.waitForNetworkIdle();
+    } catch (err) {
+      await screenshot(page, jobId, "step4", true);
+
+      throw new Error(err.stack);
+    }
+  }
 
   function sleep(milliseconds) {
     return new Promise(function (resolve) {
