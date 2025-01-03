@@ -50,11 +50,17 @@ return [
     'country_of_birth' => 'Country/territory of birth',
     'city_of_birth' => 'City/town of birth',
     'date_of_birth' => 'Date of birth',
-    'year_of_birth' => 'Year of birth',
-    'month_of_birth' => 'Month of birth',
-    'day_of_birth' => 'Day of birth',
+    'year_of_birth' => 'Date of birth - Year',
+    'month_of_birth' => 'Date of birth - Month',
+    'day_of_birth' => 'Date of birth - Day',
     'date_of_issue_of_passport' => 'Date of issue of passport',
+    'date_of_issue_of_passport_year' => 'Date of issue of passport - Year',
+    'date_of_issue_of_passport_month' => 'Date of issue of passport - Month',
+    'date_of_issue_of_passport_day' => 'Date of issue of passport - Day',
     'date_of_expiry_of_passport' => 'Date of expiry of passport',
+    'date_of_expiry_of_passport_year' => 'Date of expiry of passport - Year',
+    'date_of_expiry_of_passport_month' => 'Date of expiry of passport - Month',
+    'date_of_expiry_of_passport_day' => 'Date of expiry of passport - Day',
     'select_year' => 'Select year',
     'select_month' => 'Select month',
     'select_day' => 'Select day',
@@ -138,4 +144,7 @@ return [
     'must_only_contain_alphanumeric_characters_or_punctuation_marks' => 'Must only contain alphanumeric characters or punctuation marks.',
     'must_only_contain_numbers_and_spaces' => 'Must contain only numbers and spaces.',
     'the_form_could_not_be_submitted_because_errors_were_found' => 'The form could not be submitted because errors were found.',
+    'you_indicate_that_you_want_to_apply_on_behalf_of_a_minor' => 'You indicate that you want to apply on behalf of a minor. To continue, you need to enter a date
+                        of birth that is less than 18 years of age. If you want to apply for an adult, return to the
+                        first screen and change your answer for "Are you applying on behalf of a minor child?" to "No".',
 ];

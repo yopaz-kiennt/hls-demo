@@ -1,4 +1,5 @@
 <script setup>
+import FormSubmitErrors from '@/Components/EtaApplication/Errors/FormSubmitErrors.vue';
 import { Button } from '@/Components/ui/button';
 import Loading from '@/Components/ui/loading/Loading.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -60,6 +61,8 @@ onBeforeUnmount(() => {
                         @submit="nextStep()"
                     >
                         <!-- <FormErrors :errors="errors" /> -->
+
+                        <FormSubmitErrors />
 
                         <StepApplicantType v-if="currentStep === 0" />
                         <StepRepresentativeDetails v-if="currentStep === 1" />

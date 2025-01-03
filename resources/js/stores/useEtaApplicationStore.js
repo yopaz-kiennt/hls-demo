@@ -135,6 +135,8 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         jobTitles: {},
         selectedItem: null,
         isOpenModalDetails: false,
+        age: 0,
+        showErrorMessageApplyOnBehalfOfMinorChild: false,
     }),
     getters: {
         fieldNames() {
@@ -172,12 +174,12 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 'personalDetails.gender': this.messages.gender,
                 'personalDetails.countryOfBirth': this.messages.country_of_birth,
                 'personalDetails.cityTownOfBirth': this.messages.city_of_birth,
-                'personalDetails.issueDateYear': this.messages.date_of_issue_of_passport,
-                'personalDetails.issueDateMonth': this.messages.date_of_issue_of_passport,
-                'personalDetails.issueDateDay': this.messages.date_of_issue_of_passport,
-                'personalDetails.expiryDateYear': this.messages.date_of_expiry_of_passport,
-                'personalDetails.expiryDateMonth': this.messages.date_of_expiry_of_passport,
-                'personalDetails.expiryDateDay': this.messages.date_of_expiry_of_passport,
+                'personalDetails.issueDateYear': this.messages.date_of_issue_of_passport_year,
+                'personalDetails.issueDateMonth': this.messages.date_of_issue_of_passport_month,
+                'personalDetails.issueDateDay': this.messages.date_of_issue_of_passport_day,
+                'personalDetails.expiryDateYear': this.messages.date_of_expiry_of_passport_year,
+                'personalDetails.expiryDateMonth': this.messages.date_of_expiry_of_passport_month,
+                'personalDetails.expiryDateDay': this.messages.date_of_expiry_of_passport_day,
                 'personalDetails.maritalStatus': this.messages.marital_status,
                 'personalDetails.hasPreviouslyAppliedToCanada': this.messages.visa_eta_permit_applied_obtained,
                 'personalDetails.uciReEnter': this.messages.uci_previous_visa_eta_permit_number_reenter,
@@ -467,7 +469,6 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                         this.messages.english_french_characters,
                                         (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
                                     )
-                                    .required(this.messages.please_be_sure_to_enter_this_item)
                         ),
                         gender: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
@@ -482,6 +483,33 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             state.formData.prerequisite.passportNotedNationality,
                             () => yup.string().required(this.messages.this_item_must_be_selected)
                         ),
+                        // dobYear: yup.string().when([], {
+                        //     is: () => true,
+                        //     then: (schema) => {
+                        //         const passportNotedNationality = state.formData.prerequisite.passportNotedNationality;
+                        //         if (passportNotedNationality === '87') {
+                        //             return yup
+                        //                 .string()
+                        //                 .required(this.messages.this_item_must_be_selected)
+                        //                 .test(
+                        //                     'no-apply-less-than-18',
+                        //                     this.messages.you_indicate_that_you_want_to_apply_on_behalf_of_a_minor,
+                        //                     () => {
+                        //                         if (
+                        //                             this.formData.isRepresentative == 0 &&
+                        //                             this.formData.isApplyingOnBehalfOfMinorChild == 0 &&
+                        //                             state.checkAgeOfPersonalDetails >= state.minAgeRequired
+                        //                         ) {
+                        //                             return false;
+                        //                         }
+                        //                         return true;
+                        //                     }
+                        //                 );
+                        //         }
+
+                        //         return schema;
+                        //     },
+                        // }),
                         dobMonth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
                             () => yup.string().required(this.messages.this_item_must_be_selected)
@@ -763,7 +791,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                 return value && value == 0;
                             },
                             then: () => yup.string().required(this.messages.this_item_must_be_selected),
-                            otherwise: () => yup.number().optional(),
+                            otherwise: () => yup.string().optional(),
                         }),
                         travelDateTimeMinute: yup.string().when('isTravelDateKnown', {
                             is: (value) => {
@@ -939,6 +967,8 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 age--;
             }
 
+            this.age = age;
+
             return age;
         },
         minAgeRequired() {
@@ -993,6 +1023,19 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             } else {
                 this.jobTitles = [];
             }
+
+            this.changeOccupation();
+        },
+        changeOccupation() {
+            if (!this.jobTitles.length) {
+                this.formData.employmentDetails.title = '';
+                this.formData.employmentDetails.companyEmployerSchoolFacilityName = '';
+                this.formData.employmentDetails.country = '';
+                this.formData.employmentDetails.city = '';
+                this.formData.employmentDetails.fromDateYear = '';
+            } else {
+                this.formData.employmentDetails.country = '105';
+            }
         },
         nextStep() {
             if (this.formData.isRepresentative == 1 && this.currentStep == 0) {
@@ -1021,17 +1064,30 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             this.currentStep--;
         },
         async submitForm() {
+            this.showErrorMessageApplyOnBehalfOfMinorChild = false;
+            if (
+                this.age >= 18 &&
+                this.formData.isRepresentative == 0 &&
+                this.formData.isApplyingOnBehalfOfMinorChild == 0
+            ) {
+                this.showErrorMessageApplyOnBehalfOfMinorChild = true;
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                });
+                return;
+            }
+
             try {
                 this.loading = true;
                 const { data } = await axios.post(this.$route('eta_application.register'), this.formData);
-
                 setTimeout(() => {
                     window.$toast({
                         type: 'success',
                         title: data.message,
                     });
                 }, 400);
-
                 setTimeout(() => {
                     router.visit(this.$route('eta_application.index'));
                 }, 5100);
@@ -1235,6 +1291,21 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             this.formData.travelDetails.travelDateTimeHour = '';
             this.formData.travelDetails.travelDateTimeMinute = '';
             this.formData.travelDetails.travelDateTimeTimezone = '79';
+        },
+        changeRefusedVisaOrPermitOrDeniedEntryToCanada() {
+            this.formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails = '';
+        },
+        changeCommittedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere() {
+            this.formData.backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails =
+                '';
+        },
+        changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis() {
+            this.formData.backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker = '';
+            this.formData.backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis = '';
+        },
+        changeRepresentativeRelationship() {
+            this.formData.representative.membershipIdNumber = '';
+            this.formData.representative.province = '';
         },
     },
 });

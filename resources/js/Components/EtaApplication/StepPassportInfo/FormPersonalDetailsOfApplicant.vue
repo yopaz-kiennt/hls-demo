@@ -87,7 +87,11 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField, errors }" name="personalDetails.hasPreviouslyAppliedToCanada">
+    <FormField
+        v-slot="{ componentField, errors }"
+        v-model="formData.personalDetails.hasPreviouslyAppliedToCanada"
+        name="personalDetails.hasPreviouslyAppliedToCanada"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.visa_eta_permit_applied_obtained" />
             <!-- Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada? -->
@@ -96,7 +100,6 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
                 <Select
                     v-bind="componentField"
                     id="personalDetails.hasPreviouslyAppliedToCanada"
-                    v-model="formData.personalDetails.hasPreviouslyAppliedToCanada"
                     @update:modelValue="changeHasPreviouslyAppliedToCanada"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">

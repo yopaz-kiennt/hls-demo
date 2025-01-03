@@ -23,6 +23,7 @@ const { messages } = usePage().props;
             formData.representative.representativeRelationship == representativeRelationship.memberOfChampre
         "
         v-slot="{ componentField, errors }"
+        v-model="formData.representative.membershipIdNumber"
         name="representative.membershipIdNumber"
     >
         <FormItem class="form-group">
@@ -30,13 +31,7 @@ const { messages } = usePage().props;
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input
-                        v-bind="componentField"
-                        id="representative.membershipIdNumber"
-                        v-model="formData.representative.membershipIdNumber"
-                        type="text"
-                        maxlength="50"
-                    />
+                    <Input v-bind="componentField" id="representative.membershipIdNumber" type="text" maxlength="50" />
                 </FormControl>
             </div>
 
@@ -71,20 +66,18 @@ const { messages } = usePage().props;
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField, errors }" name="representative.lastName">
+    <FormField
+        v-slot="{ componentField, errors }"
+        v-model="formData.representative.lastName"
+        name="representative.lastName"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.surname_last_name" />
             <!-- Surname(s) / last name(s) -->
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input
-                        v-bind="componentField"
-                        id="representative.lastName"
-                        v-model="formData.representative.lastName"
-                        type="text"
-                        maxlength="50"
-                    />
+                    <Input v-bind="componentField" id="representative.lastName" type="text" maxlength="50" />
                 </FormControl>
             </div>
 
@@ -92,20 +85,18 @@ const { messages } = usePage().props;
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField, errors }" name="representative.firstName">
+    <FormField
+        v-slot="{ componentField, errors }"
+        v-model="formData.representative.firstName"
+        name="representative.firstName"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.given_first_name" />
             <!-- Given name(s) / first name(s) -->
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input
-                        v-bind="componentField"
-                        id="representative.firstName"
-                        v-model="formData.representative.firstName"
-                        type="text"
-                        maxlength="50"
-                    />
+                    <Input v-bind="componentField" id="representative.firstName" type="text" maxlength="50" />
                 </FormControl>
             </div>
 
@@ -122,6 +113,7 @@ const { messages } = usePage().props;
             formData.representative.representativeRelationship == representativeRelationship.travelAgent
         "
         v-slot="{ componentField, errors }"
+        v-model="formData.representative.organizationName"
         name="representative.organizationName"
     >
         <FormItem class="form-group">
@@ -130,13 +122,7 @@ const { messages } = usePage().props;
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input
-                        v-bind="componentField"
-                        id="representative.organizationName"
-                        v-model="formData.representative.organizationName"
-                        type="text"
-                        maxlength="75"
-                    />
+                    <Input v-bind="componentField" id="representative.organizationName" type="text" maxlength="75" />
                 </FormControl>
             </div>
 
@@ -144,20 +130,18 @@ const { messages } = usePage().props;
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField, errors }" name="representative.mailingAddress">
+    <FormField
+        v-slot="{ componentField, errors }"
+        v-model="formData.representative.mailingAddress"
+        name="representative.mailingAddress"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.mailing_address" />
             <!-- Mailing address -->
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input
-                        v-bind="componentField"
-                        id="representative.mailingAddress"
-                        v-model="formData.representative.mailingAddress"
-                        type="text"
-                        maxlength="30"
-                    />
+                    <Input v-bind="componentField" id="representative.mailingAddress" type="text" maxlength="30" />
                 </FormControl>
             </div>
 
@@ -171,6 +155,7 @@ const { messages } = usePage().props;
             formData.representative.representativeRelationship == representativeRelationship.memberOfCanadian
         "
         v-slot="{ componentField, errors }"
+        v-model="formData.representative.postalCodeZip"
         name="representative.postalCodeZip"
     >
         <FormItem class="form-group">
@@ -179,13 +164,7 @@ const { messages } = usePage().props;
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input
-                        v-bind="componentField"
-                        id="representative.postalCodeZip"
-                        v-model="formData.representative.postalCodeZip"
-                        type="text"
-                        maxlength="30"
-                    />
+                    <Input v-bind="componentField" id="representative.postalCodeZip" type="text" maxlength="30" />
                 </FormControl>
             </div>
 
@@ -193,20 +172,18 @@ const { messages } = usePage().props;
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField, errors }" name="representative.phoneNumber">
+    <FormField
+        v-slot="{ componentField, errors }"
+        v-model="formData.representative.phoneNumber"
+        name="representative.phoneNumber"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.telephone_number" />
             <!-- Telephone number -->
 
             <div class="md:max-w-[60%]">
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
-                    <Input
-                        v-bind="componentField"
-                        id="representative.phoneNumber"
-                        v-model="formData.representative.phoneNumber"
-                        type="text"
-                        maxlength="20"
-                    />
+                    <Input v-bind="componentField" id="representative.phoneNumber" type="text" maxlength="20" />
                 </FormControl>
             </div>
 

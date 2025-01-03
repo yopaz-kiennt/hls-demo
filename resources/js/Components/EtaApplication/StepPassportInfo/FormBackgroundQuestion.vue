@@ -36,13 +36,35 @@ const untreatedConditions = ref([
         value: '3',
     },
 ]);
+
+const changeRefusedVisaOrPermitOrDeniedEntryToCanada = (value) => {
+    if (value == 1) {
+        etaApplicationStore.changeRefusedVisaOrPermitOrDeniedEntryToCanada();
+    }
+};
+
+const changeCommittedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere = (value) => {
+    if (value == 1) {
+        etaApplicationStore.changeCommittedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere();
+    }
+};
+
+const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = (value) => {
+    if (value == 1) {
+        etaApplicationStore.changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis();
+    }
+};
 </script>
 
 <template>
     <h2 class="leading-form">{{ messages.background_questions }}</h2>
     <!-- Background Questions -->
 
-    <FormField v-slot="{ componentField, errors }" name="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada">
+    <FormField
+        v-slot="{ componentField, errors }"
+        v-model="formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
+        name="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.visa_refused_or_denied_entry" />
             <!-- Have you ever been refused a visa or permit, denied entry to, or ordered to leave Canada or any other country/territory? -->
@@ -51,7 +73,7 @@ const untreatedConditions = ref([
                 <Select
                     v-bind="componentField"
                     id="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
-                    v-model="formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
+                    @update:modelValue="changeRefusedVisaOrPermitOrDeniedEntryToCanada"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -80,6 +102,7 @@ const untreatedConditions = ref([
     >
         <FormField
             v-slot="{ componentField, errors }"
+            v-model="formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
             name="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
         >
             <FormItem class="form-group">
@@ -91,7 +114,6 @@ const untreatedConditions = ref([
                         <Textarea
                             v-bind="componentField"
                             id="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
-                            v-model="formData.backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
                             class="min-h-[150px]"
                             maxlength="500"
                         />
@@ -105,6 +127,7 @@ const untreatedConditions = ref([
 
     <FormField
         v-slot="{ componentField, errors }"
+        v-model="formData.backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
         name="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
     >
         <FormItem class="form-group">
@@ -115,9 +138,7 @@ const untreatedConditions = ref([
                 <Select
                     v-bind="componentField"
                     id="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
-                    v-model="
-                        formData.backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere
-                    "
+                    @update:modelValue="changeCommittedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -146,6 +167,9 @@ const untreatedConditions = ref([
     >
         <FormField
             v-slot="{ componentField, errors }"
+            v-model="
+                formData.backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails
+            "
             name="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails"
         >
             <FormItem class="form-group">
@@ -157,10 +181,6 @@ const untreatedConditions = ref([
                         <Textarea
                             v-bind="componentField"
                             id="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails"
-                            v-model="
-                                formData.backgroundQuestions
-                                    .committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails
-                            "
                             class="min-h-[150px]"
                             maxlength="500"
                         />
@@ -174,6 +194,7 @@ const untreatedConditions = ref([
 
     <FormField
         v-slot="{ componentField, errors }"
+        v-model="formData.backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
         name="backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
     >
         <FormItem class="form-group">
@@ -184,9 +205,7 @@ const untreatedConditions = ref([
                 <Select
                     v-bind="componentField"
                     id="backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
-                    v-model="
-                        formData.backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis
-                    "
+                    @update:modelValue="changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -215,6 +234,7 @@ const untreatedConditions = ref([
     >
         <FormField
             v-slot="{ componentField, errors }"
+            v-model="formData.backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker"
             name="backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker"
         >
             <FormItem class="form-group">
@@ -225,9 +245,6 @@ const untreatedConditions = ref([
                     <Select
                         v-bind="componentField"
                         id="backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker"
-                        v-model="
-                            formData.backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker
-                        "
                     >
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
@@ -254,6 +271,7 @@ const untreatedConditions = ref([
                 formData.backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker == '0'
             "
             v-slot="{ componentField, errors }"
+            v-model="formData.backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
             name="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
         >
             <FormItem class="form-group">
@@ -261,11 +279,7 @@ const untreatedConditions = ref([
                 <!-- Have you ever been diagnosed with tuberculosis? -->
 
                 <div class="md:max-w-[60%]">
-                    <Select
-                        v-bind="componentField"
-                        id="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
-                        v-model="formData.backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
-                    >
+                    <Select v-bind="componentField" id="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis">
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.please_select" />
@@ -286,17 +300,17 @@ const untreatedConditions = ref([
         </FormField>
     </template>
 
-    <FormField v-slot="{ componentField, errors }" name="backgroundQuestions.doYouHaveOneOfTheseConditions">
+    <FormField
+        v-slot="{ componentField, errors }"
+        v-model="formData.backgroundQuestions.doYouHaveOneOfTheseConditions"
+        name="backgroundQuestions.doYouHaveOneOfTheseConditions"
+    >
         <FormItem class="form-group">
             <LabelRequired :title="messages.health_condition_check" />
             <!-- Do you have one of these conditions? -->
 
             <div class="md:max-w-[60%]">
-                <Select
-                    v-bind="componentField"
-                    id="backgroundQuestions.doYouHaveOneOfTheseConditions"
-                    v-model="formData.backgroundQuestions.doYouHaveOneOfTheseConditions"
-                >
+                <Select v-bind="componentField" id="backgroundQuestions.doYouHaveOneOfTheseConditions">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
                             <SelectValue :placeholder="messages.please_select" />
@@ -319,6 +333,7 @@ const untreatedConditions = ref([
 
     <FormField
         v-slot="{ componentField, errors }"
+        v-model="formData.backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
         name="backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
     >
         <FormItem class="form-group">
@@ -330,9 +345,6 @@ const untreatedConditions = ref([
                     <Textarea
                         v-bind="componentField"
                         id="backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
-                        v-model="
-                            formData.backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails
-                        "
                         class="min-h-[150px]"
                         maxlength="250"
                     />
