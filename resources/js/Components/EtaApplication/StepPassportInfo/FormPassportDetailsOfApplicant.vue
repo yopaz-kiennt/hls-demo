@@ -3,6 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import DateSelector from '@/Components/ui/dateselector/DateSelector.vue';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
+import LabelNoRequired from '@/Components/ui/label/LabelNoRequired.vue';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
@@ -114,7 +115,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 
     <FormField v-slot="{ componentField, errors }" name="personalDetails.firstNameOfPassport">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.given_first_name" />
+            <LabelNoRequired :title="messages.given_first_name" />
             <!-- Given name(s) / first name(s) -->
 
             <!-- <p>Please enter exactly as shown on your passport or identity document.</p> -->

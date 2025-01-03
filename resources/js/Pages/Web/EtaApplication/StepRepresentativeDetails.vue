@@ -16,6 +16,12 @@ const { messages } = usePage().props;
 const etaApplicationStore = useEtaApplicationStore();
 
 const { formData } = storeToRefs(etaApplicationStore);
+
+const changeRepresentativeRelationship = (value) => {
+    if (value || value == 0) {
+        etaApplicationStore.changeRepresentativeRelationship();
+    }
+};
 </script>
 
 <template>
@@ -30,6 +36,7 @@ const { formData } = storeToRefs(etaApplicationStore);
                     v-bind="componentField"
                     id="representative.representativeRelationship"
                     v-model="formData.representative.representativeRelationship"
+                    @update:modelValue="changeRepresentativeRelationship"
                 >
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>

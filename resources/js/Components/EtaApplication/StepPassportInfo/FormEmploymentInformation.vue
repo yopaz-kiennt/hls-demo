@@ -64,7 +64,11 @@ const updateJobTitles = () => {
     </FormField>
 
     <template v-if="jobTitles.length">
-        <FormField v-slot="{ componentField, errors }" name="employmentDetails.title">
+        <FormField
+            v-slot="{ componentField, errors }"
+            v-model="formData.employmentDetails.title"
+            name="employmentDetails.title"
+        >
             <FormItem class="form-group">
                 <LabelRequired :title="messages.job_title" />
                 <!-- Job title -->
@@ -72,11 +76,7 @@ const updateJobTitles = () => {
                 <!-- <p>Select the option that best describes your job.</p> -->
 
                 <div class="md:max-w-[60%]">
-                    <Select
-                        v-bind="componentField"
-                        id="employmentDetails.title"
-                        v-model="formData.employmentDetails.title"
-                    >
+                    <Select v-bind="componentField" id="employmentDetails.title">
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.please_select" />
@@ -103,7 +103,11 @@ const updateJobTitles = () => {
             </FormItem>
         </FormField>
 
-        <FormField v-slot="{ componentField, errors }" name="employmentDetails.companyEmployerSchoolFacilityName">
+        <FormField
+            v-slot="{ componentField, errors }"
+            v-model="formData.employmentDetails.companyEmployerSchoolFacilityName"
+            name="employmentDetails.companyEmployerSchoolFacilityName"
+        >
             <FormItem class="form-group">
                 <LabelRequired :title="messages.name_of_employer_or_school" />
                 <!-- Name of employer or school, as appropriate. -->
@@ -113,7 +117,6 @@ const updateJobTitles = () => {
                         <Input
                             v-bind="componentField"
                             id="employmentDetails.companyEmployerSchoolFacilityName"
-                            v-model="formData.employmentDetails.companyEmployerSchoolFacilityName"
                             type="text"
                             maxlength="75"
                         />
@@ -124,17 +127,17 @@ const updateJobTitles = () => {
             </FormItem>
         </FormField>
 
-        <FormField v-slot="{ componentField, errors }" name="employmentDetails.countryOfEmployment">
+        <FormField
+            v-slot="{ componentField, errors }"
+            v-model="formData.employmentDetails.country"
+            name="employmentDetails.countryOfEmployment"
+        >
             <FormItem class="form-group">
                 <LabelRequired :title="messages.country_or_territory" />
                 <!-- Country/territory -->
 
                 <div class="md:max-w-[60%]">
-                    <Select
-                        v-bind="componentField"
-                        id="employmentDetails.countryOfEmployment"
-                        v-model="formData.employmentDetails.country"
-                    >
+                    <Select v-bind="componentField" id="employmentDetails.countryOfEmployment">
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.please_select" />
@@ -155,7 +158,11 @@ const updateJobTitles = () => {
             </FormItem>
         </FormField>
 
-        <FormField v-slot="{ componentField, errors }" name="employmentDetails.cityOfEmployment">
+        <FormField
+            v-slot="{ componentField, errors }"
+            v-model="formData.employmentDetails.city"
+            name="employmentDetails.cityOfEmployment"
+        >
             <FormItem class="form-group">
                 <LabelRequired :title="messages.city_or_town" />
                 <!-- City/town -->
@@ -165,7 +172,6 @@ const updateJobTitles = () => {
                         <Input
                             v-bind="componentField"
                             id="employmentDetails.cityOfEmployment"
-                            v-model="formData.employmentDetails.city"
                             type="text"
                             maxlength="50"
                         />
@@ -176,7 +182,11 @@ const updateJobTitles = () => {
             </FormItem>
         </FormField>
 
-        <FormField v-slot="{ componentField, errors }" name="employmentDetails.fromDateYear">
+        <FormField
+            v-slot="{ componentField, errors }"
+            v-model="formData.employmentDetails.fromDateYear"
+            name="employmentDetails.fromDateYear"
+        >
             <FormItem class="form-group">
                 <LabelRequired :title="messages.since_what_year" />
                 <!-- Since what year? -->
@@ -184,11 +194,7 @@ const updateJobTitles = () => {
                 <div class="md:max-w-[60%]">
                     <div class="md:w-[32%]">
                         <FormControl>
-                            <SelectYear
-                                v-bind="componentField"
-                                v-model="formData.employmentDetails.fromDateYear"
-                                :classes="errors.length > 0 ? 'select-invalid' : ''"
-                            />
+                            <SelectYear v-bind="componentField" :classes="errors.length > 0 ? 'select-invalid' : ''" />
                         </FormControl>
                     </div>
                 </div>

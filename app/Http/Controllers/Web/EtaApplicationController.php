@@ -25,6 +25,29 @@ class EtaApplicationController extends Controller
 
     public function register(RegisterRequest $request)
     {
+        $applicationCreated = Application::create([
+            'user_id' => Auth::user()->id,
+            'is_representative' => $request->get('isRepresentative'),
+            'is_applying_for_minor' => $request->get('isApplyingOnBehalfOfMinorChild'),
+            'representative_relationship' => $request->get('representative')['representativeRelationship'],
+            'travel_document_type' => $request->get('prerequisite')['travelDocumentType'],
+            'birthday' => $this->getBirthday($request),
+            'is_travel_date_known' => $request->get('travelDetails')['isTravelDateKnown'],
+            'data' => $request->all(),
+            'status' => ApplicationStatus::Pending->value,
+        ]);
+
+        // send message
+        $rabbitmqService = new RabbitMQService;
+        $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue_name'), json_encode([
+            'id' => $applicationCreated->id,
+        ]));
+
+        return $this->responseSuccess(null, 'Đăng ký thành công!');
+    }
+
+    private function getBirthday($request)
+    {
         $dob = $request->get('personalDetails');
         $monthMapping = [
             'January' => 1,
@@ -42,25 +65,6 @@ class EtaApplicationController extends Controller
         ];
         $birthday = sprintf('%04d-%02d-%02d', $dob['dobYear'], $monthMapping[$dob['dobMonth']], $dob['dobDay']);
 
-        $applicationCreated = Application::create([
-            'user_id' => Auth::user()->id,
-            'is_representative' => $request->get('isRepresentative'),
-            'is_applying_for_minor' => $request->get('isApplyingOnBehalfOfMinorChild'),
-            'representative_relationship' => $request->get('representative')['representativeRelationship'],
-            'travel_document_type' => $request->get('prerequisite')['travelDocumentType'],
-            'birthday' => $birthday,
-            'is_travel_date_known' => $request->get('travelDetails')['isTravelDateKnown'],
-            'data' => $request->all(),
-            'status' => ApplicationStatus::Pending->value,
-        ]);
-
-        // send message
-        $rabbitmqService = new RabbitMQService;
-        $queueName = config('queue.connections.rabbitmq.queue_name');
-        $rabbitmqService->sendMessage($queueName, json_encode([
-            'id' => $applicationCreated->id,
-        ]));
-
-        return $this->responseSuccess(null, 'Đăng ký thành công!');
+        return $birthday;
     }
 }

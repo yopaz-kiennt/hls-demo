@@ -31,13 +31,12 @@ defineProps({
 <template>
     <div class="mt-1 flex justify-between md:max-w-[60%]">
         <div class="w-[33%] md:w-[32%]">
-            <FormField v-slot="{ componentField, errors }" :name="inputYear">
+            <FormField v-slot="{ componentField, errors }" v-model="year" :name="inputYear">
                 <FormItem>
                     <FormControl>
                         <SelectYear
                             v-bind="componentField"
                             :id="inputYear"
-                            v-model="year"
                             :classes="errors.length > 0 ? 'select-invalid' : ''"
                             :end-year="endYear"
                         />
@@ -49,13 +48,12 @@ defineProps({
         </div>
 
         <div class="w-[33%] md:w-[32%]">
-            <FormField v-slot="{ componentField, errors }" :name="inputMonth">
+            <FormField v-slot="{ componentField, errors }" v-model="month" :name="inputMonth">
                 <FormItem>
                     <FormControl>
                         <SelectMonth
                             v-bind="componentField"
                             :id="inputMonth"
-                            v-model="month"
                             :classes="errors.length > 0 ? 'select-invalid' : ''"
                         />
                     </FormControl>
@@ -66,13 +64,12 @@ defineProps({
         </div>
 
         <div class="w-[33%] md:w-[32%]">
-            <FormField v-slot="{ componentField, errors }" :name="inputDay">
+            <FormField v-slot="{ componentField, errors }" v-model="day" :name="inputDay">
                 <FormItem>
                     <FormControl>
                         <SelectDay
                             v-bind="componentField"
                             :id="inputDay"
-                            v-model="day"
                             :classes="errors.length > 0 ? 'select-invalid' : ''"
                         />
                     </FormControl>

@@ -195,10 +195,10 @@ defineProps({
 <template>
     <div class="mt-1 flex justify-between md:max-w-[60%]">
         <div class="w-[33%] md:w-[32%]">
-            <FormField v-slot="{ componentField, errors }" :name="inputHour">
+            <FormField v-slot="{ componentField, errors }" v-model="hour" :name="inputHour">
                 <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
                     <FormControl>
-                        <Select v-model="hour" v-bind="componentField">
+                        <Select v-bind="componentField">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.select_hour" />
                             </SelectTrigger>
@@ -219,10 +219,10 @@ defineProps({
         </div>
 
         <div class="w-[33%] md:w-[32%]">
-            <FormField v-slot="{ componentField, errors }" :name="inputMinute">
+            <FormField v-slot="{ componentField, errors }" v-model="minute" :name="inputMinute">
                 <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
-                    <FormControl v-bind="componentField">
-                        <Select v-model="minute">
+                    <FormControl>
+                        <Select v-bind="componentField">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.select_minute" />
                             </SelectTrigger>
@@ -247,10 +247,10 @@ defineProps({
         </div>
 
         <div class="w-[33%] md:w-[32%]">
-            <FormField v-slot="{ errors }" :name="inputTimezone">
+            <FormField v-slot="{ componentField, errors }" v-model="timezone" :name="inputTimezone">
                 <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
                     <FormControl>
-                        <Select v-model="timezone">
+                        <Select v-bind="componentField">
                             <SelectTrigger>
                                 <SelectValue :placeholder="messages.select_timezone" />
                             </SelectTrigger>

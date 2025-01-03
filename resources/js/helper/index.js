@@ -48,3 +48,12 @@ export const getTravelDocuments = (lang) => [
         value: '8',
     },
 ];
+
+export const scrollToField = (field) => {
+    const targetElement = document.getElementById(field);
+
+    if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetElement.focus();
+    }
+};

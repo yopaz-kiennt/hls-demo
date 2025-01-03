@@ -4,9 +4,10 @@ import { usePage } from '@inertiajs/vue3';
 
 const { messages } = usePage().props;
 
-// const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
-
-const months = Array.from({ length: 12 }, (_, i) => new Date(0, i).toLocaleString('en-US', { month: 'long' }));
+const months = Array.from({ length: 12 }, (_, i) => ({
+    value: new Date(0, i).toLocaleString('en-US', { month: 'long' }),
+    label: (i + 1).toString().padStart(2, '0'),
+}));
 
 const model = defineModel();
 
@@ -31,8 +32,8 @@ defineProps({
 
             <SelectContent>
                 <SelectGroup>
-                    <SelectItem v-for="monthOption in months" :key="monthOption" :value="monthOption">
-                        {{ monthOption }}
+                    <SelectItem v-for="month in months" :key="month.value" :value="month.value">
+                        {{ month.label }}
                     </SelectItem>
                 </SelectGroup>
             </SelectContent>
