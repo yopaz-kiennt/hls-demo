@@ -35,6 +35,12 @@
     }
 }
 
+.checkbox-invalid {
+    button {
+        @apply border-red-500;
+    }
+}
+
 .select-invalid button {
     @apply border-red-500;
 }

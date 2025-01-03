@@ -146,7 +146,7 @@ const changeRepresentativeRelationship = (value) => {
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" name="representative.declareContactAndInformationIsTruthy">
+    <FormField v-slot="{ componentField, errors }" name="representative.declareContactAndInformationIsTruthy">
         <FormItem class="mt-8 grid w-full items-center gap-1.5">
             <LabelRequired :title="messages.representative_declaration" class="text-[22px] font-normal" />
 
@@ -158,6 +158,7 @@ const changeRepresentativeRelationship = (value) => {
                         value="true"
                         :label="messages.declaration_contact_info"
                         v-bind="componentField"
+                        :class="{ 'checkbox-invalid': errors.length > 0 }"
                     />
                     <!-- I declare that my contact and personal information above is truthful, complete and correct. -->
                 </FormControl>
@@ -167,7 +168,7 @@ const changeRepresentativeRelationship = (value) => {
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField }" type="checkbox" name="representative.understandAndAccept">
+    <FormField v-slot="{ componentField, errors }" type="checkbox" name="representative.understandAndAccept">
         <FormItem class="mt-8 grid w-full gap-1.5">
             <LabelRequired :title="messages.representative_authorization" class="text-[22px] font-normal" />
             <!-- Representative's authorization -->
@@ -182,6 +183,7 @@ const changeRepresentativeRelationship = (value) => {
                         :label="messages.declaration_authorization"
                         boxClasses="items-unset"
                         labelClasses="mt-[-5px]"
+                        :class="{ 'checkbox-invalid': errors.length > 0 }"
                     />
 
                     <!-- I understand and accept that I am the person appointed by the applicant to conduct business on the

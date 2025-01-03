@@ -96,7 +96,7 @@ const { messages } = usePage().props;
 
     <p>I agree that by typing my name and clicking sign, I am electronically signing my application.</p>
 
-    <FormField v-slot="{ componentField }" name="consentAndDeclaration.inAggreance">
+    <FormField v-slot="{ componentField, errors }" name="consentAndDeclaration.inAggreance">
         <FormItem class="form-group">
             <LabelRequired :title="messages.i_agree" :classes="'text-[24px] font-normal'" />
 
@@ -108,6 +108,7 @@ const { messages } = usePage().props;
                         value="true"
                         :label="messages.i_agree"
                         v-bind="componentField"
+                        :class="{ 'checkbox-invalid': errors.length > 0 }"
                     />
                 </FormControl>
             </div>

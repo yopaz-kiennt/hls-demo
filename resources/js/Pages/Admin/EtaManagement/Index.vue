@@ -59,6 +59,10 @@ const search = () => {
     loading.value = true;
     etaApplicationStore.setLoading(true);
     router.get(`/admin/eta-management?${buildUrlParams({ ...formSearch.value })}`);
+
+    setTimeout(() => {
+        etaApplicationStore.setLoading(false);
+    }, 300);
 };
 
 const reset = () => {
@@ -71,6 +75,10 @@ const reset = () => {
 
     etaApplicationStore.setLoading(true);
     router.get('/admin/eta-management');
+
+    setTimeout(() => {
+        etaApplicationStore.setLoading(false);
+    }, 300);
 };
 
 const loadPage = (page) => {
