@@ -918,7 +918,30 @@ require("dotenv").config({
         )
       ) {
         await step3dot1(page, application);
+      } else {
+        await step3dot2(page, application);
       }
+
+      // -- Privacy notice --
+
+      // I Agree (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.consentAndDeclaration_inAggreance",
+      );
+      await page.click(
+        "#applicationDetails\\.consentAndDeclaration_inAggreance",
+      );
+      await sleep(300);
+
+      // Signature of applicant (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.consentAndDeclaration_fullName",
+      );
+      await page.type(
+        "#applicationDetails\\.consentAndDeclaration_fullName",
+        application.data.consentAndDeclaration.fullName,
+      );
+      await sleep(300);
 
       await page.waitForSelector(".btn-next");
       await screenshot(page, application.id, "step3", false);
@@ -1044,7 +1067,7 @@ require("dotenv").config({
     } else if (
       ![4, 10, 14].includes(application.data.employmentDetails.occupation)
     ) {
-      // !(Homemaker / Retired / Unemployed)
+      // not in (Homemaker / Retired / Unemployed)
       await step3dot1dot2(page, application);
     }
 
@@ -1341,25 +1364,211 @@ require("dotenv").config({
         .haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails ?? "",
     );
     await sleep(300);
+  }
 
-    // -- Privacy notice --
+  async function step3dot2(page, application) {
+    // Date of birth (required)
+    // age < 18
 
-    // I Agree (required)
+    // Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada? (required)
     await page.waitForSelector(
-      "#applicationDetails\\.consentAndDeclaration_inAggreance",
+      "#applicationDetails\\.personalDetails_hasPreviouslyAppliedToCanada",
     );
-    await page.click("#applicationDetails\\.consentAndDeclaration_inAggreance");
+    await page.select(
+      "#applicationDetails\\.personalDetails_hasPreviouslyAppliedToCanada",
+      application.data.personalDetails.hasPreviouslyAppliedToCanada,
+    );
     await sleep(300);
 
-    // Signature of applicant (required)
+    // Yes
+    if (application.data.personalDetails.hasPreviouslyAppliedToCanada === "0") {
+      // Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (optional)
+      await page.waitForSelector("#applicationDetails\\.personalDetails_uci");
+      await page.type(
+        "#applicationDetails\\.personalDetails_uci",
+        application.data.personalDetails.uci ?? "",
+      );
+      await sleep(300);
+
+      // Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (re-enter)
+      await page.waitForSelector(
+        "#applicationDetails\\.personalDetails_uciReEnter",
+      );
+      await page.type(
+        "#applicationDetails\\.personalDetails_uciReEnter",
+        application.data.personalDetails.uciReEnter ?? "",
+      );
+      await sleep(300);
+    }
+
+    // -- Contact information --
+
+    // Preferred language to contact you (required)
     await page.waitForSelector(
-      "#applicationDetails\\.consentAndDeclaration_fullName",
+      "#applicationDetails\\.contactDetails_languageOfPreference",
+    );
+    await page.select(
+      "#applicationDetails\\.contactDetails_languageOfPreference",
+      application.data.contactDetails.languageOfPreference,
+    );
+    await sleep(300);
+
+    // Email address (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.contactDetails_emailAddress",
     );
     await page.type(
-      "#applicationDetails\\.consentAndDeclaration_fullName",
-      application.data.consentAndDeclaration.fullName,
+      "#applicationDetails\\.contactDetails_emailAddress",
+      application.data.contactDetails.emailAddress,
     );
     await sleep(300);
+
+    // Email address (re-enter) (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.contactDetails_emailAddressReEnter",
+    );
+    await page.type(
+      "#applicationDetails\\.contactDetails_emailAddressReEnter",
+      application.data.contactDetails.emailAddressReEnter,
+    );
+    await sleep(300);
+
+    // -- Residential address --
+
+    // Apartment/unit number (if applicable)
+    await page.waitForSelector("#applicationDetails\\.contactDetails_aptUnit");
+    await page.type(
+      "#applicationDetails\\.contactDetails_aptUnit",
+      application.data.contactDetails.aptUnit ?? "",
+    );
+    await sleep(300);
+
+    // Street/civic number or house name (required)
+    await page.waitForSelector("#applicationDetails\\.contactDetails_streetNo");
+    await page.type(
+      "#applicationDetails\\.contactDetails_streetNo",
+      application.data.contactDetails.streetNo,
+    );
+    await sleep(300);
+
+    // Street address/name (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.contactDetails_streetAddress",
+    );
+    await page.type(
+      "#applicationDetails\\.contactDetails_streetAddress",
+      application.data.contactDetails.streetAddress,
+    );
+    await sleep(300);
+
+    // Street address/name line 2 (if applicable)
+    await page.waitForSelector(
+      "#applicationDetails\\.contactDetails_streetAddressAlt",
+    );
+    await page.type(
+      "#applicationDetails\\.contactDetails_streetAddressAlt",
+      application.data.contactDetails.streetAddressAlt ?? "",
+    );
+    await sleep(300);
+
+    // City/town (required)
+    await page.waitForSelector("#applicationDetails\\.contactDetails_city");
+    await page.type(
+      "#applicationDetails\\.contactDetails_city",
+      application.data.contactDetails.city,
+    );
+    await sleep(300);
+
+    // Country/territory (required)
+    await page.waitForSelector("#applicationDetails\\.contactDetails_country");
+    await page.select(
+      "#applicationDetails\\.contactDetails_country",
+      application.data.contactDetails.country,
+    );
+    await sleep(300);
+
+    // District/region
+    await page.waitForSelector("#applicationDetails\\.contactDetails_district");
+    await page.type(
+      "#applicationDetails\\.contactDetails_district",
+      application.data.contactDetails.district ?? "",
+    );
+    await sleep(300);
+
+    // -- Travel information --
+
+    // Do you know when you will travel to Canada? (required)
+    await page.waitForSelector(
+      "#applicationDetails\\.travelDetails_isTravelDateKnown",
+    );
+    await page.select(
+      "#applicationDetails\\.travelDetails_isTravelDateKnown",
+      `${application.is_travel_date_known}`,
+    );
+    await sleep(300);
+
+    // Yes
+    if (application.is_travel_date_known === 0) {
+      // When do you plan to travel to Canada? (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.travelDetails_travelDateYear",
+      );
+      await page.select(
+        "#applicationDetails\\.travelDetails_travelDateYear",
+        `${application.data.travelDetails.travelDateYear}`,
+      );
+      await sleep(300);
+
+      // When do you plan to travel to Canada? (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.travelDetails_travelDateMonth",
+      );
+      await page.select(
+        "#applicationDetails\\.travelDetails_travelDateMonth",
+        `${application.data.travelDetails.travelDateMonth}`,
+      );
+      await sleep(300);
+
+      // When do you plan to travel to Canada? (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.travelDetails_travelDateDay",
+      );
+      await page.select(
+        "#applicationDetails\\.travelDetails_travelDateDay",
+        `${application.data.travelDetails.travelDateDay}`,
+      );
+      await sleep(300);
+
+      // Please enter the time your flight to Canada will depart (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.travelDetails_travelDateTimeHour",
+      );
+      await page.select(
+        "#applicationDetails\\.travelDetails_travelDateTimeHour",
+        `${application.data.travelDetails.travelDateTimeHour}`,
+      );
+      await sleep(300);
+
+      // Please enter the time your flight to Canada will depart (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.travelDetails_travelDateTimeMinute",
+      );
+      await page.select(
+        "#applicationDetails\\.travelDetails_travelDateTimeMinute",
+        `${application.data.travelDetails.travelDateTimeMinute}`,
+      );
+      await sleep(300);
+
+      // Please enter the time your flight to Canada will depart (required)
+      await page.waitForSelector(
+        "#applicationDetails\\.travelDetails_travelDateTimeTimezone",
+      );
+      await page.select(
+        "#applicationDetails\\.travelDetails_travelDateTimeTimezone",
+        `${application.data.travelDetails.travelDateTimeTimezone}`,
+      );
+      await sleep(300);
+    }
   }
 
   async function step3dot1dot1(page, application) {
