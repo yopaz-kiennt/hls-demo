@@ -26,11 +26,11 @@ defineProps({
 
 const menuItems = ref([
     {
-        title: messages.home,
+        title: 'eTA登録',
         icon: HomeIcon,
         children: null,
         isOpen: false,
-        routeName: 'dashboard',
+        routeName: 'eta_application.index',
     },
     {
         title: messages.registration_information_list,
