@@ -26,7 +26,6 @@ class EtaApplicationController extends Controller
     public function register(RegisterRequest $request)
     {
         $applicationCreated = Application::create([
-            'user_id' => Auth::user()->id,
             'is_representative' => $request->get('isRepresentative'),
             'is_applying_for_minor' => $request->get('isApplyingOnBehalfOfMinorChild'),
             'representative_relationship' => $request->get('representative')['representativeRelationship'],

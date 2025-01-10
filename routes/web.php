@@ -4,18 +4,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EtaManagementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\EtaApplicationController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -27,10 +17,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/eta-application', [EtaApplicationController::class, 'index'])->name('eta_application.index');
-    Route::post('/eta-application', [EtaApplicationController::class, 'register'])->name('eta_application.register');
+Route::get('/', function () {
+    return redirect(route('eta_application.index'));
 });
+Route::get('/eta-application', [EtaApplicationController::class, 'index'])->name('eta_application.index');
+Route::post('/eta-application', [EtaApplicationController::class, 'register'])->name('eta_application.register');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', function () {
@@ -42,4 +33,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('/eta-management/{id}/resend-email', [EtaManagementController::class, 'resendEmail'])->name('eta_management.resend_email');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
