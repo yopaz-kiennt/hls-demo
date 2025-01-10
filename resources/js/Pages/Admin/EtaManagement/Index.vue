@@ -114,7 +114,7 @@ const loadPage = (page) => {
                             />
                         </td>
                         <td class="max-w-[120px]">
-                            <Datepicker v-model="formSearch.date" classes="w-[160px]" />
+                            <Datepicker v-model="formSearch.date" classes="w-[160px] min-h-[40px]" />
                         </td>
                         <td>
                             <Select v-model="formSearch.paymentStatus">

@@ -24,7 +24,7 @@ class RegisterRequest extends FormRequest
         return [
             'isRepresentative' => 'required',
             'isApplyingOnBehalfOfMinorChild' => 'required_if:isRepresentative,=,0',
-            'representative.representativeRelationship' => 'required',
+            'representative.representativeRelationship' => 'required_if:isRepresentative,=,0',
             'prerequisite.travelDocumentType' => 'required',
 
             // birthday
