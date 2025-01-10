@@ -157,7 +157,7 @@ require("dotenv").config({
 
   async function initBrowser() {
     return await puppeteer.launch({
-      headless: false, // TODO
+      headless: true, // TODO
     });
   }
 
