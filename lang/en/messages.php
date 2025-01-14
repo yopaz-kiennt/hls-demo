@@ -147,4 +147,5 @@ return [
     'you_indicate_that_you_want_to_apply_on_behalf_of_a_minor' => 'You indicate that you want to apply on behalf of a minor. To continue, you need to enter a date
                         of birth that is less than 18 years of age. If you want to apply for an adult, return to the
                         first screen and change your answer for "Are you applying on behalf of a minor child?" to "No".',
+    'you_must_be_at_least_18_years_of_age_to_apply' => 'Year - You must be at least 18 years of age to apply or apply on behalf of someone. A parent/guardian or a representative must answer Yes to the question "Are you a representative or a parent/guardian applying on behalf of an eTA applicant?" and complete the additional questions.',
 ];

@@ -29,7 +29,7 @@ const closeModal = () => {
 <template>
     <div class="screenshots">
         <div v-for="(image, index) in screenshots" :key="index" class="preview-image" @click="openModal(image)">
-            <img :src="`${url}/${image}`" alt="Thumbnail" class="h-auto w-40" />
+            <img :src="`${url}/${image}`" alt="Thumbnail" class="h-[150px] w-40" />
         </div>
     </div>
 

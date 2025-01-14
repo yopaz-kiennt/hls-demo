@@ -146,4 +146,5 @@ return [
     'must_only_contain_numbers_and_spaces' => '数字とスペースのみを含める必要があります。',
     'the_form_could_not_be_submitted_because_errors_were_found' => 'フォームにエラーが見つかったため、送信できませんでした。',
     'you_indicate_that_you_want_to_apply_on_behalf_of_a_minor' => '未成年者を代理して申請することを示しています。続行するには、18歳未満の生年月日を入力する必要があります。成人のために申請する場合は、最初の画面に戻り、「未成年者を代理して申請しますか？」の回答を「いいえ」に変更してください。',
+    'you_must_be_at_least_18_years_of_age_to_apply' => '年齢 - 申請するには18歳以上である必要があります。もしくは、他の方の代理で申請する場合、保護者または代表者が「eTA申請者の代理または保護者として申請していますか？」という質問に「はい」と回答し、追加の質問に回答する必要があります。',
 ];
