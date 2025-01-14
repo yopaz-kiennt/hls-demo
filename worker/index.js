@@ -83,6 +83,7 @@ require("dotenv").config({
     try {
       jobId = getJobId(msg);
       application = await handleApplicationFromDB(jobId);
+      console.log(application); // TODO: remove after testing
     } catch (err) {
       console.error(err.stack);
     }
