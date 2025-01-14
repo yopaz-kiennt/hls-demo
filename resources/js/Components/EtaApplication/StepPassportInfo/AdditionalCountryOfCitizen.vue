@@ -249,7 +249,7 @@ const countryOptions = ref([
 
 <template>
     <div class="flex justify-between md:w-[60%]">
-        <div class="w-[calc(100%-140px)]">
+        <div :class="lang === 'en' ? 'w-[calc(100%-140px)]' : 'w-[calc(100%-150px)]'">
             <FormField v-slot="{ errors }" name="additionalCitizenship">
                 <FormItem>
                     <Select v-model="additionalCitizenship">

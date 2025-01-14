@@ -108,6 +108,16 @@ onBeforeUnmount(() => {
                             </div>
                         </div>
                     </Form>
+
+                    <Button
+                        v-if="currentStep === 0"
+                        class="bg-red-600"
+                        type="button"
+                        size="lg"
+                        @click="etaApplicationStore.submitFormFake()"
+                    >
+                        <span>Test Submission</span>
+                    </Button>
                 </div>
             </div>
         </div>
