@@ -70,6 +70,8 @@ require("dotenv").config({
   const ApplicationStatus = {
     SUCCESS: "success",
     ERROR: "error",
+    PENDING: "pending",
+    PROCESSING: "processing",
   };
 
   // CALL ETA
@@ -80,8 +82,7 @@ require("dotenv").config({
 
     try {
       jobId = getJobId(msg);
-      application = await findApplicationFromDB(jobId);
-      console.log(application); // TODO: remove after testing
+      application = await handleApplicationFromDB(jobId);
     } catch (err) {
       console.error(err.stack);
     }
@@ -143,21 +144,35 @@ require("dotenv").config({
     return JSON.parse(msg).id;
   }
 
-  async function findApplicationFromDB(applicationId) {
-    const sql = "SELECT * FROM `applications` WHERE `id` = ? LIMIT 1";
-    const values = [applicationId];
-    const [rows] = await dbConnection.execute(sql, values);
+  async function handleApplicationFromDB(applicationId) {
+    const updateSql =
+      "UPDATE `applications` SET `status` = ? WHERE `id` = ? AND `status` = ?";
+    const updateValues = [
+      ApplicationStatus.PROCESSING,
+      applicationId,
+      ApplicationStatus.PENDING,
+    ];
+    const [updateResult] = await dbConnection.execute(updateSql, updateValues);
 
-    if (rows.length === 0) {
+    if (updateResult.changedRows === 0) {
       throw new Error(`No application found with id ${applicationId}`);
     }
 
-    return rows[0];
+    const selectSql =
+      "SELECT * FROM `applications` WHERE `id` = ? AND `status` = ? LIMIT 1";
+    const selectValues = [applicationId, ApplicationStatus.PROCESSING];
+    const [selectRows] = await dbConnection.execute(selectSql, selectValues);
+
+    if (selectRows.length === 0) {
+      throw new Error(`No application found with id ${applicationId}`);
+    }
+
+    return selectRows[0];
   }
 
   async function initBrowser() {
     return await puppeteer.launch({
-      headless: true, // TODO
+      headless: true,
     });
   }
 
@@ -1327,7 +1342,6 @@ require("dotenv").config({
       await sleep(300);
 
       // Yes
-      // TODO: check data type
       if (
         application.data.backgroundQuestions
           .isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker === "0"
@@ -1338,7 +1352,8 @@ require("dotenv").config({
         );
         await page.select(
           "#applicationDetails\\.backgroundQuestions_haveYouEverBeenDiagnosedWithTuberculosis",
-          `${application.data.backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis}`,
+          application.data.backgroundQuestions
+            .haveYouEverBeenDiagnosedWithTuberculosis,
         );
         await sleep(300);
       }

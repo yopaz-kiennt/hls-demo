@@ -141,6 +141,9 @@ const loadPage = (page) => {
                                         <SelectItem value="pending">
                                             {{ lang == 'en' ? 'Pending' : '登録待ち' }}
                                         </SelectItem>
+                                        <SelectItem value="processing">
+                                            {{ lang == 'en' ? 'Processing' : '処理中' }}
+                                        </SelectItem>
                                         <SelectItem value="success">
                                             {{ lang == 'en' ? 'Success' : '登録完了' }}
                                         </SelectItem>
@@ -197,6 +200,9 @@ const loadPage = (page) => {
                                     <SelectGroup>
                                         <SelectItem value="pending">
                                             {{ lang == 'en' ? 'Pending' : '登録待ち' }}
+                                        </SelectItem>
+                                        <SelectItem value="processing">
+                                            {{ lang == 'en' ? 'Processing' : '処理中' }}
                                         </SelectItem>
                                         <SelectItem value="success">
                                             {{ lang == 'en' ? 'Success' : '登録完了' }}
