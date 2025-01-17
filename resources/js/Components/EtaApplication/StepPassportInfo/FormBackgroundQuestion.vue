@@ -69,7 +69,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             <LabelRequired :title="messages.visa_refused_or_denied_entry" />
             <!-- Have you ever been refused a visa or permit, denied entry to, or ordered to leave Canada or any other country/territory? -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanada"
@@ -109,7 +109,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
                 <LabelRequired :title="messages.refusal_details" />
                 <!-- For each refusal, please indicate the country that refused you a visa or permit, or denied you entry, as well as the reasons provided to you by the country. -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Textarea
                             v-bind="componentField"
@@ -134,7 +134,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             <LabelRequired :title="messages.criminal_offence" />
             <!-- Have you ever committed, been arrested for, been charged with or convicted of any criminal offence in any country/territory? -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
@@ -176,7 +176,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
                 <LabelRequired :title="messages.arrest_charge_conviction_details" />
                 <!-- For each arrest, charge, or conviction, please indicate where (city, country), when (month/year), the nature of the offence, and the sentence. -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Textarea
                             v-bind="componentField"
@@ -201,7 +201,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             <LabelRequired :title="messages.tuberculosis_diagnosis_contact" />
             <!-- In the past two years, were you diagnosed with tuberculosis or have you been in close contact with a person with tuberculosis? -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
@@ -241,7 +241,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
                 <LabelRequired :title="messages.tuberculosis_contact_health_worker" />
                 <!-- Is your contact with tuberculosis the result of being a health care worker? -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <Select
                         v-bind="componentField"
                         id="backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker"
@@ -278,7 +278,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
                 <LabelRequired :title="messages.tuberculosis_diagnosed" />
                 <!-- Have you ever been diagnosed with tuberculosis? -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <Select v-bind="componentField" id="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis">
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
@@ -309,7 +309,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             <LabelRequired :title="messages.health_condition_check" />
             <!-- Do you have one of these conditions? -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select v-bind="componentField" id="backgroundQuestions.doYouHaveOneOfTheseConditions">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -340,7 +340,7 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             <LabelNoRequired :title="messages.additional_details" />
             <!-- Please briefly indicate if there are additional details pertinent to your application. For example, an urgent need to travel to Canada. Provide relevant details to avoid delays in the processing of your application. -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Textarea
                         v-bind="componentField"

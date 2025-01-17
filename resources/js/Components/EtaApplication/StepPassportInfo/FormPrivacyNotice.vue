@@ -100,7 +100,7 @@ const { messages } = usePage().props;
         <FormItem class="form-group">
             <LabelRequired :title="messages.i_agree" :classes="'text-[24px] font-normal'" />
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl>
                     <FormInputCheckbox
                         id="consentAndDeclaration.inAggreance"
@@ -125,7 +125,7 @@ const { messages } = usePage().props;
             <p>{{ messages.sign_instructions }}</p>
             <!-- To sign, enter your name as it appears on your passport. -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"

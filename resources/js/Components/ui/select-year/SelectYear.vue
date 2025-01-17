@@ -29,7 +29,7 @@ const { messages } = usePage().props;
 </script>
 
 <template>
-    <div class="w-[100%]" :class="classes">
+    <div class="flex items-center" :class="classes">
         <Select :id="id" v-model="model">
             <SelectTrigger>
                 <SelectValue :placeholder="messages.select_year" />
@@ -43,5 +43,7 @@ const { messages } = usePage().props;
                 </SelectGroup>
             </SelectContent>
         </Select>
+
+        <span class="ml-2 w-[60px]">年</span>
     </div>
 </template>

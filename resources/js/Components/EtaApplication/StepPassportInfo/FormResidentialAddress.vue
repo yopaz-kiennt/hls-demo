@@ -26,7 +26,7 @@ const { messages } = usePage().props;
             <LabelNoRequired :title="messages.apartment_unit_number" />
             <!-- Apartment/unit number (if applicable) -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -47,7 +47,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.street_civic_number_or_house_name" />
             <!-- Street/civic number or house name -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -68,7 +68,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.street_address_or_name" />
             <!-- Street address/name -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -89,7 +89,7 @@ const { messages } = usePage().props;
             <LabelNoRequired :title="messages.street_address_or_name_line_2" />
             <!-- Street address/name line 2 (if applicable) -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -110,7 +110,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.city_or_town" />
             <!-- City/town -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -131,7 +131,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.country_or_territory" />
             <!-- Country/territory -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="contactDetails.countryOfContactDetails"
@@ -160,7 +160,7 @@ const { messages } = usePage().props;
             <LabelNoRequired :title="messages.district_or_region" />
             <!-- District/region -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"

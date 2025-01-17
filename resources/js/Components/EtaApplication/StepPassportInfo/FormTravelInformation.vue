@@ -35,7 +35,7 @@ const changeTravelDateKnown = (value) => {
                 Canada, please select "no".
             </p> -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="travelDetails.isTravelDateKnown"

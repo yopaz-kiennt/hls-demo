@@ -17,7 +17,7 @@ return [
 
     // Step 02
     'parent_guardian_or_representative_details' => '親/保護者または代理人に関する情報',
-    'i_am' => '私は',
+    'i_am' => '代理で申請される方と申請者の間柄を教えてください',
     'a_family_member_or_friend' => '家族または友人です。',
     'a_member_of_a_non_governmental_or_religious_organization' => '非政府団体または宗教団体に属する者です。',
     'a_member_of_the_college_of_immigration_and_citizenship_consultants' => '移民コンサルタント規制評議会（ICCRC）の会員です。',
@@ -45,7 +45,7 @@ return [
     'passport_nationality' => '申請者パスポート情報',
     'passport_details_of_applicant' => '申請者パスポート情報',
     'passport_number' => 'パスポート番号 ',
-    'passport_number_re_enter' => 'パスポート番号（再入力）',
+    'passport_number_re_enter' => 'パスポート番号（再入力）:',
     'gender' => '性別',
     'country_of_birth' => '出生国・領土',
     'city_of_birth' => '出生市町村',
@@ -61,9 +61,9 @@ return [
     'date_of_expiry_of_passport_year' => 'パスポート有効期間満了日（年）',
     'date_of_expiry_of_passport_month' => 'パスポート有効期間満了日（月）',
     'date_of_expiry_of_passport_day' => 'パスポート有効期間満了日（日）',
-    'select_year' => '年を選択',
-    'select_month' => '月を選択',
-    'select_day' => '日を選択',
+    'select_year' => '年',
+    'select_month' => '月',
+    'select_day' => '日',
     'select_hour' => '時間を選択',
     'select_minute' => '分を選択',
     'select_timezone' => '時間帯を選択',
@@ -147,4 +147,5 @@ return [
     'the_form_could_not_be_submitted_because_errors_were_found' => 'フォームにエラーが見つかったため、送信できませんでした。',
     'you_indicate_that_you_want_to_apply_on_behalf_of_a_minor' => '未成年者を代理して申請することを示しています。続行するには、18歳未満の生年月日を入力する必要があります。成人のために申請する場合は、最初の画面に戻り、「未成年者を代理して申請しますか？」の回答を「いいえ」に変更してください。',
     'you_must_be_at_least_18_years_of_age_to_apply' => '年齢 - 申請するには18歳以上である必要があります。もしくは、他の方の代理で申請する場合、保護者または代表者が「eTA申請者の代理または保護者として申請していますか？」という質問に「はい」と回答し、追加の質問に回答する必要があります。',
+    'canada_eta_application_form' => 'カナダeTA申請フォーム',
 ];

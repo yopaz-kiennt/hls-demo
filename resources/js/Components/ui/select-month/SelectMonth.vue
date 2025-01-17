@@ -24,7 +24,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="w-[100%]" :class="classes">
+    <div class="flex items-center" :class="classes">
         <Select :id="id" v-model="model">
             <SelectTrigger>
                 <SelectValue :placeholder="messages.select_month" />
@@ -38,5 +38,7 @@ defineProps({
                 </SelectGroup>
             </SelectContent>
         </Select>
+
+        <span class="ml-2 w-[60px]">月</span>
     </div>
 </template>

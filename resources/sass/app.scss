@@ -1,13 +1,25 @@
 .required {
-    color: #d3080c;
+    background-color: #E0232F;
     margin-right: 5px;
+    color: #fff;
+    font-size: 0.5em;
+    padding: 3px 5px;
 }
 
 .form-control {
     width: 100%;
     border: 1px solid #e2e8f0;
     padding: 5px 10px;
-    border-radius: 4px;
+}
+
+select.form-control {
+    border: 1px solid #707070;
+    font-size: 13px;
+    padding: 7px 10px;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .href-custom {

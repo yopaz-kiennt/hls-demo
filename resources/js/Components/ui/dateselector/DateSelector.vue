@@ -29,8 +29,8 @@ defineProps({
 </script>
 
 <template>
-    <div class="mt-1 flex justify-between md:max-w-[60%]">
-        <div class="w-[33%] md:w-[32%]">
+    <div class="mt-1 flex">
+        <div class="mr-2 flex w-[28%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="year" :name="inputYear">
                 <FormItem>
                     <FormControl>
@@ -47,7 +47,7 @@ defineProps({
             </FormField>
         </div>
 
-        <div class="w-[33%] md:w-[32%]">
+        <div class="mr-2 w-[28%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="month" :name="inputMonth">
                 <FormItem>
                     <FormControl>
@@ -63,7 +63,7 @@ defineProps({
             </FormField>
         </div>
 
-        <div class="w-[33%] md:w-[32%]">
+        <div class="w-[28%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="day" :name="inputDay">
                 <FormItem>
                     <FormControl>

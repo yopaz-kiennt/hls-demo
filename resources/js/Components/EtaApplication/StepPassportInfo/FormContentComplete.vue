@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { getTravelDocuments } from '@/helper';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { usePage } from '@inertiajs/vue3';
-import { CircleHelp } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { defineAsyncComponent, ref } from 'vue';
 const ModalNationalOnPassport = defineAsyncComponent(
@@ -75,10 +74,10 @@ const isOpenModalNationalOnPassport = ref(false);
                 <LabelRequired :title="messages.travel_document_question" />
                 <!-- What travel document do you plan to use to travel to Canada? -->
 
-                <CircleHelp class="icon-question" @click="isOpenModalTravelDocument = true" />
+                <!-- <CircleHelp class="icon-question" @click="isOpenModalTravelDocument = true" /> -->
             </div>
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="prerequisite.travelDocumentType"
@@ -104,17 +103,22 @@ const isOpenModalNationalOnPassport = ref(false);
         </FormItem>
     </FormField>
 
-    <template v-if="formData.prerequisite.travelDocumentType && formData.prerequisite.travelDocumentType <= 4">
+    <template
+        v-if="
+            !formData.prerequisite.travelDocumentType ||
+            (formData.prerequisite.travelDocumentType && formData.prerequisite.travelDocumentType <= 4)
+        "
+    >
         <FormField v-slot="{ componentField, errors }" name="prerequisite.countryOfCitizenship">
             <FormItem class="form-group">
                 <div class="flex">
                     <LabelRequired :title="messages.passport_code_selection" />
                     <!-- Select the code that matches the one on your passport. -->
 
-                    <CircleHelp class="icon-question" @click="isOpenModalSelectCodeOnPassport = true" />
+                    <!-- <CircleHelp class="icon-question" @click="isOpenModalSelectCodeOnPassport = true" /> -->
                 </div>
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <Select
                         v-bind="componentField"
                         id="prerequisite.countryOfCitizenship"
@@ -148,10 +152,10 @@ const isOpenModalNationalOnPassport = ref(false);
                     <LabelRequired :title="messages.passport_nationality" />
                     <!-- What is the nationality noted on this passport? -->
 
-                    <CircleHelp class="icon-question" @click="isOpenModalNationalOnPassport = true" />
+                    <!-- <CircleHelp class="icon-question" @click="isOpenModalNationalOnPassport = true" /> -->
                 </div>
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <Select
                         v-bind="componentField"
                         id="prerequisite.passportNotedNationality"

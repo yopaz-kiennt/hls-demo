@@ -30,7 +30,7 @@ const updateJobTitles = () => {
 
             <!-- <p>Select the option that best describes your current employment situation.</p> -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="employmentDetails.occupation"
@@ -75,7 +75,7 @@ const updateJobTitles = () => {
 
                 <!-- <p>Select the option that best describes your job.</p> -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <Select v-bind="componentField" id="employmentDetails.title">
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
@@ -112,7 +112,7 @@ const updateJobTitles = () => {
                 <LabelRequired :title="messages.name_of_employer_or_school" />
                 <!-- Name of employer or school, as appropriate. -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
                             v-bind="componentField"
@@ -136,7 +136,7 @@ const updateJobTitles = () => {
                 <LabelRequired :title="messages.country_or_territory" />
                 <!-- Country/territory -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <Select v-bind="componentField" id="employmentDetails.countryOfEmployment">
                         <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                             <SelectTrigger>
@@ -167,7 +167,7 @@ const updateJobTitles = () => {
                 <LabelRequired :title="messages.city_or_town" />
                 <!-- City/town -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
                             v-bind="componentField"
@@ -191,7 +191,7 @@ const updateJobTitles = () => {
                 <LabelRequired :title="messages.since_what_year" />
                 <!-- Since what year? -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <div class="md:w-[32%]">
                         <FormControl>
                             <SelectYear v-bind="componentField" :classes="errors.length > 0 ? 'select-invalid' : ''" />

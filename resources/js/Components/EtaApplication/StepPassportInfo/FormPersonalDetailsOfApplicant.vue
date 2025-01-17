@@ -43,7 +43,7 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
             <LabelRequired :title="messages.marital_status" />
             <!-- Marital status -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="personalDetails.maritalStatus"
@@ -96,7 +96,7 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
             <LabelRequired :title="messages.visa_eta_permit_applied_obtained" />
             <!-- Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada? -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="personalDetails.hasPreviouslyAppliedToCanada"
@@ -134,7 +134,7 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
                 <LabelNoRequired :title="messages.uci_previous_visa_eta_permit_number" />
                 <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (optional) -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
                             v-bind="componentField"
@@ -155,7 +155,7 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
                 <LabelNoRequired :title="messages.uci_previous_visa_eta_permit_number_reenter" />
                 <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (re-enter) -->
 
-                <div class="md:max-w-[60%]">
+                <div>
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <Input
                             v-bind="componentField"

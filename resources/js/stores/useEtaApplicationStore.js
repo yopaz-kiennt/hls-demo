@@ -8,7 +8,7 @@ import * as yup from 'yup';
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
         messages: {},
-        currentStep: 0,
+        currentStep: 2,
         steps: [
             {
                 step: 1,
@@ -50,8 +50,8 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             // Step 03
             prerequisite: {
                 travelDocumentType: '',
-                countryOfCitizenship: '',
-                passportNotedNationality: '',
+                countryOfCitizenship: '97',
+                passportNotedNationality: '87',
             },
             personalDetails: {
                 passportNumber: '',

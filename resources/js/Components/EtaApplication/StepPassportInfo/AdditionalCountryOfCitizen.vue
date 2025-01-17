@@ -248,7 +248,7 @@ const countryOptions = ref([
 </script>
 
 <template>
-    <div class="flex justify-between md:w-[60%]">
+    <div class="flex justify-between">
         <div :class="lang === 'en' ? 'w-[calc(100%-140px)]' : 'w-[calc(100%-150px)]'">
             <FormField v-slot="{ errors }" name="additionalCitizenship">
                 <FormItem>
@@ -274,7 +274,7 @@ const countryOptions = ref([
         </div>
 
         <Button
-            class="button sm:-w-[135px] flex"
+            class="button sm:-w-[135px] flex rounded-none bg-[#54cfee] hover:bg-[#358da3]"
             size="lg"
             type="button"
             :disabled="additionalCitizenship == null"
@@ -285,7 +285,7 @@ const countryOptions = ref([
         </Button>
     </div>
 
-    <div class="mt-3 md:w-[60%]">
+    <div class="mt-3">
         <div
             v-for="(item, index) in formData.personalDetails.additionalCountriesOfCitizenship"
             :key="index"

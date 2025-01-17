@@ -1,6 +1,5 @@
 <script setup>
 import { Label } from '@/Components/ui/label';
-import { usePage } from '@inertiajs/vue3';
 
 defineProps({
     title: {
@@ -12,14 +11,27 @@ defineProps({
         default: '',
     },
 });
-
-const { messages } = usePage().props;
 </script>
 
 <template>
-    <Label class="mb-[5px] text-[16px]" :class="classes">
-        <span class="required font-medium">*</span>
+    <Label class="hissu mb-[5px] text-[1rem]" :class="classes">
         <span>{{ title }}</span>
-        <span class="required ml-1 text-[16px] font-medium">({{ messages.required }})</span>
     </Label>
 </template>
+
+<style scoped lang="scss">
+.hissu {
+    position: relative;
+    font-weight: normal;
+
+    &::after {
+        content: '必須';
+        background: #e0232f;
+        color: #fff;
+        font-size: 0.5em;
+        padding: 3px 5px;
+        margin-left: 5px;
+        vertical-align: text-top;
+    }
+}
+</style>

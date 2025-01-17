@@ -22,7 +22,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.email_address" />
             <!-- Email address -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -43,7 +43,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.email_address_re_enter" />
             <!-- Email address (re-enter) -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"

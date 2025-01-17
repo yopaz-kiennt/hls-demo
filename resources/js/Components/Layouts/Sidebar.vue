@@ -26,7 +26,7 @@ defineProps({
 
 const menuItems = ref([
     {
-        title: 'eTA登録',
+        title: messages.canada_eta_application_form,
         icon: HomeIcon,
         children: null,
         isOpen: false,

@@ -8,7 +8,6 @@ import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { usePage } from '@inertiajs/vue3';
-import { CircleHelp } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { defineAsyncComponent, ref } from 'vue';
 const ModalPassportNumber = defineAsyncComponent(() => import('./Modals/ModalPassportNumber.vue'));
@@ -29,7 +28,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.passport_details_of_applicant }}</h2>
+    <!-- <h2 class="leading-form">{{ messages.passport_details_of_applicant }}</h2> -->
     <!-- Passport details of applicant -->
 
     <FormField v-slot="{ componentField, errors }" name="personalDetails.passportNumber">
@@ -38,7 +37,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
                 <LabelRequired :title="messages.passport_number" />
                 <!-- Passport number -->
 
-                <CircleHelp class="icon-question" @click="isOpenModalPassportNumber = true" />
+                <!-- <CircleHelp class="icon-question" @click="isOpenModalPassportNumber = true" /> -->
             </div>
 
             <!-- <p>
@@ -47,7 +46,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
                 exactly as it appears on the passport information page.
             </p> -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -70,7 +69,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 
             <!-- <p>You cannot copy and paste into this field.</p> -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -92,12 +91,12 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
                 <LabelRequired :title="messages.surname_last_name" />
                 <!-- Surname(s) / last name(s) -->
 
-                <CircleHelp class="icon-question" @click="isOpenModalSurnameOrLastname = true" />
+                <!-- <CircleHelp class="icon-question" @click="isOpenModalSurnameOrLastname = true" /> -->
             </div>
 
             <!-- <p>Please enter exactly as shown on your passport or identity document.</p> -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -120,7 +119,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 
             <!-- <p>Please enter exactly as shown on your passport or identity document.</p> -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -155,7 +154,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <LabelRequired :title="messages.gender" />
             <!-- Gender -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select v-bind="componentField" id="personalDetails.gender" v-model="formData.personalDetails.gender">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -184,7 +183,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <LabelRequired :title="messages.country_of_birth" />
             <!-- Country/territory of birth -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="personalDetails.countryOfBirth"
@@ -218,7 +217,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
                 were born.
             </p> -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -239,7 +238,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <LabelRequired :title="messages.date_of_issue_of_passport" />
             <!-- Date of issue of passport -->
 
-            <CircleHelp class="icon-question" @click="isOpenModalDateOfIssueOfPassport = true" />
+            <!-- <CircleHelp class="icon-question" @click="isOpenModalDateOfIssueOfPassport = true" /> -->
         </div>
 
         <DateSelector
@@ -261,7 +260,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
             <LabelRequired :title="messages.date_of_expiry_of_passport" />
             <!-- Date of expiry of passport -->
 
-            <CircleHelp class="icon-question" @click="isOpenModalDateOfExpiryOfPassport = true" />
+            <!-- <CircleHelp class="icon-question" @click="isOpenModalDateOfExpiryOfPassport = true" /> -->
         </div>
 
         <DateSelector
