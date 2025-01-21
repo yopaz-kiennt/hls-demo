@@ -35,7 +35,7 @@ defineProps({
 
 <template>
     <div class="mt-1 flex w-[100%]">
-        <div class="mr-2 w-[30%] md:w-[25%]">
+        <div class="mr-2 w-[32%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="year" :name="inputYear">
                 <FormItem>
                     <FormControl class="max-w-[140px]">
@@ -55,7 +55,7 @@ defineProps({
             </FormField>
         </div>
 
-        <div class="mr-2 w-[30%] md:w-[25%]">
+        <div class="mr-2 w-[32%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="month" :name="inputMonth">
                 <FormItem>
                     <FormControl class="max-w-[140px]">
