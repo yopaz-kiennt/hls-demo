@@ -69,7 +69,7 @@ const handleDateSelect = (selectedDate) => {
                 variant="outline"
                 :class="
                     cn(
-                        'max-w-[280px] justify-between text-left font-normal',
+                        'max-w-[280px] justify-between rounded-none border-[#707070] text-left font-normal',
                         !value && 'text-muted-foreground',
                         classes
                     )

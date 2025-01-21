@@ -14,7 +14,10 @@ const { messages } = usePage().props;
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.contact_information }}</h2>
+    <h2 class="leading-form">
+        <div class="dot"></div>
+        <span>{{ messages.contact_information }}</span>
+    </h2>
     <!-- Contact information -->
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.emailAddressOfContactDetails">
@@ -22,7 +25,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.email_address" />
             <!-- Email address -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -43,7 +46,7 @@ const { messages } = usePage().props;
             <LabelRequired :title="messages.email_address_re_enter" />
             <!-- Email address (re-enter) -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"

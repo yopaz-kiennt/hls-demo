@@ -2,10 +2,9 @@
 import FormSubmitErrors from '@/Components/EtaApplication/Errors/FormSubmitErrors.vue';
 import { Button } from '@/Components/ui/button';
 import Loading from '@/Components/ui/loading/Loading.vue';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import CommonNotify from '@/Components/ui/notify/CommonNotify.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { Head, usePage } from '@inertiajs/vue3';
-import { ArrowLeft, ArrowRight } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { Form } from 'vee-validate';
 import { onBeforeUnmount } from 'vue';
@@ -18,6 +17,8 @@ const etaApplicationStore = useEtaApplicationStore();
 const { formSchema, formData, currentStep, loading } = storeToRefs(etaApplicationStore);
 
 const { messages } = usePage().props;
+
+etaApplicationStore.setMessages(messages);
 
 const props = defineProps({
     occupations: {
@@ -37,6 +38,13 @@ const scrollToTop = () => {
 
 const nextStep = () => {
     etaApplicationStore.nextStep();
+
+    // Run in step 2
+    setTimeout(() => {
+        window.scrollTo({
+            top: 0,
+        });
+    }, 200);
 };
 
 onBeforeUnmount(() => {
@@ -45,14 +53,23 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Head title="eTA登録" />
+    <Head title="CANADA eTA" />
 
-    <AuthenticatedLayout>
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden bg-white p-4 shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                    <h1 class="mb-[40px] border-b-2 border-red-600 text-[32px] font-medium">eTA登録</h1>
+    <div class="dark:bg-gray-900">
+        <main>
+            <div>
+                <h1
+                    class="text-center text-[2em] font-bold"
+                    :class="{
+                        'mb-[7%] mt-[7%]': currentStep === 0,
+                        'mb-[6%] mt-[7%]': currentStep === 1,
+                        'mt-[4%]': currentStep === 2,
+                    }"
+                >
+                    {{ messages.canada_eta_application_form }}
+                </h1>
 
+                <div class="mx-auto max-w-[607px] p-[20px] sm:px-6">
                     <Form
                         ref="formRef"
                         v-slot="{ meta }"
@@ -73,43 +90,65 @@ onBeforeUnmount(() => {
                                 (!formData.prerequisite.travelDocumentType && currentStep < 2) ||
                                 (formData.prerequisite.travelDocumentType &&
                                     formData.prerequisite.travelDocumentType <= 4 &&
+                                    formData.prerequisite.passportNotedNationality) ||
+                                (!formData.prerequisite.travelDocumentType &&
                                     formData.prerequisite.passportNotedNationality)
                             "
-                            class="mt-4 flex items-center justify-between"
+                            class="mt-4"
                         >
-                            <div>
+                            <div class="text-right">
                                 <Button
-                                    v-if="currentStep > 0"
+                                    v-if="currentStep === 0"
+                                    type="submit"
+                                    size="lg"
+                                    class="mt-[7%] w-[50%] bg-[#e0232f] hover:bg-[#45a049]"
+                                    style="border-radius: 20px !important"
+                                    @click="scrollToTop()"
+                                >
+                                    <span>{{ messages.next }}</span>
+                                </Button>
+                            </div>
+
+                            <div
+                                v-if="currentStep === 1"
+                                class="w-100 mb-[70px] mt-[60px] flex justify-between gap-[2em]"
+                            >
+                                <Button
+                                    v-if="currentStep > 0 && currentStep < 2"
                                     type="button"
                                     variant="outline"
                                     size="lg"
+                                    class="w-[50%] border border-[#e0232f] font-bold text-[#e0232f] hover:border-[#45a049] hover:bg-[#45a049] hover:text-[#fff]"
+                                    style="border-radius: 20px !important"
                                     @click="etaApplicationStore.prevStep()"
                                 >
-                                    <ArrowLeft />
                                     <span>{{ messages.previous }}</span>
-                                </Button>
-                            </div>
-
-                            <div class="flex items-center gap-3">
-                                <Button v-if="currentStep !== 2" type="submit" size="lg" @click="scrollToTop()">
-                                    <span>{{ messages.next }}</span>
-                                    <ArrowRight />
                                 </Button>
 
                                 <Button
-                                    v-if="currentStep === 2"
-                                    size="lg"
                                     type="submit"
-                                    @click="!meta.valid ? scrollToTop() : null"
+                                    size="lg"
+                                    class="w-[50%] bg-[#e0232f] font-bold hover:bg-[#45a049]"
+                                    style="border-radius: 20px !important"
+                                    @click="scrollToTop()"
                                 >
-                                    <span>{{ messages.proceed_to_payment }}</span>
-                                    <ArrowRight />
+                                    <span>{{ messages.next }}</span>
                                 </Button>
                             </div>
+
+                            <Button
+                                v-if="currentStep === 2"
+                                size="lg"
+                                type="submit"
+                                class="mb-[50px] mt-[20px] w-[100%] rounded-none bg-[#e0232f] hover:bg-[#45a049]"
+                                @click="!meta.valid ? scrollToTop() : null"
+                            >
+                                <span>{{ messages.proceed_to_payment }}</span>
+                            </Button>
                         </div>
                     </Form>
 
-                    <Button
+                    <!-- <Button
                         v-if="currentStep === 0"
                         class="bg-red-600"
                         type="button"
@@ -117,13 +156,15 @@ onBeforeUnmount(() => {
                         @click="etaApplicationStore.submitFormFake()"
                     >
                         <span>Test Submission</span>
-                    </Button>
+                    </Button> -->
                 </div>
             </div>
-        </div>
 
-        <div v-if="loading" class="loading-overlay">
-            <Loading />
-        </div>
-    </AuthenticatedLayout>
+            <div v-if="loading" class="loading-overlay">
+                <Loading />
+            </div>
+        </main>
+    </div>
+
+    <CommonNotify />
 </template>

@@ -57,7 +57,7 @@ const loadPage = (page) => {
                     @click="loadPage(item.value)"
                 >
                     <button
-                        class="h-10 w-10 rounded-md p-0"
+                        class="h-10 w-10 rounded-none p-0"
                         :class="
                             item.value === page
                                 ? 'bg-[#3b82f6] text-white'

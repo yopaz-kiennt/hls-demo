@@ -36,7 +36,7 @@ export const getTravelDocuments = (lang) => [
         title:
             lang === 'en'
                 ? 'Alien passport/travel document issued for non-citizens'
-                : '国民以外の個人に発給された外国人パスポート/渡航文書 (※この文書では eTA 申請ができません)',
+                : '国民以外の個人に発給された外国人パスポート/渡航文書',
         value: '6',
     },
     {

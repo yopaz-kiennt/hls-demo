@@ -1,11 +1,11 @@
 <script setup>
+import InputError from '@/Components/InputError.vue';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import SelectHour from '@/Components/ui/select-hour/SelectHour.vue';
+import SelectMinute from '@/Components/ui/select-minute/SelectMinute.vue';
 import { usePage } from '@inertiajs/vue3';
-
-const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
-
-const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
+import { ref } from 'vue';
 
 const timezones = [
     { value: '0', name: 'Acre Time' },
@@ -173,6 +173,8 @@ const timezones = [
 const hour = defineModel('hour');
 const minute = defineModel('minute');
 const timezone = defineModel('timezone');
+const hourErrors = ref([]);
+const minuteErrors = ref([]);
 
 const { messages } = usePage().props;
 
@@ -193,60 +195,44 @@ defineProps({
 </script>
 
 <template>
-    <div class="mt-1 flex justify-between md:max-w-[60%]">
-        <div class="w-[33%] md:w-[32%]">
+    <div class="mt-1 flex">
+        <div class="mr-2 flex w-[28%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="hour" :name="inputHour">
-                <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
-                    <FormControl>
-                        <Select v-bind="componentField">
-                            <SelectTrigger>
-                                <SelectValue :placeholder="messages.select_hour" />
-                            </SelectTrigger>
-
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem v-for="hourOption in hours" :key="hourOption" :value="hourOption">
-                                        {{ hourOption }}
-                                    </SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                <FormItem>
+                    <FormControl class="max-w-[140px]">
+                        <SelectHour
+                            v-bind="componentField"
+                            :id="inputHour"
+                            :classes="errors.length > 0 ? 'select-invalid' : ''"
+                        />
                     </FormControl>
 
-                    <FormMessage class="mt-2" />
+                    <span class="hidden">
+                        {{ hourErrors = errors && errors?.length > 0 ? errors : [] }}
+                    </span>
                 </FormItem>
             </FormField>
         </div>
 
-        <div class="w-[33%] md:w-[32%]">
+        <div class="mr-2 flex w-[28%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="minute" :name="inputMinute">
-                <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
-                    <FormControl>
-                        <Select v-bind="componentField">
-                            <SelectTrigger>
-                                <SelectValue :placeholder="messages.select_minute" />
-                            </SelectTrigger>
-
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem
-                                        v-for="minuteOption in minutes"
-                                        :key="minuteOption"
-                                        :value="minuteOption"
-                                    >
-                                        {{ minuteOption }}
-                                    </SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                <FormItem>
+                    <FormControl class="max-w-[140px]">
+                        <SelectMinute
+                            v-bind="componentField"
+                            :id="inputMinute"
+                            :classes="errors.length > 0 ? 'select-invalid' : ''"
+                        />
                     </FormControl>
 
-                    <FormMessage class="mt-2" />
+                    <span class="hidden">
+                        {{ minuteErrors = errors && errors?.length > 0 ? errors : [] }}
+                    </span>
                 </FormItem>
             </FormField>
         </div>
 
-        <div class="w-[33%] md:w-[32%]">
+        <div class="w-[28%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="timezone" :name="inputTimezone">
                 <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
                     <FormControl>
@@ -273,5 +259,10 @@ defineProps({
                 </FormItem>
             </FormField>
         </div>
+    </div>
+
+    <div class="error-messages mt-2">
+        <InputError v-if="hourErrors.length > 0" class="mb-1" :message="hourErrors[0]" />
+        <InputError v-if="minuteErrors.length > 0" class="mb-1" :message="minuteErrors[0]" />
     </div>
 </template>

@@ -13,11 +13,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/', function () {
-    return redirect(route('eta_application.index'));
-});
-Route::get('/eta-application', [EtaApplicationController::class, 'index'])->name('eta_application.index');
-Route::post('/eta-application', [EtaApplicationController::class, 'register'])->name('eta_application.register');
+Route::get('/', [EtaApplicationController::class, 'index'])->name('eta_application.index');
+Route::post('/', [EtaApplicationController::class, 'register'])->name('eta_application.register');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', function () {

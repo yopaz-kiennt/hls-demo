@@ -25,13 +25,11 @@ const changeRepresentativeRelationship = (value) => {
 </script>
 
 <template>
-    <h2 class="mb-3 text-[28px] font-medium">{{ messages.parent_guardian_or_representative_details }}</h2>
-
     <FormField v-slot="{ componentField, errors }" name="representative.representativeRelationship">
         <FormItem class="form-group">
             <LabelRequired :title="messages.i_am" />
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select
                     v-bind="componentField"
                     id="representative.representativeRelationship"
@@ -79,7 +77,7 @@ const changeRepresentativeRelationship = (value) => {
         <FormItem class="form-group">
             <LabelRequired :title="messages.are_you_being_paid_to_represent" />
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <Select v-model="formData.representative.representativeCompensated" v-bind="componentField">
                     <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                         <SelectTrigger>
@@ -109,7 +107,7 @@ const changeRepresentativeRelationship = (value) => {
             <LabelNoRequired :title="messages.fax_number" />
             <!-- Fax number -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -130,7 +128,7 @@ const changeRepresentativeRelationship = (value) => {
             <LabelNoRequired :title="messages.email_address" />
             <!-- Email address -->
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">
                     <Input
                         v-bind="componentField"
@@ -148,9 +146,9 @@ const changeRepresentativeRelationship = (value) => {
 
     <FormField v-slot="{ componentField, errors }" name="representative.declareContactAndInformationIsTruthy">
         <FormItem class="mt-8 grid w-full items-center gap-1.5">
-            <LabelRequired :title="messages.representative_declaration" class="text-[22px] font-normal" />
+            <LabelRequired :title="messages.representative_declaration" class="text-[1rem]" style="font-weight: bold" />
 
-            <div class="md:max-w-[60%]">
+            <div>
                 <FormControl>
                     <FormInputCheckbox
                         id="representative.declareContactAndInformationIsTruthy"
@@ -158,6 +156,8 @@ const changeRepresentativeRelationship = (value) => {
                         value="true"
                         :label="messages.declaration_contact_info"
                         v-bind="componentField"
+                        boxClasses="items-unset"
+                        labelClasses="mt-[-5px]"
                         :class="{ 'checkbox-invalid': errors.length > 0 }"
                     />
                     <!-- I declare that my contact and personal information above is truthful, complete and correct. -->
@@ -170,7 +170,11 @@ const changeRepresentativeRelationship = (value) => {
 
     <FormField v-slot="{ componentField, errors }" type="checkbox" name="representative.understandAndAccept">
         <FormItem class="mt-8 grid w-full gap-1.5">
-            <LabelRequired :title="messages.representative_authorization" class="text-[22px] font-normal" />
+            <LabelRequired
+                :title="messages.representative_authorization"
+                class="text-[1rem]"
+                style="font-weight: bold"
+            />
             <!-- Representative's authorization -->
 
             <div class="md:max-w-[100%]">

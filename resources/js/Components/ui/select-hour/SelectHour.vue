@@ -2,11 +2,7 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { usePage } from '@inertiajs/vue3';
 
-const props = defineProps({
-    endYear: {
-        type: Number || null,
-        default: null,
-    },
+defineProps({
     classes: {
         type: String,
         default: '',
@@ -17,11 +13,7 @@ const props = defineProps({
     },
 });
 
-const currentYear = new Date().getFullYear();
-let years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => 1900 + i).reverse();
-if (props.endYear) {
-    years = Array.from({ length: props.endYear - currentYear + 1 }, (_, i) => currentYear + i);
-}
+const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
 
 const model = defineModel();
 
@@ -32,18 +24,18 @@ const { messages } = usePage().props;
     <div class="flex items-center" :class="classes">
         <Select :id="id" v-model="model">
             <SelectTrigger>
-                <SelectValue :placeholder="messages.select_year" />
+                <SelectValue :placeholder="messages.select_hour" />
             </SelectTrigger>
 
             <SelectContent>
                 <SelectGroup>
-                    <SelectItem v-for="yearOption in years" :key="yearOption" :value="yearOption">
-                        {{ yearOption }}
+                    <SelectItem v-for="hourOption in hours" :key="hourOption" :value="hourOption">
+                        {{ hourOption }}
                     </SelectItem>
                 </SelectGroup>
             </SelectContent>
         </Select>
 
-        <span class="ml-2 w-[60px]">年</span>
+        <span class="ml-2 w-[60px]">時</span>
     </div>
 </template>

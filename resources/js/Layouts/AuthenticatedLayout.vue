@@ -38,7 +38,7 @@ etaApplicationStore.setMessages(messages);
                                     :href="route('eta_application.index')"
                                     :active="route().current('eta_application.index')"
                                 >
-                                    eTA登録
+                                    {{ messages.canada_eta_application_form }}
                                 </NavLink>
                             </div>
 
@@ -132,7 +132,7 @@ etaApplicationStore.setMessages(messages);
                             :href="route('eta_application.index')"
                             :active="route().current('eta_application.index')"
                         >
-                            eTA登録
+                            {{ messages.canada_eta_application_form }}
                         </ResponsiveNavLink>
                     </div>
 

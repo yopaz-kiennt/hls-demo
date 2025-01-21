@@ -110,15 +110,16 @@ const loadPage = (page) => {
                                 v-model="formSearch.email"
                                 type="email"
                                 :placeholder="messages.enter_your_email_address"
+                                class="border-input"
                                 @keyup.enter="search"
                             />
                         </td>
                         <td class="max-w-[120px]">
-                            <Datepicker v-model="formSearch.date" classes="w-[160px] min-h-[40px]" />
+                            <Datepicker v-model="formSearch.date" classes="w-[160px] min-h-[40px] border-input" />
                         </td>
                         <td>
                             <Select v-model="formSearch.paymentStatus">
-                                <SelectTrigger>
+                                <SelectTrigger class="border-input">
                                     <SelectValue :placeholder="messages.please_select" />
                                 </SelectTrigger>
 
@@ -132,7 +133,7 @@ const loadPage = (page) => {
                         </td>
                         <td>
                             <Select v-model="formSearch.status">
-                                <SelectTrigger>
+                                <SelectTrigger class="border-input">
                                     <SelectValue :placeholder="messages.please_select" />
                                 </SelectTrigger>
 
@@ -192,7 +193,7 @@ const loadPage = (page) => {
                                 v-model="item.status"
                                 @update:modelValue="etaApplicationStore.updateStatus(item, item.status)"
                             >
-                                <SelectTrigger>
+                                <SelectTrigger class="border-input">
                                     <SelectValue :placeholder="messages.please_select" />
                                 </SelectTrigger>
 

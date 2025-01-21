@@ -1,13 +1,29 @@
+body {
+    font-family: Arial, sans-serif !important;
+}
+
 .required {
-    color: #d3080c;
+    background-color: #E0232F;
     margin-right: 5px;
+    color: #fff;
+    font-size: 0.5em;
+    padding: 3px 5px;
 }
 
 .form-control {
     width: 100%;
     border: 1px solid #e2e8f0;
     padding: 5px 10px;
-    border-radius: 4px;
+}
+
+select.form-control {
+    border: 1px solid #707070;
+    font-size: 13px;
+    padding: 7px 10px;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .href-custom {
@@ -16,11 +32,25 @@
 }
 
 .form-group {
-    @apply mt-6 grid w-full items-center gap-1.5;
+    @apply mt-8 grid w-full items-center gap-1.5;
+}
+
+.form-group:first-child {
+    @apply mt-6;
 }
 
 .leading-form {
-    @apply mb-1 mt-6 text-[28px] font-medium;
+    @apply mb-[30px] mt-[90px] text-[24px] font-bold;
+    display: flex;
+    align-items: center;
+
+    .dot {
+        margin-right: 5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #45a049;
+    }
 }
 
 .icon-question {
@@ -88,5 +118,35 @@
                 }
             }
         }
+    }
+}
+
+.hissu {
+    position: relative;
+    font-weight: normal;
+
+    &::after {
+        content: '必須';
+        background: #e0232f;
+        color: #fff;
+        font-size: 0.5em;
+        padding: 3px 5px;
+        margin-left: 5px;
+        vertical-align: text-top;
+    }
+}
+
+.ninni {
+    position: relative;
+    font-weight: normal;
+
+    &::after {
+        content: '任意';
+        background: #549b2a;
+        color: #fff;
+        font-size: 0.5em;
+        padding: 3px 5px;
+        margin-left: 5px;
+        vertical-align: text-top;
     }
 }
