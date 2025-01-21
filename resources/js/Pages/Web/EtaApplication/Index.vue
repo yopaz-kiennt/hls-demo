@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
                     {{ messages.canada_eta_application_form }}
                 </h1>
 
-                <div class="mx-auto max-w-[607px] p-[20px] sm:px-6">
+                <div class="mx-auto max-w-[607px] p-[40px] sm:px-6 md:p-[20px]">
                     <Form
                         ref="formRef"
                         v-slot="{ meta }"

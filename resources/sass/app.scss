@@ -1,5 +1,6 @@
 body {
     font-family: Arial, sans-serif !important;
+    overflow-x: hidden;
 }
 
 .required {
@@ -32,7 +33,7 @@ select.form-control {
 }
 
 .form-group {
-    @apply mt-8 grid w-full items-center gap-1.5;
+    @apply mt-8 w-full items-center gap-1.5;
 }
 
 .form-group:first-child {
@@ -134,6 +135,13 @@ select.form-control {
         margin-left: 5px;
         vertical-align: text-top;
     }
+
+    @media screen and (min-width: 425px) and (max-width: 550px) {
+        &::after {
+            margin-left: 0;
+            padding: 3px 4px;
+        }
+    }
 }
 
 .ninni {
@@ -148,5 +156,12 @@ select.form-control {
         padding: 3px 5px;
         margin-left: 5px;
         vertical-align: text-top;
+    }
+
+    @media screen and (min-width: 425px) and (max-width: 550px) {
+        &::after {
+            margin-left: 0;
+            padding: 3px 4px;
+        }
     }
 }

@@ -14,7 +14,7 @@ const { lang } = usePage().props;
         :id="formMessageId"
         as="p"
         :name="toValue(name)"
-        class="font-medium text-destructive"
+        class="mt-[5px] font-medium text-destructive"
         :class="lang === 'en' ? 'text-[13px]' : 'text-[12px]'"
     />
 </template>
