@@ -23,7 +23,10 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.personal_details_of_applicant }}</h2>
+    <h2 class="leading-form">
+        <div class="dot"></div>
+        <span>{{ messages.personal_details_of_applicant }}</span>
+    </h2>
     <!-- Personal details of applicant -->
 
     <!-- <h3 class="text-[18px] font-medium">Additional nationalities</h3> -->
@@ -131,7 +134,7 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
     >
         <FormField v-slot="{ componentField, errors }" name="personalDetails.uci">
             <FormItem class="form-group">
-                <LabelNoRequired :title="messages.uci_previous_visa_eta_permit_number" />
+                <LabelNoRequired :hasNinni="true" :title="messages.uci_previous_visa_eta_permit_number" />
                 <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (optional) -->
 
                 <div>
@@ -152,7 +155,7 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
 
         <FormField v-slot="{ componentField, errors }" name="personalDetails.uciReEnter">
             <FormItem class="form-group">
-                <LabelNoRequired :title="messages.uci_previous_visa_eta_permit_number_reenter" />
+                <LabelNoRequired :hasNinni="true" :title="messages.uci_previous_visa_eta_permit_number_reenter" />
                 <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (re-enter) -->
 
                 <div>

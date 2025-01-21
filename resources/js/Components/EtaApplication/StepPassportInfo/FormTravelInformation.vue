@@ -22,7 +22,10 @@ const changeTravelDateKnown = (value) => {
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.travel_information }}</h2>
+    <h2 class="leading-form">
+        <div class="dot"></div>
+        <span>{{ messages.travel_information }}</span>
+    </h2>
     <!-- Travel information -->
 
     <FormField v-slot="{ componentField, errors }" name="travelDetails.isTravelDateKnown">

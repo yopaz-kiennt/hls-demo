@@ -1,8 +1,8 @@
 <script setup>
-const ModalTravelDocument = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalTravelDocument.vue')
-);
-import ModalSelectCodeOnPassport from '@/Components/EtaApplication/StepPassportInfo/Modals/ModalSelectCodeOnPassport.vue';
+// const ModalTravelDocument = defineAsyncComponent(
+//     () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalTravelDocument.vue')
+// );
+// import ModalSelectCodeOnPassport from '@/Components/EtaApplication/StepPassportInfo/Modals/ModalSelectCodeOnPassport.vue';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import IconWarning from '@/Components/ui/icons/IconWarning.vue';
 import LabelRequired from '@/Components/ui/label/LabelRequired.vue';
@@ -11,10 +11,10 @@ import { getTravelDocuments } from '@/helper';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { usePage } from '@inertiajs/vue3';
 import { storeToRefs } from 'pinia';
-import { defineAsyncComponent, ref } from 'vue';
-const ModalNationalOnPassport = defineAsyncComponent(
-    () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalNationalOnPassport.vue')
-);
+import { ref } from 'vue';
+// const ModalNationalOnPassport = defineAsyncComponent(
+//     () => import('@/Components/EtaApplication/StepPassportInfo/Modals/ModalNationalOnPassport.vue')
+// );
 
 const etaApplicationStore = useEtaApplicationStore();
 
@@ -24,9 +24,9 @@ const { messages, lang } = usePage().props;
 
 const travelDocuments = ref(getTravelDocuments(lang));
 
-const isOpenModalTravelDocument = ref(false);
-const isOpenModalSelectCodeOnPassport = ref(false);
-const isOpenModalNationalOnPassport = ref(false);
+// const isOpenModalTravelDocument = ref(false);
+// const isOpenModalSelectCodeOnPassport = ref(false);
+// const isOpenModalNationalOnPassport = ref(false);
 </script>
 
 <template>
@@ -198,12 +198,12 @@ const isOpenModalNationalOnPassport = ref(false);
         </p>
     </div>
 
-    <ModalTravelDocument :open="isOpenModalTravelDocument" @close="isOpenModalTravelDocument = false" />
+    <!-- <ModalTravelDocument :open="isOpenModalTravelDocument" @close="isOpenModalTravelDocument = false" />
     <ModalSelectCodeOnPassport
         :open="isOpenModalSelectCodeOnPassport"
         @close="isOpenModalSelectCodeOnPassport = false"
     />
-    <ModalNationalOnPassport :open="isOpenModalNationalOnPassport" @close="isOpenModalNationalOnPassport = false" />
+    <ModalNationalOnPassport :open="isOpenModalNationalOnPassport" @close="isOpenModalNationalOnPassport = false" /> -->
 </template>
 
 <style scoped lang="scss">

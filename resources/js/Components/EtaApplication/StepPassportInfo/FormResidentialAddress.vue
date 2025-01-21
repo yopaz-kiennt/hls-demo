@@ -16,7 +16,10 @@ const { messages } = usePage().props;
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.residential_address }}</h2>
+    <h2 class="leading-form">
+        <div class="dot"></div>
+        <span>{{ messages.residential_address }}</span>
+    </h2>
     <!-- Residential address -->
 
     <!-- <p>Enter your permanent home address. Do not enter an address where you live temporarily.</p> -->

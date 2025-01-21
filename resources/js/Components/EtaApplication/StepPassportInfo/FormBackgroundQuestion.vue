@@ -57,7 +57,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.background_questions }}</h2>
+    <h2 class="leading-form">
+        <div class="dot"></div>
+        <span>{{ messages.background_questions }}</span>
+    </h2>
     <!-- Background Questions -->
 
     <FormField

@@ -1,10 +1,9 @@
 <script setup>
-import { Button } from '@/Components/ui/button';
 import { FormControl, FormField, FormItem, FormMessage } from '@/Components/ui/form';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { usePage } from '@inertiajs/vue3';
-import { Plus, Trash } from 'lucide-vue-next';
+// import { Plus, Trash } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
@@ -16,26 +15,41 @@ const { messages, lang } = usePage().props;
 
 const additionalCitizenship = ref(null);
 
-const addAdditionalCitizenship = () => {
-    if (additionalCitizenship.value || additionalCitizenship.value == 0) {
-        const item = countryOptions.value.find((item) => item.value == additionalCitizenship.value);
-        const rawItem = JSON.parse(JSON.stringify(item));
+// const addAdditionalCitizenship = () => {
+//     if (additionalCitizenship.value || additionalCitizenship.value == 0) {
+//         const item = countryOptions.value.find((item) => item.value == additionalCitizenship.value);
+//         const rawItem = JSON.parse(JSON.stringify(item));
 
-        const exists = formData.value.personalDetails.additionalCountriesOfCitizenship.some(
-            (existingItem) => existingItem.value === rawItem.value
-        );
+//         const exists = formData.value.personalDetails.additionalCountriesOfCitizenship.some(
+//             (existingItem) => existingItem.value === rawItem.value
+//         );
 
-        if (!exists) {
-            etaApplicationStore.addCountriesOfCitizen(rawItem);
-        }
+//         if (!exists) {
+//             etaApplicationStore.addCountriesOfCitizen(rawItem);
+//         }
 
-        // clear select
-        additionalCitizenship.value = null;
+//         // clear select
+//         additionalCitizenship.value = null;
+//     }
+// };
+
+// const deleteCountryOfCitizen = (value) => {
+//     etaApplicationStore.deleteCountryOfCitizen(value);
+// };
+
+const changeAdditionalCitizenship = () => {
+    const item = countryOptions.value.find((item) => item.value == additionalCitizenship.value);
+    const rawItem = JSON.parse(JSON.stringify(item));
+
+    etaApplicationStore.deleteOldCountriesOfCitizen();
+
+    const exists = formData.value.personalDetails.additionalCountriesOfCitizenship.some(
+        (existingItem) => existingItem.value === rawItem.value
+    );
+
+    if (!exists) {
+        etaApplicationStore.addCountriesOfCitizen(rawItem);
     }
-};
-
-const deleteCountryOfCitizen = (value) => {
-    etaApplicationStore.deleteCountryOfCitizen(value);
 };
 
 const countryOptions = ref([
@@ -248,7 +262,31 @@ const countryOptions = ref([
 </script>
 
 <template>
-    <div class="flex justify-between">
+    <div class="mt-[10px] w-[100%]">
+        <FormField v-slot="{ errors }" name="additionalCitizenship">
+            <FormItem>
+                <Select v-model="additionalCitizenship" @update:modelValue="changeAdditionalCitizenship">
+                    <FormControl :class="{ 'input-invalid': errors.length > 0 }">
+                        <SelectTrigger>
+                            <SelectValue :placeholder="messages.please_select" />
+                        </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem v-for="item in countryOptions" :key="item.value" :value="item.value">
+                                {{ item.label }}
+                            </SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+
+                <FormMessage />
+            </FormItem>
+        </FormField>
+    </div>
+
+    <!-- <div class="flex justify-between">
         <div :class="lang === 'en' ? 'w-[calc(100%-140px)]' : 'w-[calc(100%-150px)]'">
             <FormField v-slot="{ errors }" name="additionalCitizenship">
                 <FormItem>
@@ -274,7 +312,7 @@ const countryOptions = ref([
         </div>
 
         <Button
-            class="button sm:-w-[135px] flex rounded-none bg-[#54cfee] hover:bg-[#358da3]"
+            class="button sm:-w-[135px] flex rounded-none bg-[#45a049] hover:bg-[#45a049]"
             size="lg"
             type="button"
             :disabled="additionalCitizenship == null"
@@ -289,9 +327,9 @@ const countryOptions = ref([
         <div
             v-for="(item, index) in formData.personalDetails.additionalCountriesOfCitizenship"
             :key="index"
-            class="mt-1 flex w-[100%] rounded-sm bg-gray-100 px-2 py-2"
+            class="mt-1 flex w-[100%] rounded-sm bg-[#f9f9f9] px-2 py-2"
         >
-            <p class="w-[95%]">
+            <p class="w-[95%] text-[13px]">
                 {{ item.label }}
             </p>
             <button
@@ -303,7 +341,7 @@ const countryOptions = ref([
                 <Trash class="w-[20px]" />
             </button>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <!-- <style scoped lang="scss">

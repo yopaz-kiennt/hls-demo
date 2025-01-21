@@ -14,7 +14,10 @@ const { messages } = usePage().props;
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.contact_information }}</h2>
+    <h2 class="leading-form">
+        <div class="dot"></div>
+        <span>{{ messages.contact_information }}</span>
+    </h2>
     <!-- Contact information -->
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.emailAddressOfContactDetails">

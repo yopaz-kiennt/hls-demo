@@ -20,7 +20,10 @@ const updateJobTitles = () => {
 </script>
 
 <template>
-    <h2 class="leading-form">{{ messages.employment_information }}</h2>
+    <h2 class="leading-form">
+        <div class="dot"></div>
+        <span>{{ messages.employment_information }}</span>
+    </h2>
     <!-- Employment information -->
 
     <FormField v-slot="{ componentField, errors }" name="employmentDetails.occupation">
@@ -127,14 +130,13 @@ const updateJobTitles = () => {
             </FormItem>
         </FormField>
 
-        <FormField
+        <!-- <FormField
             v-slot="{ componentField, errors }"
             v-model="formData.employmentDetails.country"
             name="employmentDetails.countryOfEmployment"
         >
             <FormItem class="form-group">
                 <LabelRequired :title="messages.country_or_territory" />
-                <!-- Country/territory -->
 
                 <div>
                     <Select v-bind="componentField" id="employmentDetails.countryOfEmployment">
@@ -156,7 +158,7 @@ const updateJobTitles = () => {
 
                 <FormMessage />
             </FormItem>
-        </FormField>
+        </FormField> -->
 
         <FormField
             v-slot="{ componentField, errors }"
@@ -192,7 +194,7 @@ const updateJobTitles = () => {
                 <!-- Since what year? -->
 
                 <div>
-                    <div class="md:w-[32%]">
+                    <div class="w-[28%] md:w-[25%]">
                         <FormControl>
                             <SelectYear v-bind="componentField" :classes="errors.length > 0 ? 'select-invalid' : ''" />
                         </FormControl>

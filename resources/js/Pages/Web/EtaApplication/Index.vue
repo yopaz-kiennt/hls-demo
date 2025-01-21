@@ -38,6 +38,13 @@ const scrollToTop = () => {
 
 const nextStep = () => {
     etaApplicationStore.nextStep();
+
+    // Run in step 2
+    setTimeout(() => {
+        window.scrollTo({
+            top: 0,
+        });
+    }, 200);
 };
 
 onBeforeUnmount(() => {
@@ -83,6 +90,8 @@ onBeforeUnmount(() => {
                                 (!formData.prerequisite.travelDocumentType && currentStep < 2) ||
                                 (formData.prerequisite.travelDocumentType &&
                                     formData.prerequisite.travelDocumentType <= 4 &&
+                                    formData.prerequisite.passportNotedNationality) ||
+                                (!formData.prerequisite.travelDocumentType &&
                                     formData.prerequisite.passportNotedNationality)
                             "
                             class="mt-4"
@@ -92,7 +101,8 @@ onBeforeUnmount(() => {
                                     v-if="currentStep === 0"
                                     type="submit"
                                     size="lg"
-                                    class="mt-[7%] w-[50%] rounded-[20px] bg-[#e0232f] hover:bg-[#45a049]"
+                                    class="mt-[7%] w-[50%] bg-[#e0232f] hover:bg-[#45a049]"
+                                    style="border-radius: 20px !important"
                                     @click="scrollToTop()"
                                 >
                                     <span>{{ messages.next }}</span>
@@ -108,7 +118,8 @@ onBeforeUnmount(() => {
                                     type="button"
                                     variant="outline"
                                     size="lg"
-                                    class="w-[50%] rounded-[20px] border border-[#e0232f] font-bold text-[#e0232f] hover:bg-[#45a049] hover:text-[#e0232f]"
+                                    class="w-[50%] border border-[#e0232f] font-bold text-[#e0232f] hover:border-[#45a049] hover:bg-[#45a049] hover:text-[#fff]"
+                                    style="border-radius: 20px !important"
                                     @click="etaApplicationStore.prevStep()"
                                 >
                                     <span>{{ messages.previous }}</span>
@@ -117,7 +128,8 @@ onBeforeUnmount(() => {
                                 <Button
                                     type="submit"
                                     size="lg"
-                                    class="w-[50%] rounded-[20px] bg-[#e0232f] font-bold hover:bg-[#45a049]"
+                                    class="w-[50%] bg-[#e0232f] font-bold hover:bg-[#45a049]"
+                                    style="border-radius: 20px !important"
                                     @click="scrollToTop()"
                                 >
                                     <span>{{ messages.next }}</span>
@@ -128,7 +140,7 @@ onBeforeUnmount(() => {
                                 v-if="currentStep === 2"
                                 size="lg"
                                 type="submit"
-                                class="w-100 rounded-none bg-[#e0232f] hover:bg-[#45a049]"
+                                class="mb-[50px] mt-[20px] w-[100%] rounded-none bg-[#e0232f] hover:bg-[#45a049]"
                                 @click="!meta.valid ? scrollToTop() : null"
                             >
                                 <span>{{ messages.proceed_to_payment }}</span>

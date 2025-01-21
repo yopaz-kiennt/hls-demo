@@ -8,7 +8,7 @@ import * as yup from 'yup';
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
         messages: {},
-        currentStep: 2,
+        currentStep: 0,
         steps: [
             {
                 step: 1,
@@ -62,7 +62,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 dobMonth: '',
                 dobDay: '',
                 gender: '',
-                countryOfBirth: '',
+                countryOfBirth: '107',
                 cityTownOfBirth: '',
                 issueDateYear: '',
                 issueDateMonth: '',
@@ -86,7 +86,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                 occupation: '',
                 title: '',
                 companyEmployerSchoolFacilityName: '',
-                country: '',
+                country: '105',
                 city: '',
                 fromDateYear: '',
             },
@@ -401,13 +401,13 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         travelDocumentType: yup.string().required(this.messages.this_item_must_be_selected), // 148 (regex)
                         countryOfCitizenship: yup.string().when('travelDocumentType', {
                             is: (value) => value >= 0,
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () => yup.string().default('97').required(this.messages.this_item_must_be_selected),
                         }),
                         passportNotedNationality: yup.string().when('countryOfCitizenship', {
                             is: (value) => {
                                 return value == '97';
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () => yup.string().default('87').required(this.messages.this_item_must_be_selected),
                         }),
                     }),
                     // =============================== Passport details of applicant ===============================
@@ -476,7 +476,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         ),
                         countryOfBirth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().default('107').required(this.messages.this_item_must_be_selected)
                         ),
                         // Date of birth
                         dobYear: yup.string().when([], {
@@ -487,7 +487,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     return (
                                         yup
                                             .string()
-                                            .required(this.messages.this_item_must_be_selected)
+                                            .required(this.messages.this_year_must_be_selected)
                                             // .test(
                                             //     'no-apply-less-than-18',
                                             //     this.messages.you_indicate_that_you_want_to_apply_on_behalf_of_a_minor,
@@ -523,11 +523,11 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         }),
                         dobMonth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_month_must_be_selected)
                         ),
                         dobDay: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_day_must_be_selected)
                         ),
                         cityTownOfBirth: conditionalPassportNotedNationality(
                             // (maxlength 50)
@@ -545,28 +545,28 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         // Date of issue of passport
                         issueDateYear: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_year_must_be_selected)
                         ),
                         issueDateMonth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_month_must_be_selected)
                         ),
                         issueDateDay: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_day_must_be_selected)
                         ),
                         // Date of expiry of passport
                         expiryDateYear: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_year_must_be_selected)
                         ),
                         expiryDateMonth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_month_must_be_selected)
                         ),
                         expiryDateDay: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_item_must_be_selected)
+                            () => yup.string().required(this.messages.this_day_must_be_selected)
                         ),
                         // ===============================
 
@@ -647,8 +647,8 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             is: () => {
                                 return state.jobTitles.length;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
-                            otherwise: () => yup.string().optional(),
+                            then: () => yup.string().default('105').required(this.messages.this_item_must_be_selected),
+                            otherwise: () => yup.string().default('105').optional(),
                         }),
                         cityOfEmployment: yup.string().when('occupation', {
                             is: () => {
@@ -778,21 +778,21 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             is: (value) => {
                                 return value && value == 0;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () => yup.string().required(this.messages.this_year_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         travelDateMonth: yup.string().when('isTravelDateKnown', {
                             is: (value) => {
                                 return value && value == 0;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () => yup.string().required(this.messages.this_month_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         travelDateDay: yup.string().when('isTravelDateKnown', {
                             is: (value) => {
                                 return value && value == 0;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () => yup.string().required(this.messages.this_day_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
 
@@ -801,14 +801,14 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             is: (value) => {
                                 return value && value == 0;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () => yup.string().required(this.messages.this_hour_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         travelDateTimeMinute: yup.string().when('isTravelDateKnown', {
                             is: (value) => {
                                 return value && value == 0;
                             },
-                            then: () => yup.string().required(this.messages.this_item_must_be_selected),
+                            then: () => yup.string().required(this.messages.this_minute_must_be_selected),
                             otherwise: () => yup.string().optional(),
                         }),
                         travelDateTimeTimezone: yup
@@ -1007,6 +1007,10 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         },
         addCountriesOfCitizen(item) {
             this.formData.personalDetails.additionalCountriesOfCitizenship.push(item);
+        },
+        deleteOldCountriesOfCitizen() {
+            this.formData.personalDetails.additionalCountriesOfCitizenship =
+                this.formData.personalDetails.additionalCountriesOfCitizenship.filter((item) => item.value === 105);
         },
         setOpenModalDetails(value) {
             this.isOpenModalDetails = value;

@@ -178,10 +178,9 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
         </FormItem>
     </FormField>
 
-    <FormField v-slot="{ componentField, errors }" name="personalDetails.countryOfBirth">
+    <!-- <FormField v-slot="{ componentField, errors }" name="personalDetails.countryOfBirth">
         <FormItem class="form-group">
             <LabelRequired :title="messages.country_of_birth" />
-            <!-- Country/territory of birth -->
 
             <div>
                 <Select
@@ -205,7 +204,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 
             <FormMessage />
         </FormItem>
-    </FormField>
+    </FormField> -->
 
     <FormField v-slot="{ componentField, errors }" name="personalDetails.cityTownOfBirth">
         <FormItem class="form-group">

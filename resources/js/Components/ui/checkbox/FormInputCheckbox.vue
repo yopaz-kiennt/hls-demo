@@ -38,8 +38,8 @@ const model = defineModel({
 </script>
 
 <template>
-    <div class="flex items-center space-x-2" :class="boxClasses">
+    <div class="flex items-center space-x-4" :class="boxClasses">
         <Checkbox :id="id" v-model:checked="model" :value="value" :class="inputClasses" />
-        <label :for="id" class="cursor-pointer" :class="labelClasses">{{ label }}</label>
+        <label :for="id" class="hissu cursor-pointer" :class="labelClasses">{{ label }}</label>
     </div>
 </template>
