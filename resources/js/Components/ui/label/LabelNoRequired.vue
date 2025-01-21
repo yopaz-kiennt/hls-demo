@@ -18,7 +18,7 @@ defineProps({
 </script>
 
 <template>
-    <Label class="mb-[5px] text-[16px] font-normal" :class="[classes, hasNinni ? 'ninni' : '']">
+    <Label class="mb-[5px] block text-[16px] font-normal" :class="[classes, hasNinni ? 'ninni' : '']">
         <span>{{ title }}</span>
     </Label>
 </template>

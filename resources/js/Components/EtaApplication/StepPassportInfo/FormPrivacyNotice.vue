@@ -54,6 +54,7 @@ const { messages } = usePage().props;
                         :label="messages.i_agree"
                         v-bind="componentField"
                         :class="{ 'checkbox-invalid': errors.length > 0 }"
+                        :labelClasses="'hissu'"
                     />
                 </FormControl>
             </div>
