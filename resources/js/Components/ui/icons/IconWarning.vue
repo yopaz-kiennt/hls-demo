@@ -23,6 +23,12 @@
 .icon {
     position: relative;
     width: 30px;
+    height: 50px;
+    margin-top: 10px;
+
+    @media screen and (max-width: 500px) {
+        margin-top: 30px;
+    }
 
     &::before,
     &::after {
@@ -41,7 +47,7 @@
     }
 
     &::after {
-        bottom: -25px;
+        bottom: -7px;
     }
 }
 </style>

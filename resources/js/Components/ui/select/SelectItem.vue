@@ -27,7 +27,7 @@ const forwardedProps = useForwardProps(delegatedProps);
         v-bind="forwardedProps"
         :class="
             cn(
-                'relative flex w-full cursor-default select-none items-center py-1.5 pl-8 pr-2 text-[13.333px] outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'dropdown-item relative flex w-full cursor-default select-none items-center py-1.5 pl-8 pr-2 text-[13.333px] outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
                 props.class
             )
         "
@@ -43,3 +43,11 @@ const forwardedProps = useForwardProps(delegatedProps);
         </SelectItemText>
     </SelectItem>
 </template>
+
+<style lang="scss">
+@media screen and (min-width: 375px) and (max-width: 425px) {
+    .dropdown-item {
+        padding-left: 5px !important;
+    }
+}
+</style>
