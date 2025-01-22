@@ -71,7 +71,7 @@ const travelDocuments = ref(getTravelDocuments(lang));
     <FormField v-slot="{ componentField, errors }" name="prerequisite.travelDocumentType">
         <FormItem class="form-group">
             <div class="flex">
-                <LabelRequired :title="messages.travel_document_question" />
+                <LabelRequired :title="messages.travel_document_question" inputId="prerequisite.travelDocumentType" />
                 <!-- What travel document do you plan to use to travel to Canada? -->
 
                 <!-- <CircleHelp class="icon-question" @click="isOpenModalTravelDocument = true" /> -->

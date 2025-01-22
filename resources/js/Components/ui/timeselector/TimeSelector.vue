@@ -196,7 +196,7 @@ defineProps({
 
 <template>
     <div class="mt-1 flex">
-        <div class="mr-2 flex w-[28%] md:w-[25%]">
+        <div class="mr-2 flex w-[32%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="hour" :name="inputHour">
                 <FormItem>
                     <FormControl class="max-w-[140px]">
@@ -214,7 +214,7 @@ defineProps({
             </FormField>
         </div>
 
-        <div class="mr-2 flex w-[28%] md:w-[25%]">
+        <div class="mr-2 flex w-[32%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="minute" :name="inputMinute">
                 <FormItem>
                     <FormControl class="max-w-[140px]">
@@ -232,7 +232,7 @@ defineProps({
             </FormField>
         </div>
 
-        <div class="w-[28%] md:w-[25%]">
+        <div class="w-[32%] md:w-[25%]">
             <FormField v-slot="{ componentField, errors }" v-model="timezone" :name="inputTimezone">
                 <FormItem :class="errors.length > 0 ? 'select-invalid' : ''">
                     <FormControl>

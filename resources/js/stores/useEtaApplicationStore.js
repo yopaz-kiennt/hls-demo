@@ -5,6 +5,10 @@ import { isAfter, parse } from 'date-fns';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import * as yup from 'yup';
 
+yup.addMethod(yup.string, 'noWhitespace', function (errorMessage) {
+    return this.test('no-whitespace', errorMessage, (value) => value && value.trim().length > 0);
+});
+
 export const useEtaApplicationStore = defineStore('eta_application', {
     state: () => ({
         messages: {},
@@ -137,6 +141,22 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         isOpenModalDetails: false,
         age: 0,
         showErrorMessageApplyOnBehalfOfMinorChild: false,
+        monthMapping: {
+            January: 0,
+            February: 1,
+            March: 2,
+            April: 3,
+            May: 4,
+            June: 5,
+            July: 6,
+            August: 7,
+            September: 8,
+            October: 9,
+            November: 10,
+            December: 11,
+        },
+        regexPunctuationCharacter: /^[a-zA-Z0-9#@&*\\(\\)\-;:'",.\\/:\s]*$/,
+        regexEnglishAndFrench: /^[A-Za-zÀ-ÿ]*$/,
     }),
     getters: {
         fieldNames() {
@@ -274,7 +294,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .max(50, this.messages.max_length_50_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
                                     .matches(
-                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.regexPunctuationCharacter,
                                         this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                     ),
                         }),
@@ -293,7 +313,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                         .max(50, this.messages.max_length_50_characters)
                                         .required(this.messages.please_be_sure_to_enter_this_item)
                                         .matches(
-                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.regexPunctuationCharacter,
                                             this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                         ),
                             }),
@@ -308,9 +328,10 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                 }
                             )
                             .test('english-french-characters', this.messages.english_french_characters, (value) =>
-                                /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                this.regexEnglishAndFrench.test(value || '')
                             )
-                            .required(this.messages.please_be_sure_to_enter_this_item),
+                            .required(this.messages.please_be_sure_to_enter_this_item)
+                            .noWhitespace(this.messages.please_be_sure_to_enter_this_item),
                         firstName: yup // 109
                             .string()
                             .max(50, this.messages.max_length_50_characters)
@@ -322,8 +343,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                 }
                             )
                             .test('english-french-characters', this.messages.english_french_characters, (value) =>
-                                /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                this.regexEnglishAndFrench.test(value || '')
                             )
+                            .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                             .required(this.messages.please_be_sure_to_enter_this_item),
                         organizationName: yup // 110
                             .string()
@@ -342,8 +364,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     yup
                                         .string()
                                         .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                         .matches(
-                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.regexPunctuationCharacter,
                                             this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                         ),
                             }),
@@ -351,8 +374,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             .string()
                             .max(200, this.messages.max_length_200_characters)
                             .required(this.messages.please_be_sure_to_enter_this_item)
+                            .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                             .matches(
-                                /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                this.regexPunctuationCharacter,
                                 this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                             ),
                         postalCodeZip: yup // 112 (maxlength 30)
@@ -369,12 +393,14 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     yup
                                         .string()
                                         .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                         .matches(/^[0-9]+$/, 'Must be numeric'),
                             }),
                         phoneNumber: yup
                             .string()
                             .max(20, this.messages.max_length_20_characters)
                             .required(this.messages.please_be_sure_to_enter_this_item)
+                            .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                             .matches(/^[0-9 ]*$/, this.messages.must_only_contain_numbers_and_spaces),
                         faxNumber: yup
                             .string()
@@ -420,6 +446,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .max(12, this.messages.max_length_12_characters)
                                     .matches(/^[a-zA-Z0-9]*$/, this.messages.only_number_or_alphanumeric_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                         ),
                         passportNumberReEnter: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
@@ -430,6 +457,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .matches(/^[a-zA-Z0-9]*$/, this.messages.only_number_or_alphanumeric_characters)
                                     .oneOf([yup.ref('passportNumber')], this.messages.the_passport_number_do_not_match)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                         ),
                         lastNameOfPassport: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
@@ -447,9 +475,10 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .test(
                                         'english-french-characters',
                                         this.messages.english_french_characters,
-                                        (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                        (value) => this.regexEnglishAndFrench.test(value || '')
                                     )
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                         ),
                         firstNameOfPassport: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
@@ -467,7 +496,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .test(
                                         'english-french-characters',
                                         this.messages.english_french_characters,
-                                        (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                        (value) => this.regexEnglishAndFrench.test(value || '')
                                     )
                         ),
                         gender: conditionalPassportNotedNationality(
@@ -508,7 +537,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                                 () => {
                                                     if (
                                                         this.formData.isRepresentative == 1 &&
-                                                        state.checkAgeOfPersonalDetails < state.minAgeRequired
+                                                        state.checkAgeOfPersonalDetails < state.minAgeRequired &&
+                                                        state.formData.personalDetails.dobMonth &&
+                                                        state.formData.personalDetails.dobDay
                                                     ) {
                                                         return false;
                                                     }
@@ -530,22 +561,36 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             () => yup.string().required(this.messages.this_day_must_be_selected)
                         ),
                         cityTownOfBirth: conditionalPassportNotedNationality(
-                            // (maxlength 50)
                             state.formData.prerequisite.passportNotedNationality,
                             () =>
                                 yup
                                     .string()
                                     .max(50, this.messages.max_length_50_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                     .matches(
-                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.regexPunctuationCharacter,
                                         this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                     )
                         ),
                         // Date of issue of passport
                         issueDateYear: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_year_must_be_selected)
+                            () =>
+                                yup
+                                    .string()
+                                    .required(this.messages.this_year_must_be_selected)
+                                    .test(
+                                        'issue-date-must-be-before-expiration-date',
+                                        this.messages.the_issue_date_must_be_before_the_expiration_date,
+                                        () => {
+                                            if (state.invalidDatesOfPassport) {
+                                                return false;
+                                            }
+
+                                            return true;
+                                        }
+                                    )
                         ),
                         issueDateMonth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
@@ -558,7 +603,21 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         // Date of expiry of passport
                         expiryDateYear: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
-                            () => yup.string().required(this.messages.this_year_must_be_selected)
+                            () =>
+                                yup
+                                    .string()
+                                    .required(this.messages.this_year_must_be_selected)
+                                    .test(
+                                        'issue-date-must-be-before-expiration-date',
+                                        this.messages.the_issue_date_must_be_before_the_expiration_date,
+                                        () => {
+                                            if (state.invalidDatesOfPassport) {
+                                                return false;
+                                            }
+
+                                            return true;
+                                        }
+                                    )
                         ),
                         expiryDateMonth: conditionalPassportNotedNationality(
                             state.formData.prerequisite.passportNotedNationality,
@@ -638,7 +697,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .max(75, this.messages.max_length_75_characters)
                                     .required(this.messages.this_item_must_be_selected)
                                     .matches(
-                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.regexPunctuationCharacter,
                                         this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                     ),
                             otherwise: () => yup.string().optional(),
@@ -659,8 +718,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .string()
                                     .max(50, this.messages.max_length_50_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                     .matches(
-                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.regexPunctuationCharacter,
                                         this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                     ),
                             otherwise: () => yup.string().optional(),
@@ -685,6 +745,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .string()
                                     .max(100, this.messages.max_length_100_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                     .email(this.messages.email_valid)
                         ),
                         emailAddressReEnterOfContactDetails: conditionalPassportNotedNationality(
@@ -695,6 +756,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .string()
                                     .max(100, this.messages.max_length_100_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                     .email(this.messages.email_valid)
                                     .oneOf([yup.ref('emailAddressOfContactDetails')], this.messages.values_must_match)
                         ),
@@ -713,6 +775,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .string()
                                     .max(30, this.messages.max_length_30_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                     .matches(
                                         /^[a-zA-Z0-9 ]*$/,
                                         this.messages.must_only_contain_alphanumeric_characters_or_a_space
@@ -725,8 +788,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .string()
                                     .max(100, this.messages.max_length_100_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                     .matches(
-                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.regexPunctuationCharacter,
                                         this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                     )
                         ),
@@ -737,7 +801,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .string()
                                     .max(100, this.messages.max_length_100_characters)
                                     .matches(
-                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.regexPunctuationCharacter,
                                         this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                     )
                         ),
@@ -748,8 +812,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .string()
                                     .max(50, this.messages.max_length_50_characters)
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                     .matches(
-                                        /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                        this.regexPunctuationCharacter,
                                         this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                     )
                         ),
@@ -761,7 +826,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             .string()
                             .max(50, this.messages.max_length_50_characters)
                             .matches(
-                                /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                this.regexPunctuationCharacter,
                                 this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                             ),
                     }),
@@ -778,7 +843,21 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             is: (value) => {
                                 return value && value == 0;
                             },
-                            then: () => yup.string().required(this.messages.this_year_must_be_selected),
+                            then: () =>
+                                yup
+                                    .string()
+                                    .required(this.messages.this_year_must_be_selected)
+                                    .test(
+                                        'year-must-be-greater-than-today-date',
+                                        this.messages.year_must_be_greater_than_today_date,
+                                        () => {
+                                            if (state.invalidTravelDate) {
+                                                return false;
+                                            }
+
+                                            return true;
+                                        }
+                                    ),
                             otherwise: () => yup.string().optional(),
                         }),
                         travelDateMonth: yup.string().when('isTravelDateKnown', {
@@ -844,8 +923,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     yup
                                         .string()
                                         .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                         .matches(
-                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.regexPunctuationCharacter,
                                             this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                         ),
                                 otherwise: () => yup.string().optional(),
@@ -867,8 +947,9 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     yup
                                         .string()
                                         .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                                         .matches(
-                                            /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                            this.regexPunctuationCharacter,
                                             this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                                         ),
                                 otherwise: () => yup.string().optional(),
@@ -886,7 +967,11 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                 is: (value) => {
                                     return value && value == 0;
                                 },
-                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                then: () =>
+                                    yup
+                                        .string()
+                                        .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .noWhitespace(this.messages.please_be_sure_to_enter_this_item),
                                 otherwise: () => yup.string().optional(),
                             }),
                         haveYouEverBeenDiagnosedWithTuberculosis: yup
@@ -895,7 +980,11 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                 is: (value) => {
                                     return value && value == 0;
                                 },
-                                then: () => yup.string().required(this.messages.please_be_sure_to_enter_this_item),
+                                then: () =>
+                                    yup
+                                        .string()
+                                        .required(this.messages.please_be_sure_to_enter_this_item)
+                                        .noWhitespace(this.messages.please_be_sure_to_enter_this_item),
                                 otherwise: () => yup.string().optional(),
                             }),
                         doYouHaveOneOfTheseConditions: yup.string().when([], {
@@ -908,7 +997,7 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                         haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails: yup
                             .string()
                             .matches(
-                                /^[a-zA-Z0-9.,!?'"()\-:; ]*$/,
+                                this.regexPunctuationCharacter,
                                 this.messages.must_only_contain_alphanumeric_characters_or_punctuation_marks
                             ),
                     }),
@@ -940,9 +1029,10 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                                     .test(
                                         'english-french-characters',
                                         this.messages.english_french_characters,
-                                        (value) => /^[A-Za-zÀ-ÿ]*$/.test(value || '')
+                                        (value) => this.regexEnglishAndFrench.test(value || '')
                                     )
                                     .required(this.messages.please_be_sure_to_enter_this_item)
+                                    .noWhitespace(this.messages.please_be_sure_to_enter_this_item)
                         ),
                     }),
                     // ===============================
@@ -953,25 +1043,10 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         checkAgeOfPersonalDetails(state) {
             const { dobYear, dobMonth, dobDay } = state.formData.personalDetails;
 
-            const monthMapping = {
-                January: 0,
-                February: 1,
-                March: 2,
-                April: 3,
-                May: 4,
-                June: 5,
-                July: 6,
-                August: 7,
-                September: 8,
-                October: 9,
-                November: 10,
-                December: 11,
-            };
-
             if (!dobYear || !dobMonth || !dobDay) return 0;
 
             const today = new Date();
-            const dob = new Date(dobYear, monthMapping[dobMonth], dobDay);
+            const dob = new Date(dobYear, state.monthMapping[dobMonth], dobDay);
             let age = today.getFullYear() - dob.getFullYear();
 
             if (today < new Date(today.getFullYear(), dob.getMonth(), dob.getDate())) {
@@ -985,17 +1060,50 @@ export const useEtaApplicationStore = defineStore('eta_application', {
         minAgeRequired() {
             return 18;
         },
-        validateDatesOfPassport(state) {
+        invalidDatesOfPassport(state) {
             const { issueDateYear, issueDateMonth, issueDateDay, expiryDateYear, expiryDateMonth, expiryDateDay } =
                 state.formData.personalDetails;
-            const issue = parse(`${issueDateYear}-${issueDateMonth}-${issueDateDay}`, 'yyyy-MM-dd', new Date());
-            const expiry = parse(`${expiryDateYear}-${expiryDateMonth}-${expiryDateDay}`, 'yyyy-MM-dd', new Date());
 
-            if (isAfter(issue, expiry)) {
-                return '発行日が有効期限前の日付である必要があります。';
+            if (!issueDateMonth || !issueDateDay || !expiryDateYear || !expiryDateMonth || !expiryDateDay) {
+                return false;
             }
 
-            return null;
+            const newIssueDateMonth = state.monthMapping[issueDateMonth] + 1;
+            const newExpiryDateMonth = state.monthMapping[expiryDateMonth] + 1;
+
+            const issue = parse(`${issueDateYear}-${newIssueDateMonth}-${issueDateDay}`, 'yyyy-MM-dd', new Date());
+            const expiry = parse(`${expiryDateYear}-${newExpiryDateMonth}-${expiryDateDay}`, 'yyyy-MM-dd', new Date());
+
+            if (isAfter(issue, expiry)) {
+                return true;
+            }
+
+            return false;
+        },
+        invalidTravelDate(state) {
+            const { travelDateYear, travelDateMonth, travelDateDay } = state.formData.travelDetails;
+
+            if (!travelDateYear || !travelDateMonth || !travelDateDay) {
+                return false;
+            }
+
+            const newTravelDateMonth = state.monthMapping[travelDateMonth] + 1;
+
+            const travelDate = parse(
+                `${travelDateYear}-${newTravelDateMonth}-${travelDateDay}`,
+                'yyyy-MM-dd',
+                new Date()
+            );
+            travelDate.setHours(0, 0, 0, 0);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (travelDate < today) {
+                return true;
+            }
+
+            return false;
         },
     },
     actions: {

@@ -19,6 +19,10 @@ const changeTravelDateKnown = (value) => {
         etaApplicationStore.changeTravelDateKnown();
     }
 };
+
+const getTravelEndYear = () => {
+    return new Date().getFullYear() + 5;
+};
 </script>
 
 <template>
@@ -80,6 +84,7 @@ const changeTravelDateKnown = (value) => {
                 inputYear="travelDetails.travelDateYear"
                 inputMonth="travelDetails.travelDateMonth"
                 inputDay="travelDetails.travelDateDay"
+                :end-year="getTravelEndYear()"
             />
         </div>
 

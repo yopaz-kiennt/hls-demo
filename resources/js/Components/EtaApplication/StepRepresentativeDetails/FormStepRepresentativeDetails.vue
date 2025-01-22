@@ -72,7 +72,7 @@ const { messages } = usePage().props;
         name="representative.lastName"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.surname_last_name" />
+            <LabelRequired :title="messages.surname_last_name" inputId="representative.lastName" />
             <!-- Surname(s) / last name(s) -->
 
             <div>
@@ -91,7 +91,7 @@ const { messages } = usePage().props;
         name="representative.firstName"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.given_first_name" />
+            <LabelRequired :title="messages.given_first_name" inputId="representative.firstName" />
             <!-- Given name(s) / first name(s) -->
 
             <div>
@@ -117,7 +117,7 @@ const { messages } = usePage().props;
         name="representative.organizationName"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.name_of_firm_organization" />
+            <LabelRequired :title="messages.name_of_firm_organization" inputId="representative.organizationName" />
             <!-- Name of firm, organization -->
 
             <div>
@@ -136,7 +136,7 @@ const { messages } = usePage().props;
         name="representative.mailingAddress"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.mailing_address" />
+            <LabelRequired :title="messages.mailing_address" inputId="representative.mailingAddress" />
             <!-- Mailing address -->
 
             <div>
@@ -159,7 +159,7 @@ const { messages } = usePage().props;
         name="representative.postalCodeZip"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.postal_code" />
+            <LabelRequired :title="messages.postal_code" inputId="representative.postalCodeZip" />
             <!-- Postal code -->
 
             <div>
@@ -178,7 +178,7 @@ const { messages } = usePage().props;
         name="representative.phoneNumber"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.telephone_number" />
+            <LabelRequired :title="messages.telephone_number" inputId="representative.phoneNumber" />
             <!-- Telephone number -->
 
             <div>

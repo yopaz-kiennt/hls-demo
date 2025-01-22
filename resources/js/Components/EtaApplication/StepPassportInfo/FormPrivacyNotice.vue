@@ -65,7 +65,7 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="consentAndDeclaration.fullNameOfConsent">
         <FormItem class="form-group" style="margin-top: 50px">
-            <LabelRequired :title="messages.signature_of_applicant" />
+            <LabelRequired :title="messages.signature_of_applicant" inputId="consentAndDeclaration.fullNameOfConsent" />
             <!-- Signature of applicant -->
             <div>
                 <FormControl :class="{ 'input-invalid': errors.length > 0 }">

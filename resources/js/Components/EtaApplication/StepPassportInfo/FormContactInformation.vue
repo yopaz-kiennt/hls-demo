@@ -22,7 +22,7 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.emailAddressOfContactDetails">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.email_address" />
+            <LabelRequired :title="messages.email_address" inputId="contactDetails.emailAddressOfContactDetails" />
             <!-- Email address -->
 
             <div>
@@ -43,7 +43,10 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.emailAddressReEnterOfContactDetails">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.email_address_re_enter" />
+            <LabelRequired
+                :title="messages.email_address_re_enter"
+                inputId="contactDetails.emailAddressReEnterOfContactDetails"
+            />
             <!-- Email address (re-enter) -->
 
             <div>

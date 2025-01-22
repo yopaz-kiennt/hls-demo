@@ -3,6 +3,12 @@ body {
     overflow-x: hidden;
 }
 
+@media screen and (min-width: 450px) {
+    .xs\:block {
+        display: block;
+    }
+}
+
 .required {
     background-color: #E0232F;
     margin-right: 5px;

@@ -47,7 +47,7 @@ const forwardedProps = useForwardProps(delegatedProps);
 <style lang="scss">
 @media screen and (min-width: 375px) and (max-width: 425px) {
     .dropdown-item {
-        padding-left: 5px !important;
+        max-width: 320px;
     }
 }
 </style>

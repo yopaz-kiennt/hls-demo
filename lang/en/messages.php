@@ -155,4 +155,6 @@ return [
                         first screen and change your answer for "Are you applying on behalf of a minor child?" to "No".',
     'you_must_be_at_least_18_years_of_age_to_apply' => 'Year - You must be at least 18 years of age to apply or apply on behalf of someone. A parent/guardian or a representative must answer Yes to the question "Are you a representative or a parent/guardian applying on behalf of an eTA applicant?" and complete the additional questions.',
     'canada_eta_application_form' => 'Canada eTA Application Form',
+    'the_issue_date_must_be_before_the_expiration_date' => 'The issue date must be before the expiration date.',
+    'year_must_be_greater_than_today_date' => 'Year - Must be greater than today`s date',
 ];

@@ -154,4 +154,6 @@ return [
     'you_indicate_that_you_want_to_apply_on_behalf_of_a_minor' => '未成年者を代理して申請することを示しています。続行するには、18歳未満の生年月日を入力する必要があります。成人のために申請する場合は、最初の画面に戻り、「未成年者を代理して申請しますか？」の回答を「いいえ」に変更してください。',
     'you_must_be_at_least_18_years_of_age_to_apply' => '年齢 - 申請するには18歳以上である必要があります。もしくは、他の方の代理で申請する場合、保護者または代表者が「eTA申請者の代理または保護者として申請していますか？」という質問に「はい」と回答し、追加の質問に回答する必要があります。',
     'canada_eta_application_form' => 'カナダeTA申請フォーム',
+    'the_issue_date_must_be_before_the_expiration_date' => '発行日が有効期限前の日付である必要があります。',
+    'year_must_be_greater_than_today_date' => '年 - 今日の日付より大きい必要があります',
 ];

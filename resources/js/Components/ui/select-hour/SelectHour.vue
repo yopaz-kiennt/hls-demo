@@ -36,6 +36,6 @@ const { messages } = usePage().props;
             </SelectContent>
         </Select>
 
-        <span class="ml-2 w-[60px]">時</span>
+        <span class="xs:block ml-2 hidden w-[60px]">時</span>
     </div>
 </template>

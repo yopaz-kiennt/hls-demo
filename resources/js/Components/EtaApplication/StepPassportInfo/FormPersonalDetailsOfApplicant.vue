@@ -134,7 +134,11 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
     >
         <FormField v-slot="{ componentField, errors }" name="personalDetails.uci">
             <FormItem class="form-group">
-                <LabelNoRequired :hasNinni="true" :title="messages.uci_previous_visa_eta_permit_number" />
+                <LabelNoRequired
+                    :hasNinni="true"
+                    :title="messages.uci_previous_visa_eta_permit_number"
+                    inputId="personalDetails.uci"
+                />
                 <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (optional) -->
 
                 <div>
@@ -155,7 +159,11 @@ const changeHasPreviouslyAppliedToCanada = (value) => {
 
         <FormField v-slot="{ componentField, errors }" name="personalDetails.uciReEnter">
             <FormItem class="form-group">
-                <LabelNoRequired :hasNinni="true" :title="messages.uci_previous_visa_eta_permit_number_reenter" />
+                <LabelNoRequired
+                    :hasNinni="true"
+                    :title="messages.uci_previous_visa_eta_permit_number_reenter"
+                    inputId="personalDetails.uciReEnter"
+                />
                 <!-- Unique client identifier (UCI) / Previous Canadian visa, eTA or permit number (re-enter) -->
 
                 <div>

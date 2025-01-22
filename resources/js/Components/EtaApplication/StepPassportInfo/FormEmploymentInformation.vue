@@ -112,7 +112,10 @@ const updateJobTitles = () => {
             name="employmentDetails.companyEmployerSchoolFacilityName"
         >
             <FormItem class="form-group">
-                <LabelRequired :title="messages.name_of_employer_or_school" />
+                <LabelRequired
+                    :title="messages.name_of_employer_or_school"
+                    inputId="employmentDetails.companyEmployerSchoolFacilityName"
+                />
                 <!-- Name of employer or school, as appropriate. -->
 
                 <div>
@@ -166,7 +169,7 @@ const updateJobTitles = () => {
             name="employmentDetails.cityOfEmployment"
         >
             <FormItem class="form-group">
-                <LabelRequired :title="messages.city_or_town" />
+                <LabelRequired :title="messages.city_or_town" inputId="employmentDetails.cityOfEmployment" />
                 <!-- City/town -->
 
                 <div>

@@ -26,7 +26,7 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.aptUnit">
         <FormItem class="form-group">
-            <LabelNoRequired :title="messages.apartment_unit_number" />
+            <LabelNoRequired :title="messages.apartment_unit_number" inputId="contactDetails.aptUnit" />
             <!-- Apartment/unit number (if applicable) -->
 
             <div>
@@ -47,7 +47,7 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.streetNo">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.street_civic_number_or_house_name" />
+            <LabelRequired :title="messages.street_civic_number_or_house_name" inputId="contactDetails.streetNo" />
             <!-- Street/civic number or house name -->
 
             <div>
@@ -68,7 +68,7 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.streetAddress">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.street_address_or_name" />
+            <LabelRequired :title="messages.street_address_or_name" inputId="contactDetails.streetAddress" />
             <!-- Street address/name -->
 
             <div>
@@ -89,7 +89,10 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.streetAddressAlt">
         <FormItem class="form-group">
-            <LabelNoRequired :title="messages.street_address_or_name_line_2" />
+            <LabelNoRequired
+                :title="messages.street_address_or_name_line_2"
+                inputId="contactDetails.streetAddressAlt"
+            />
             <!-- Street address/name line 2 (if applicable) -->
 
             <div>
@@ -110,7 +113,7 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.cityOfContactDetails">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.city_or_town" />
+            <LabelRequired :title="messages.city_or_town" inputId="contactDetails.cityOfContactDetails" />
             <!-- City/town -->
 
             <div>
@@ -160,7 +163,7 @@ const { messages } = usePage().props;
 
     <FormField v-slot="{ componentField, errors }" name="contactDetails.district">
         <FormItem class="form-group">
-            <LabelNoRequired :title="messages.district_or_region" />
+            <LabelNoRequired :title="messages.district_or_region" inputId="contactDetails.district" />
             <!-- District/region -->
 
             <div>

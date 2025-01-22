@@ -34,7 +34,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
     <FormField v-slot="{ componentField, errors }" name="personalDetails.passportNumber">
         <FormItem class="form-group">
             <div class="flex">
-                <LabelRequired :title="messages.passport_number" />
+                <LabelRequired :title="messages.passport_number" inputId="personalDetails.passportNumber" />
                 <!-- Passport number -->
 
                 <!-- <CircleHelp class="icon-question" @click="isOpenModalPassportNumber = true" /> -->
@@ -64,7 +64,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 
     <FormField v-slot="{ componentField, errors }" name="personalDetails.passportNumberReEnter">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.passport_number_re_enter" />
+            <LabelRequired :title="messages.passport_number_re_enter" inputId="personalDetails.passportNumberReEnter" />
             <!-- Passport number (re-enter) -->
 
             <!-- <p>You cannot copy and paste into this field.</p> -->
@@ -88,7 +88,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
     <FormField v-slot="{ componentField, errors }" name="personalDetails.lastNameOfPassport">
         <FormItem class="form-group">
             <div class="flex">
-                <LabelRequired :title="messages.surname_last_name" />
+                <LabelRequired :title="messages.surname_last_name" inputId="personalDetails.lastNameOfPassport" />
                 <!-- Surname(s) / last name(s) -->
 
                 <!-- <CircleHelp class="icon-question" @click="isOpenModalSurnameOrLastname = true" /> -->
@@ -114,7 +114,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 
     <FormField v-slot="{ componentField, errors }" name="personalDetails.firstNameOfPassport">
         <FormItem class="form-group">
-            <LabelNoRequired :title="messages.given_first_name" />
+            <LabelNoRequired :title="messages.given_first_name" inputId="personalDetails.firstNameOfPassport" />
             <!-- Given name(s) / first name(s) -->
 
             <!-- <p>Please enter exactly as shown on your passport or identity document.</p> -->
@@ -208,7 +208,7 @@ const isOpenModalDateOfExpiryOfPassport = ref(false);
 
     <FormField v-slot="{ componentField, errors }" name="personalDetails.cityTownOfBirth">
         <FormItem class="form-group">
-            <LabelRequired :title="messages.city_of_birth" />
+            <LabelRequired :title="messages.city_of_birth" inputId="personalDetails.cityTownOfBirth" />
             <!-- City/town of birth -->
 
             <!-- <p>

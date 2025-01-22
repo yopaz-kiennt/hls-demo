@@ -109,7 +109,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             name="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
         >
             <FormItem class="form-group">
-                <LabelRequired :title="messages.refusal_details" />
+                <LabelRequired
+                    :title="messages.refusal_details"
+                    inputId="backgroundQuestions.refusedVisaOrPermitOrDeniedEntryToCanadaDetails"
+                />
                 <!-- For each refusal, please indicate the country that refused you a visa or permit, or denied you entry, as well as the reasons provided to you by the country. -->
 
                 <div>
@@ -134,7 +137,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
         name="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.criminal_offence" />
+            <LabelRequired
+                :title="messages.criminal_offence"
+                inputId="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhere"
+            />
             <!-- Have you ever committed, been arrested for, been charged with or convicted of any criminal offence in any country/territory? -->
 
             <div>
@@ -176,7 +182,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             name="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails"
         >
             <FormItem class="form-group">
-                <LabelRequired :title="messages.arrest_charge_conviction_details" />
+                <LabelRequired
+                    :title="messages.arrest_charge_conviction_details"
+                    inputId="backgroundQuestions.committedOrArrestedOrChargedOrConvictedOfCriminalOffenceAnywhereDetails"
+                />
                 <!-- For each arrest, charge, or conviction, please indicate where (city, country), when (month/year), the nature of the offence, and the sentence. -->
 
                 <div>
@@ -201,7 +210,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
         name="backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.tuberculosis_diagnosis_contact" />
+            <LabelRequired
+                :title="messages.tuberculosis_diagnosis_contact"
+                inputId="backgroundQuestions.inThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis"
+            />
             <!-- In the past two years, were you diagnosed with tuberculosis or have you been in close contact with a person with tuberculosis? -->
 
             <div>
@@ -241,7 +253,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             name="backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker"
         >
             <FormItem class="form-group">
-                <LabelRequired :title="messages.tuberculosis_contact_health_worker" />
+                <LabelRequired
+                    :title="messages.tuberculosis_contact_health_worker"
+                    inputId="backgroundQuestions.isYourContactWithTuberculosisTheResultOfBeingAHeathCareWorker"
+                />
                 <!-- Is your contact with tuberculosis the result of being a health care worker? -->
 
                 <div>
@@ -278,7 +293,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
             name="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
         >
             <FormItem class="form-group">
-                <LabelRequired :title="messages.tuberculosis_diagnosed" />
+                <LabelRequired
+                    :title="messages.tuberculosis_diagnosed"
+                    inputId="backgroundQuestions.haveYouEverBeenDiagnosedWithTuberculosis"
+                />
                 <!-- Have you ever been diagnosed with tuberculosis? -->
 
                 <div>
@@ -309,7 +327,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
         name="backgroundQuestions.doYouHaveOneOfTheseConditions"
     >
         <FormItem class="form-group">
-            <LabelRequired :title="messages.health_condition_check" />
+            <LabelRequired
+                :title="messages.health_condition_check"
+                inputId="backgroundQuestions.doYouHaveOneOfTheseConditions"
+            />
             <!-- Do you have one of these conditions? -->
 
             <div>
@@ -340,7 +361,10 @@ const changeInThePastTwoYearsWereYouDiagnosedOrInCloseContactWithTuberculosis = 
         name="backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
     >
         <FormItem class="form-group">
-            <LabelNoRequired :title="messages.additional_details" />
+            <LabelNoRequired
+                :title="messages.additional_details"
+                inputId="backgroundQuestions.haveOrWillHaveHealthInsuranceValidInCanadaDuringStayDetails"
+            />
             <!-- Please briefly indicate if there are additional details pertinent to your application. For example, an urgent need to travel to Canada. Provide relevant details to avoid delays in the processing of your application. -->
 
             <div>

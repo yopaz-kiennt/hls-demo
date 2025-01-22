@@ -104,7 +104,7 @@ const changeRepresentativeRelationship = (value) => {
 
     <FormField v-slot="{ componentField, errors }" name="representative.faxNumber">
         <FormItem class="form-group">
-            <LabelNoRequired :title="messages.fax_number" />
+            <LabelNoRequired :title="messages.fax_number" inputId="representative.faxNumber" />
             <!-- Fax number -->
 
             <div>
@@ -125,7 +125,7 @@ const changeRepresentativeRelationship = (value) => {
 
     <FormField v-slot="{ componentField, errors }" name="representative.emailAddress">
         <FormItem class="form-group">
-            <LabelNoRequired :title="messages.email_address" />
+            <LabelNoRequired :title="messages.email_address" inputId="representative.emailAddress" />
             <!-- Email address -->
 
             <div>
