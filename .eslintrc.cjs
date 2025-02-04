@@ -23,6 +23,7 @@ module.exports = {
                 caughtErrorsIgnorePattern: '^_',
             },
         ],
+        'no-irregular-whitespace': 'off',
         'no-unused-expressions': [
             'error',
             {
