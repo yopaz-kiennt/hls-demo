@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EtaManagementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\EtaApplicationController;
+use App\Http\Controllers\Web\HomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,8 +14,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/', [EtaApplicationController::class, 'index'])->name('eta_application.index');
-Route::post('/', [EtaApplicationController::class, 'register'])->name('eta_application.register');
+Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/policy', [HomeController::class, 'policy'])->name('policy');
+Route::get('/service', [HomeController::class, 'service'])->name('service');
+
+Route::group(['prefix' => 'eta', 'as' => 'eta_application.'], function () {
+    Route::get('/', [EtaApplicationController::class, 'index'])->name('index');
+    Route::post('/', [EtaApplicationController::class, 'register'])->name('register');
+});
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', function () {

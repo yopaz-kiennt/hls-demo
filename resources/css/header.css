@@ -1,0 +1,149 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 4px 16px 16px 18px;
+    background-color: #010d00;
+    z-index: 100;
+}
+.logoWrap {
+    display: flex;
+    flex-direction: column;
+}
+.logo {
+    text-align: center;
+}
+.logo a {
+    display: inline-block;
+}
+.logo a img {
+    width: 180px;
+}
+.logo_text {
+    font-size: 1.2rem;
+    color: #fff;
+    text-align: center;
+}
+@media only screen and (min-width: 480px) {
+    .header_wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 880px;
+        margin: 0 auto;
+    }
+    .logoWrap {
+        display: flex;
+        flex-direction: unset;
+        align-items: center;
+    }
+    .logo {
+        text-align: unset;
+    }
+    .logo a {
+        display: inline-block;
+    }
+    .logo_text {
+        padding-top: 16px;
+        padding-left: 16px;
+        text-align: unset;
+    }
+    .header_nav {
+        padding-top: 12px;
+    }
+    .gnav ul {
+        display: flex;
+        align-items: center;
+    }
+    .gnav_item:not(:last-child) {
+        margin-right: 36px;
+    }
+    .gnav_item a {
+        display: inline-block;
+        font-size: 1.5rem;
+        color: #fff;
+    }
+    .gnav_btn a {
+        padding: 4px 24px;
+        background-color: #ff0000;
+    }
+}
+
+/* ハンバーガーボタン */
+.hamburgerBtnArea {
+    position: absolute;
+    top: 28px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    z-index: 100;
+}
+.hamburgerBtn {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    overflow: hidden;
+}
+.hamburgerBtn_bar {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 4px;
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background-color: #fff;
+    transition: 0.25s;
+}
+.hamburgerBtn_bar2 {
+    top: 16px;
+}
+.hamburgerBtn_bar3 {
+    top: 24px;
+}
+
+.hamburger {
+    z-index: 99;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 120px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    opacity: 0;
+    visibility: hidden;
+    overflow: auto;
+    transition:
+        opacity 0.5s,
+        visibility 0.5s;
+}
+.hamburger_link {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #1b1919;
+}
+.hamburger_listBtn {
+    display: block;
+    color: #fff;
+    width: 100%;
+    padding: 8px 24px;
+    background-color: #ff0000;
+    text-align: center;
+}
+.hamburger_item:not(:last-child) {
+    margin-bottom: 3vh;
+}
+
+.hamburger_btnLink {
+    padding: 16px 0 0;
+}
+.hamburger_menuBtn:not(:last-child) {
+    margin-bottom: 8px;
+}
+
+@media only screen and (min-width: 480px) {
+}

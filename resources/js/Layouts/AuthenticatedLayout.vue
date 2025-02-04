@@ -1,166 +1,103 @@
 <script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import CommonNotify from '@/Components/ui/notify/CommonNotify.vue';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { route } from 'ziggy-js';
 
-const showingNavigationDropdown = ref(false);
+const isHamburgerOpen = ref(false);
 
 const { messages } = usePage().props;
-
 const etaApplicationStore = useEtaApplicationStore();
 
 etaApplicationStore.setMessages(messages);
+
+function toggleHamburger() {
+    isHamburgerOpen.value = !isHamburgerOpen.value;
+}
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
-                <!-- Primary Navigation Menu -->
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-16 justify-between">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('eta_application.index')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
-                                    />
-                                </Link>
-                            </div>
-
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    :href="route('eta_application.index')"
-                                    :active="route().current('eta_application.index')"
-                                >
-                                    {{ messages.canada_eta_application_form }}
-                                </NavLink>
-                            </div>
-
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('admin.eta_management.index')">
-                                    {{ messages.registration_information_list }}
-                                </NavLink>
-                            </div>
+        <div id="contents-wrap" class="contents-wrap">
+            <header id="header" class="header">
+                <div class="header_wrap">
+                    <div class="logoWrap">
+                        <h1 class="logo">
+                            <Link :href="route('home')"><img src="images/logo.png" alt="" /></Link>
+                        </h1>
+                        <p class="logo_text">カナダeTAを日本語で申請</p>
+                    </div>
+                    <!-- グローバルナビ -->
+                    <!-- ============================================ -->
+                    <div class="is-desktop">
+                        <div class="header_nav">
+                            <nav class="gnav">
+                                <ul>
+                                    <li
+                                        class="gnav_item"
+                                        :class="{
+                                            active: 'home' && route().current('home'),
+                                        }"
+                                    >
+                                        <Link :href="route('home')" class="">HOME</Link>
+                                    </li>
+                                    <li
+                                        class="gnav_item"
+                                        :class="{
+                                            active: 'service' && route().current('service'),
+                                        }"
+                                    >
+                                        <Link :href="route('service')">SERVICE</Link>
+                                    </li>
+                                    <li class="gnav_item gnav_btn">
+                                        <a :href="route('eta_application.index')" class="">eTA申請</a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
-
-                        <!-- <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div class="relative ms-3">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
-                                            >
-                                                {{ $page.props.auth.user.name }}
-
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </template>
-
-                                    <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
-                                        <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </div> -->
-
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
-                                @click="showingNavigationDropdown = !showingNavigationDropdown"
+                    </div>
+                    <!-- スマホメニューボタン -->
+                    <!-- ============================================ -->
+                    <div class="is-mobile">
+                        <div class="hamburgerBtnArea">
+                            <!-- Bắt sự kiện click và toggle class dựa trên isHamburgerOpen -->
+                            <div
+                                class="hamburgerBtn"
+                                :class="{ hamburgerBtn_open: isHamburgerOpen }"
+                                @click="toggleHamburger"
                             >
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex': !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex': showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{
-                        block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
-                    }"
-                    class="sm:hidden"
-                >
-                    <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            :href="route('eta_application.index')"
-                            :active="route().current('eta_application.index')"
-                        >
-                            {{ messages.canada_eta_application_form }}
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <!-- Responsive Settings Options -->
-                    <!-- <div class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
-                        <div class="px-4">
-                            <div class="text-base font-medium text-gray-800 dark:text-gray-200">
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
+                                <span
+                                    class="hamburgerBtn_bar"
+                                    :class="{ 'is-hamburgerBtn_bar-rotate': isHamburgerOpen }"
+                                ></span>
+                                <span
+                                    class="hamburgerBtn_bar hamburgerBtn_bar2"
+                                    :class="{ 'is-hamburgerBtn_bar-rotate2': isHamburgerOpen }"
+                                ></span>
+                                <span
+                                    class="hamburgerBtn_bar hamburgerBtn_bar3"
+                                    :class="{ 'is-hamburgerBtn_bar-translate': isHamburgerOpen }"
+                                ></span>
                             </div>
                         </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
-                            </ResponsiveNavLink>
+                        <!-- スマホメニュー -->
+                        <div class="hamburger" :class="{ 'is-hamburger-open': isHamburgerOpen }">
+                            <ul class="hamburger_list">
+                                <li class="hamburger_item">
+                                    <Link :href="route('home')" class="hamburger_link">HOME</Link>
+                                </li>
+                                <li class="hamburger_item">
+                                    <Link :href="route('service')" class="hamburger_link">SERVICE</Link>
+                                </li>
+                                <li class="hamburger_item">
+                                    <a :href="route('eta_application.index')" class="hamburger_link hamburger_listBtn">
+                                        eTA申請
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                    </div> -->
-                </div>
-            </nav>
-
-            <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow dark:bg-gray-800">
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                    </div>
                 </div>
             </header>
 
@@ -168,8 +105,34 @@ etaApplicationStore.setMessages(messages);
             <main>
                 <slot />
             </main>
+
+            <footer class="footer">
+                <p class="copyright"><small>© HAJIMARI Business Partners Inc.</small></p>
+                <ul class="fnav_list">
+                    <li class="fnav_item"><Link :href="route('service')">SERVICE</Link></li>
+                    <li class="fnav_item"><Link :href="route('policy')">プライバシーポリシー</Link></li>
+                </ul>
+            </footer>
         </div>
     </div>
 
     <CommonNotify />
 </template>
+
+<style>
+@import url('@css/reset.css');
+@import url('@css/base.css');
+@import url('@css/spacer.css');
+@import url('@css/header.css');
+@import url('@css/footer.css');
+@import url('@css/main.css');
+@import url('@css/animation.css');
+
+.gnav_item {
+    border-bottom: 2px solid transparent;
+}
+
+.gnav_item.active {
+    border-bottom: 2px solid #ff0000;
+}
+</style>

@@ -1,5 +1,6 @@
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
+import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => {
@@ -20,6 +21,12 @@ export default defineConfig(({ mode }) => {
                 },
             }),
         ],
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'resources/js'),
+                '@css': path.resolve(__dirname, 'resources/css'),
+            },
+        },
         server: {
             https: isProduction ? true : false,
             host: true,
