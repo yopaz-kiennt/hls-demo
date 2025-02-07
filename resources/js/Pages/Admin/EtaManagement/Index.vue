@@ -1,6 +1,5 @@
 <script setup>
 import ModalDetails from '@/Components/EtaManagement/ModalDetails.vue';
-import Screenshots from '@/Components/EtaManagement/Screenshots.vue';
 import { Button } from '@/Components/ui/button';
 import Datepicker from '@/Components/ui/datepicker/Datepicker.vue';
 import IconReset from '@/Components/ui/icons/IconReset.vue';
@@ -10,11 +9,10 @@ import Loading from '@/Components/ui/loading/Loading.vue';
 import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import VuePagination from '@/Components/VuePagination.vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AdminLayout2 from '@/Layouts/AdminLayout2.vue';
 import { buildUrlParams, formatDate } from '@/lib/utils';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
 import { Head, router, usePage } from '@inertiajs/vue3';
-import { Info, Send } from 'lucide-vue-next';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
@@ -84,12 +82,22 @@ const reset = () => {
 const loadPage = (page) => {
     router.get(`/admin/eta-management?${buildUrlParams({ ...formSearch.value, page })}`);
 };
+
+const getStatusText = (status) => {
+    const translations = {
+        pending: lang === 'en' ? 'Pending' : '登録待ち',
+        processing: lang === 'en' ? 'Processing' : '処理中',
+        success: lang === 'en' ? 'Success' : '登録完了',
+        error: lang === 'en' ? 'Error' : '失敗',
+    };
+    return translations[status] || '-';
+};
 </script>
 
 <template>
     <Head title="eTA申請一覧" />
 
-    <AdminLayout>
+    <AdminLayout2>
         <ScrollArea class="table-container mb-[30px]">
             <table class="table-hover table">
                 <thead>
@@ -99,63 +107,66 @@ const loadPage = (page) => {
                         <th class="w-[200px]">{{ messages.register_date }}</th>
                         <th class="min-w-[140px]">{{ messages.payment_status }}</th>
                         <th class="min-w-[140px]">{{ messages.register_status }}</th>
-                        <th class="min-w-[140px]">{{ messages.screenshots }}</th>
-                        <th></th>
                         <th></th>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td class="min-w-[86px] max-w-[86px]">
+                            <Input
+                                v-model="formSearch.id"
+                                type="text"
+                                :placeholder="'IDを入力'"
+                                @keyup.enter="search"
+                            />
+                        </td>
                         <td>
                             <Input
                                 v-model="formSearch.email"
                                 type="email"
                                 :placeholder="messages.enter_your_email_address"
-                                class="border-input"
                                 @keyup.enter="search"
                             />
                         </td>
-                        <td class="max-w-[120px]">
-                            <Datepicker v-model="formSearch.date" classes="w-[160px] min-h-[40px] border-input" />
+                        <td>
+                            <Datepicker v-model="formSearch.date" classes="w-[100%] min-h-[40px]" />
                         </td>
                         <td>
                             <Select v-model="formSearch.paymentStatus">
-                                <SelectTrigger class="border-input">
-                                    <SelectValue :placeholder="messages.please_select" />
+                                <SelectTrigger>
+                                    <SelectValue :placeholder="'支払い状況'" />
                                 </SelectTrigger>
 
                                 <SelectContent>
                                     <SelectGroup>
                                         <SelectItem value="0">支払い済み</SelectItem>
-                                        <SelectItem value="1">未払い</SelectItem>
+                                        <SelectItem value="1">支払い待ち</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </td>
                         <td>
                             <Select v-model="formSearch.status">
-                                <SelectTrigger class="border-input">
-                                    <SelectValue :placeholder="messages.please_select" />
+                                <SelectTrigger>
+                                    <SelectValue :placeholder="'登録状況'" />
                                 </SelectTrigger>
 
                                 <SelectContent>
                                     <SelectGroup>
+                                        <SelectItem value="success">
+                                            {{ lang == 'en' ? 'Success' : '申請成功' }}
+                                        </SelectItem>
                                         <SelectItem value="pending">
-                                            {{ lang == 'en' ? 'Pending' : '登録待ち' }}
+                                            {{ lang == 'en' ? 'Pending' : '通過待ち' }}
+                                        </SelectItem>
+                                        <SelectItem value="error">
+                                            {{ lang == 'en' ? 'Error' : '申請失敗' }}
                                         </SelectItem>
                                         <SelectItem value="processing">
                                             {{ lang == 'en' ? 'Processing' : '処理中' }}
-                                        </SelectItem>
-                                        <SelectItem value="success">
-                                            {{ lang == 'en' ? 'Success' : '登録完了' }}
-                                        </SelectItem>
-                                        <SelectItem value="error">
-                                            {{ lang == 'en' ? 'Error' : '失敗' }}
                                         </SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </td>
-                        <td></td>
                         <td>
                             <div class="flex h-full justify-center gap-1">
                                 <button class="p-2 hover:text-blue-500" @click="search">
@@ -166,7 +177,6 @@ const loadPage = (page) => {
                                 </button>
                             </div>
                         </td>
-                        <td></td>
                     </tr>
                 </thead>
 
@@ -189,59 +199,31 @@ const loadPage = (page) => {
                         </td>
                         <td>支払い状況</td>
                         <td>
-                            <Select
-                                v-model="item.status"
-                                @update:modelValue="etaApplicationStore.updateStatus(item, item.status)"
-                            >
-                                <SelectTrigger class="border-input">
-                                    <SelectValue :placeholder="messages.please_select" />
-                                </SelectTrigger>
+                            {{ getStatusText(item.status) }}
+                        </td>
+                        <td style="padding-right: 0">
+                            <div class="flex justify-end">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="lg"
+                                    class="mr-[9px] rounded-[5px] border border-[#000000]"
+                                    @click="openModalDetails(item)"
+                                >
+                                    <span>{{ messages.detail }}</span>
+                                </Button>
 
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="pending">
-                                            {{ lang == 'en' ? 'Pending' : '登録待ち' }}
-                                        </SelectItem>
-                                        <SelectItem value="processing">
-                                            {{ lang == 'en' ? 'Processing' : '処理中' }}
-                                        </SelectItem>
-                                        <SelectItem value="success">
-                                            {{ lang == 'en' ? 'Success' : '登録完了' }}
-                                        </SelectItem>
-                                        <SelectItem value="error">
-                                            {{ lang == 'en' ? 'Error' : '失敗' }}
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </td>
-                        <td>
-                            <Screenshots v-if="item.screenshots" :screenshots="item.screenshots" />
-                        </td>
-                        <td class="text-center">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="lg"
-                                class="bg-blue-500 font-normal text-white hover:bg-blue-700 hover:text-white"
-                                @click="openModalDetails(item)"
-                            >
-                                <Info />
-                                <span>{{ messages.detail }}</span>
-                            </Button>
-                        </td>
-                        <td>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="lg"
-                                class="font-normal hover:text-blue-500"
-                                :disabled="loading"
-                                @click="etaApplicationStore.resendEmail(item.id)"
-                            >
-                                <Send />
-                                <span>{{ messages.resend_email }}</span>
-                            </Button>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="lg"
+                                    class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                    :disabled="loading"
+                                    @click="etaApplicationStore.resendEmail(item.id)"
+                                >
+                                    <span>{{ messages.resend_email }}</span>
+                                </Button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -270,5 +252,5 @@ const loadPage = (page) => {
         <div v-if="loading" class="loading-overlay">
             <Loading />
         </div>
-    </AdminLayout>
+    </AdminLayout2>
 </template>

@@ -157,4 +157,8 @@ return [
     'canada_eta_application_form' => 'Canada eTA Application Form',
     'the_issue_date_must_be_before_the_expiration_date' => 'The issue date must be before the expiration date.',
     'year_must_be_greater_than_today_date' => 'Year - Must be greater than today`s date',
+    'please_enter' => 'Please enter',
+    'email' => 'Email',
+    'password' => 'Password',
+    'log_in' => 'Sign In',
 ];

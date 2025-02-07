@@ -4,7 +4,7 @@ import { Calendar } from '@/Components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
 import { cn } from '@/lib/utils';
 import { usePage } from '@inertiajs/vue3';
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date';
+import { CalendarDate, getLocalTimeZone } from '@internationalized/date';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
@@ -18,14 +18,16 @@ const formatDate = (dateString) => {
 
 const df = {
     format(date, lang) {
-        if (lang === 'en') {
-            return formatDate(date);
-        } else {
-            const formatter = new DateFormatter('ja-JP', {
-                dateStyle: 'long',
-            });
-            return formatter.format(date);
-        }
+        // if (lang === 'en') {
+        //     return formatDate(date);
+        // } else {
+        //     const formatter = new DateFormatter('ja-JP', {
+        //         dateStyle: 'long',
+        //     });
+        //     return formatter.format(date);
+        // }
+
+        return formatDate(date);
     },
 };
 

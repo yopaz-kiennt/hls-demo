@@ -25,6 +25,7 @@ export default defineConfig(({ mode }) => {
             alias: {
                 '@': path.resolve(__dirname, 'resources/js'),
                 '@css': path.resolve(__dirname, 'resources/css'),
+                '@sass': path.resolve(__dirname, 'resources/sass'),
             },
         },
         server: {

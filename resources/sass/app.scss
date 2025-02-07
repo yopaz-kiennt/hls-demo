@@ -98,30 +98,51 @@ select.form-control {
         width: 100%;
 
         &.table-hover {
-            tr {
-                &:hover {
-                    background-color: #fff;
+            tbody {
+                tr {
+                    &:hover {
+                        background-color: #fbfcf8;
+                    }
                 }
             }
         }
 
         tr {
-            border-bottom: 1px solid #e7e7e7;
+            border-bottom: 1px solid #000000;
 
             td,
             th {
-                padding: 10px 12px;
+                padding: 18px 10px;
                 font-size: 14px;
+                text-align: center;
+                color: #000000;
             }
         }
 
         thead {
             tr {
+                &:first-child {
+                    border-bottom: 0;
+
+                    th {
+                        padding-top: 0px;
+                        padding-bottom: 0px;
+                    }
+                }
+
+                &:last-child {
+                    border-bottom: 2px solid #000000;
+
+                    td {
+                        padding-top: 10px;
+                        padding-bottom: 10px;
+                    }
+                }
+
                 th {
-                    font-size: 13px;
-                    text-align: left;
-                    color: #71717a;
+                    font-size: 15px;
                     font-weight: 700;
+                    color: #000000;
                 }
             }
         }

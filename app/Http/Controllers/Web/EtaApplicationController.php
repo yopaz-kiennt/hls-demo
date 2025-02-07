@@ -8,7 +8,6 @@ use App\Http\Requests\EtaApplication\RegisterRequest;
 use App\Models\Application;
 use App\Models\Occupation;
 use App\Services\RabbitMQService;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class EtaApplicationController extends Controller
