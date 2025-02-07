@@ -158,7 +158,7 @@ import { Head } from '@inertiajs/vue3';
                 <p class="cta_text red">
                     空路でのカナダ入国には<br class="is-mobile" />事前にeTA認証を申請をしてください
                 </p>
-                <a href="" class="cta_btn">eTA登録申請はこちら</a>
+                <a :href="route('eta_application.index')" class="cta_btn">eTA登録申請はこちら</a>
                 <p class="cta_attention red">
                     ※eTA公式申請料金、及び、申請サポート料の支払後のキャンセル、返金はありません。
                 </p>

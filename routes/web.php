@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EtaManagementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\EtaApplicationController;
 use App\Http\Controllers\Web\HomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -24,13 +23,21 @@ Route::group(['prefix' => 'eta', 'as' => 'eta_application.'], function () {
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/', function () {
-        return redirect(route('admin.eta_management.index'));
+    Route::middleware('guest_admin')->group(function () {
+        Route::get('/login', [AdminController::class, 'login'])->name('login');
+        Route::post('/login', [AdminController::class, 'handleLogin'])->name('login');
     });
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/eta-management', [EtaManagementController::class, 'index'])->name('eta_management.index');
-    Route::post('/eta-management/{id}/status', [EtaManagementController::class, 'updateStatus'])->name('eta_management.update_status');
-    Route::post('/eta-management/{id}/resend-email', [EtaManagementController::class, 'resendEmail'])->name('eta_management.resend_email');
+
+    Route::middleware('auth_admin')->group(function () {
+        Route::get('/', function () {
+            return redirect(route('admin.eta_management.index'));
+        });
+        Route::get('/eta-management', [EtaManagementController::class, 'index'])->name('eta_management.index');
+        Route::post('/eta-management/{id}/status', [EtaManagementController::class, 'updateStatus'])->name('eta_management.update_status');
+        Route::post('/eta-management/{id}/resend-email', [EtaManagementController::class, 'resendEmail'])->name('eta_management.resend_email');
+
+        Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
+    });
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

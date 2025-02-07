@@ -1,5 +1,5 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="h-4 w-4" viewBox="0 0 256 256" xml:space="preserve">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="h-6 w-6" viewBox="0 0 256 256" xml:space="preserve">
         <defs></defs>
         <g
             style="
