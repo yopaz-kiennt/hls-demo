@@ -513,40 +513,38 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                             then: (schema) => {
                                 const passportNotedNationality = state.formData.prerequisite.passportNotedNationality;
                                 if (passportNotedNationality === '87') {
-                                    return (
-                                        yup
-                                            .string()
-                                            .required(this.messages.this_year_must_be_selected)
-                                            // .test(
-                                            //     'no-apply-less-than-18',
-                                            //     this.messages.you_indicate_that_you_want_to_apply_on_behalf_of_a_minor,
-                                            //     () => {
-                                            //         if (
-                                            //             this.formData.isRepresentative == 0 &&
-                                            //             this.formData.isApplyingOnBehalfOfMinorChild == 0 &&
-                                            //             state.checkAgeOfPersonalDetails >= state.minAgeRequired
-                                            //         ) {
-                                            //             return false;
-                                            //         }
-                                            //         return true;
-                                            //     }
-                                            // )
-                                            .test(
-                                                'must-at-least-18-years-of-age-to-apply',
-                                                this.messages.you_must_be_at_least_18_years_of_age_to_apply,
-                                                () => {
-                                                    if (
-                                                        this.formData.isRepresentative == 1 &&
-                                                        state.checkAgeOfPersonalDetails < state.minAgeRequired &&
-                                                        state.formData.personalDetails.dobMonth &&
-                                                        state.formData.personalDetails.dobDay
-                                                    ) {
-                                                        return false;
-                                                    }
-                                                    return true;
+                                    return yup
+                                        .string()
+                                        .required(this.messages.this_year_must_be_selected)
+                                        .test(
+                                            'no-apply-less-than-18',
+                                            this.messages.you_indicate_that_you_want_to_apply_on_behalf_of_a_minor,
+                                            () => {
+                                                if (
+                                                    this.formData.isRepresentative == 0 &&
+                                                    this.formData.isApplyingOnBehalfOfMinorChild == 0 &&
+                                                    state.checkAgeOfPersonalDetails >= state.minAgeRequired
+                                                ) {
+                                                    return false;
                                                 }
-                                            )
-                                    );
+                                                return true;
+                                            }
+                                        )
+                                        .test(
+                                            'must-at-least-18-years-of-age-to-apply',
+                                            this.messages.you_must_be_at_least_18_years_of_age_to_apply,
+                                            () => {
+                                                if (
+                                                    this.formData.isRepresentative == 1 &&
+                                                    state.checkAgeOfPersonalDetails < state.minAgeRequired &&
+                                                    state.formData.personalDetails.dobMonth &&
+                                                    state.formData.personalDetails.dobDay
+                                                ) {
+                                                    return false;
+                                                }
+                                                return true;
+                                            }
+                                        );
                                 }
 
                                 return schema;
@@ -1187,20 +1185,20 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             this.currentStep--;
         },
         async submitForm() {
-            this.showErrorMessageApplyOnBehalfOfMinorChild = false;
-            if (
-                this.age >= 18 &&
-                this.formData.isRepresentative == 0 &&
-                this.formData.isApplyingOnBehalfOfMinorChild == 0
-            ) {
-                this.showErrorMessageApplyOnBehalfOfMinorChild = true;
+            // this.showErrorMessageApplyOnBehalfOfMinorChild = false;
+            // if (
+            //     this.age >= 18 &&
+            //     this.formData.isRepresentative == 0 &&
+            //     this.formData.isApplyingOnBehalfOfMinorChild == 0
+            // ) {
+            //     this.showErrorMessageApplyOnBehalfOfMinorChild = true;
 
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                });
-                return;
-            }
+            //     window.scrollTo({
+            //         top: 0,
+            //         behavior: 'smooth',
+            //     });
+            //     return;
+            // }
 
             try {
                 this.loading = true;

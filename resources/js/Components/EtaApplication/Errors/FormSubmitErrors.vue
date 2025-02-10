@@ -33,7 +33,7 @@ const { showErrorMessageApplyOnBehalfOfMinorChild } = storeToRefs(etaApplication
                     >
                         {{ messages.year_of_birth }}
                     </a>
-                    <span class="ml-2">-</span>
+                    <span class="ml-2">- </span>
 
                     <span>
                         {{ messages.you_indicate_that_you_want_to_apply_on_behalf_of_a_minor }}
