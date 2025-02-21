@@ -6,6 +6,7 @@ use App\ApplicationStatus;
 use App\Http\Controllers\Controller;
 use App\Mail\ApprovedApplicationInfoMail;
 use App\Mail\RejectApplicationInfoMail;
+use App\Mail\SendApplicationMail;
 use App\Models\Application;
 use App\Models\Occupation;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class EtaManagementController extends Controller
         $query = Application::query();
 
         if (! empty($request->email)) {
-            $query->whereRaw("JSON_EXTRACT(data, '$.contactDetails.emailAddress') LIKE ?", ['%'.$request->email.'%']);
+            $query->whereRaw("JSON_EXTRACT(data, '$.contactDetails.emailAddress') LIKE ?", ['%' . $request->email . '%']);
         }
 
         if (! empty($request->date)) {
@@ -50,7 +51,7 @@ class EtaManagementController extends Controller
 
         $emailCustomer = $application->data['contactDetails']['emailAddress'];
 
-        $this->sendMail($emailCustomer, $status);
+        $this->sendMail($emailCustomer, $status, $application);
 
         return $this->responseSuccess([
             'status' => $application->status,
@@ -63,19 +64,24 @@ class EtaManagementController extends Controller
 
         $emailCustomer = $application->data['contactDetails']['emailAddress'];
 
-        $this->sendMail($emailCustomer, $application->status);
+        $this->sendMail($emailCustomer, $application->status, $application);
 
         return $this->responseSuccess(null, __('messages.mail_sent_successfully'));
     }
 
-    private function sendMail($email, $status)
+    private function sendMail($email, $status, $application)
     {
-        if ($status === ApplicationStatus::Success->value) {
-            Mail::to($email)->send(new ApprovedApplicationInfoMail);
-        }
+        $fullName = $application->data['personalDetails']['lastName'] . $application->data['personalDetails']['firstName'];
+        $title = "【 " . $fullName . "】様　の登録状況のお知らせーCanada eTA 申請サポート";
 
-        if ($status === ApplicationStatus::Error->value) {
-            Mail::to($email)->send(new RejectApplicationInfoMail);
-        }
+        Mail::to($email)->send(new SendApplicationMail($title, $application));
+
+        // if ($status === ApplicationStatus::Success->value) {
+        //     Mail::to($email)->send(new ApprovedApplicationInfoMail);
+        // }
+
+        // if ($status === ApplicationStatus::Error->value) {
+        //     Mail::to($email)->send(new RejectApplicationInfoMail);
+        // }
     }
 }
