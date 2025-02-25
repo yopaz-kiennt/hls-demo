@@ -7,7 +7,7 @@ import { route } from 'ziggy-js';
 
 const isHamburgerOpen = ref(false);
 
-const { messages } = usePage().props;
+const { messages, layout } = usePage().props;
 const etaApplicationStore = useEtaApplicationStore();
 
 etaApplicationStore.setMessages(messages);
@@ -24,7 +24,7 @@ function toggleHamburger() {
                 <div class="header_wrap">
                     <div class="logoWrap">
                         <h1 class="logo">
-                            <Link :href="route('home')"><img src="images/logo.png" alt="" /></Link>
+                            <Link :href="route('home')"><img src="/images/logo.png" alt="" /></Link>
                         </h1>
                         <p class="logo_text">カナダeTAを日本語で申請</p>
                     </div>
@@ -48,7 +48,7 @@ function toggleHamburger() {
                                             active: 'service' && route().current('service'),
                                         }"
                                     >
-                                        <Link :href="route('service')">SERVICE</Link>
+                                        <Link :href="route('service')">{{ layout.service }}</Link>
                                     </li>
                                     <li class="gnav_item gnav_btn">
                                         <a :href="route('eta_application.index')" class="">eTA申請</a>
@@ -88,7 +88,7 @@ function toggleHamburger() {
                                     <Link :href="route('home')" class="hamburger_link">HOME</Link>
                                 </li>
                                 <li class="hamburger_item">
-                                    <Link :href="route('service')" class="hamburger_link">SERVICE</Link>
+                                    <Link :href="route('service')" class="hamburger_link">{{ layout.service }}</Link>
                                 </li>
                                 <li class="hamburger_item">
                                     <a :href="route('eta_application.index')" class="hamburger_link hamburger_listBtn">
@@ -109,7 +109,9 @@ function toggleHamburger() {
             <footer class="footer">
                 <p class="copyright"><small>© HAJIMARI Business Partners Inc.</small></p>
                 <ul class="fnav_list">
-                    <li class="fnav_item"><Link :href="route('service')">SERVICE</Link></li>
+                    <li class="fnav_item">
+                        <Link :href="route('service')">{{ layout.service }}</Link>
+                    </li>
                     <li class="fnav_item"><Link :href="route('policy')">プライバシーポリシー</Link></li>
                 </ul>
             </footer>

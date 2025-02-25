@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\EtaApplicationController;
 use App\Http\Controllers\Web\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Payment\PaymentController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -20,6 +21,13 @@ Route::get('/service', [HomeController::class, 'service'])->name('service');
 Route::group(['prefix' => 'eta', 'as' => 'eta_application.'], function () {
     Route::get('/', [EtaApplicationController::class, 'index'])->name('index');
     Route::post('/', [EtaApplicationController::class, 'register'])->name('register');
+    Route::get('/pay', [EtaApplicationController::class, 'pay'])->name('pay');
+});
+
+Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
+    Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
+    Route::get('/success', [PaymentController::class, 'success'])->name('success');
+    Route::get('/error', [PaymentController::class, 'error'])->name('error');
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

@@ -42,8 +42,10 @@ class HandleInertiaRequests extends Middleware
                 ];
             },
             'messages' => Lang::get('messages'),
+            'layout' => Lang::get('layout'),
             'lang' => env('APP_LOCALE', 'ja'),
             'url' => env('APP_URL', 'localhost'),
+            'csrf_token' => csrf_token(),
         ];
     }
 }

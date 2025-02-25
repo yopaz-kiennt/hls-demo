@@ -160,4 +160,15 @@ return [
     'email' => 'メールアドレス',
     'password' => 'パスワード',
     'log_in' => 'ログイン',
+
+    // Step 04
+    'summary_of_fees' => '申請費用をご確認ください',
+    'application' => '項目',
+    'quantity' => '数量',
+    'price' => '料金',
+    'total' => '合計',
+    'eta_fee' => 'カナダeTA申請費用',
+    'application_support_fee' => '申請サポート費',
+    'price_note' => '※変動する場合もございます',
+    'previous_screen' => '前の画面に戻る',
 ];

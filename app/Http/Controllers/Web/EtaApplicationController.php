@@ -65,4 +65,9 @@ class EtaApplicationController extends Controller
 
         return $birthday;
     }
+
+    public function pay()
+    {
+        return Inertia::render('Web/EtaApplication/Pay');
+    }
 }

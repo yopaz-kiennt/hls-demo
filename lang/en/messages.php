@@ -161,4 +161,15 @@ return [
     'email' => 'Email',
     'password' => 'Password',
     'log_in' => 'Sign In',
+
+    // Step 04
+    'summary_of_fees' => 'Summary of fees',
+    'application' => 'Application',
+    'quantity' => 'Quantity',
+    'price' => 'Price',
+    'total' => 'Total',
+    'eta_fee' => 'eTA fee',
+    'application_support_fee' => 'Application support fee',
+    'price_note' => '※It may change',
+    'previous_screen' => 'Return to previous screen',
 ];
