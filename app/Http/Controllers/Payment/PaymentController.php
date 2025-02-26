@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function checkout()
+    public function checkout(string $applicationUuid)
     {
         \Stripe\Stripe::setApiKey(config('payment.stripe.secret_key'));
         header('Content-Type: application/json');
@@ -26,6 +28,9 @@ class PaymentController extends Controller
             'mode' => 'payment',
             'success_url' => config('app.url') . '/payment/success',
             'cancel_url' => config('app.url') . '/payment/cancel',
+            'metadata' => [
+                'application_uuid' => $applicationUuid,
+            ],
         ]);
 
         header("HTTP/1.1 303 See Other");
@@ -37,5 +42,22 @@ class PaymentController extends Controller
         return Inertia::render('Payment/Success', [
             'contactEmail' => config('payment.contact_email'),
         ]);
+    }
+
+    public function webhook(Request $request)
+    {
+        if (isset($request->data['object']['metadata']['application_uuid'])) {
+            $applicationUuid = $request->data['object']['metadata']['application_uuid'];
+
+            if ($request->type == 'checkout.session.completed' || $request->type == 'checkout.session.async_payment_succeeded') {
+                Application::where('uuid', $applicationUuid)->update([
+                    'payment_status' => Application::$paymentStatusMap['success'],
+                ]);
+            } else {
+                Application::where('uuid', $applicationUuid)->update([
+                    'payment_status' => Application::$paymentStatusMap['error'],
+                ]);
+            }
+        }
     }
 }

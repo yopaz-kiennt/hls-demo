@@ -4,6 +4,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
+defineProps({
+    applicationUuid: {
+        type: String,
+        required: true,
+    },
+});
+
 const { messages } = usePage().props;
 const csrfToken = computed(() => usePage().props.csrf_token);
 
@@ -58,7 +65,12 @@ const disableSubmitting = () => {
                 <a :href="route('eta_application.index')" class="cta_btn pageLink--black flex-1">
                     {{ messages.previous_screen }}
                 </a>
-                <form class="flex-1" :action="route('payment.checkout')" method="POST" @submit="disableSubmitting()">
+                <form
+                    class="flex-1"
+                    :action="route('payment.checkout', applicationUuid)"
+                    method="POST"
+                    @submit="disableSubmitting()"
+                >
                     <input type="hidden" :value="csrfToken" name="_token" />
                     <button class="cta_btn" type="submit" :disabled="isLoading">
                         {{ messages.proceed_to_payment }}

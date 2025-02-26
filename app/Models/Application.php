@@ -18,6 +18,10 @@ class Application extends Model
         'is_travel_date_known',
         'data',
         'status',
+        'payment_status',
+        'uuid',
+        'worker_log',
+        'screenshots',
     ];
 
     protected $casts = [
@@ -25,15 +29,20 @@ class Application extends Model
         'screenshots' => 'array',
     ];
 
-    protected $statuses = [
+    protected $statusMap = [
         'success' => '申請成功',
         'pending' => '通過待ち',
         'error' => '申請失敗',
         'processing' => '処理中',
     ];
 
+    public static $paymentStatusMap = [
+        'success' => 'success',
+        'error' => 'error',
+    ];
+
     public function getStatusLabelAttribute()
     {
-        return $this->statuses[$this->status] ?? $this->status;
+        return $this->statusMap[$this->status] ?? $this->status;
     }
 }

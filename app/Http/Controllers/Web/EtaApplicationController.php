@@ -9,6 +9,7 @@ use App\Models\Application;
 use App\Models\Occupation;
 use App\Services\RabbitMQService;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class EtaApplicationController extends Controller
 {
@@ -33,15 +34,18 @@ class EtaApplicationController extends Controller
             'is_travel_date_known' => $request->get('travelDetails')['isTravelDateKnown'],
             'data' => $request->all(),
             'status' => ApplicationStatus::Pending->value,
+            'uuid' => Str::uuid(),
         ]);
 
         // send message
-        $rabbitmqService = new RabbitMQService;
-        $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue_name'), json_encode([
-            'id' => $applicationCreated->id,
-        ]));
+        // $rabbitmqService = new RabbitMQService;
+        // $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue_name'), json_encode([
+        //     'id' => $applicationCreated->id,
+        // ]));
 
-        return $this->responseSuccess(null, 'Đăng ký thành công!');
+        return $this->responseSuccess([
+            'applicationUuid' => $applicationCreated->uuid,
+        ]);
     }
 
     private function getBirthday($request)
@@ -66,8 +70,12 @@ class EtaApplicationController extends Controller
         return $birthday;
     }
 
-    public function pay()
+    public function pay(string $applicationUuid)
     {
-        return Inertia::render('Web/EtaApplication/Pay');
+        Application::where('uuid', $applicationUuid)->firstOrFail();
+
+        return Inertia::render('Web/EtaApplication/Pay', [
+            'applicationUuid' => $applicationUuid,
+        ]);
     }
 }

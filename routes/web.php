@@ -21,11 +21,11 @@ Route::get('/service', [HomeController::class, 'service'])->name('service');
 Route::group(['prefix' => 'eta', 'as' => 'eta_application.'], function () {
     Route::get('/', [EtaApplicationController::class, 'index'])->name('index');
     Route::post('/', [EtaApplicationController::class, 'register'])->name('register');
-    Route::get('/pay', [EtaApplicationController::class, 'pay'])->name('pay');
+    Route::get('/pay/{applicationUuid}', [EtaApplicationController::class, 'pay'])->name('pay');
 });
 
 Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
-    Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout/{applicationUuid}', [PaymentController::class, 'checkout'])->name('checkout');
     Route::get('/success', [PaymentController::class, 'success'])->name('success');
     Route::get('/error', [PaymentController::class, 'error'])->name('error');
 });

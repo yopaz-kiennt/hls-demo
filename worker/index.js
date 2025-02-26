@@ -74,6 +74,11 @@ require("dotenv").config({
     PROCESSING: "processing",
   };
 
+  const ApplicationPaymentStatus = {
+    SUCCESS: "success",
+    ERROR: "error",
+  };
+
   // CALL ETA
   async function apply(msg) {
     let res = ApplicationStatus.ERROR;
@@ -147,11 +152,12 @@ require("dotenv").config({
 
   async function handleApplicationFromDB(applicationId) {
     const updateSql =
-      "UPDATE `applications` SET `status` = ? WHERE `id` = ? AND `status` = ?";
+      "UPDATE `applications` SET `status` = ? WHERE `id` = ? AND `status` = ? AND `payment_status` = ?";
     const updateValues = [
       ApplicationStatus.PROCESSING,
       applicationId,
       ApplicationStatus.PENDING,
+      ApplicationPaymentStatus.SUCCESS,
     ];
     const [updateResult] = await dbConnection.execute(updateSql, updateValues);
 
@@ -159,9 +165,8 @@ require("dotenv").config({
       throw new Error(`No application found with id ${applicationId}`);
     }
 
-    const selectSql =
-      "SELECT * FROM `applications` WHERE `id` = ? AND `status` = ? LIMIT 1";
-    const selectValues = [applicationId, ApplicationStatus.PROCESSING];
+    const selectSql = "SELECT * FROM `applications` WHERE `id` = ? LIMIT 1";
+    const selectValues = [applicationId];
     const [selectRows] = await dbConnection.execute(selectSql, selectValues);
 
     if (selectRows.length === 0) {

@@ -1203,15 +1203,16 @@ export const useEtaApplicationStore = defineStore('eta_application', {
             try {
                 this.loading = true;
                 const { data } = await axios.post(this.$route('eta_application.register'), this.formData);
-                setTimeout(() => {
-                    window.$toast({
-                        type: 'success',
-                        title: data.message,
-                    });
-                }, 400);
-                setTimeout(() => {
-                    router.visit(this.$route('eta_application.index'));
-                }, 5100);
+                // setTimeout(() => {
+                //     window.$toast({
+                //         type: 'success',
+                //         title: data.message,
+                //     });
+                // }, 400);
+                // setTimeout(() => {
+                //     router.visit(this.$route('eta_application.index'));
+                // }, 5100);
+                router.visit(this.$route('eta_application.pay', data.data.applicationUuid));
             } catch (error) {
                 if (error instanceof AxiosError) {
                     if (error.response && error.response.status === HttpStatusCode.UnprocessableEntity) {
