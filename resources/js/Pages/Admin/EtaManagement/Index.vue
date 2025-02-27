@@ -1,5 +1,6 @@
 <script setup>
 import ModalDetails from '@/Components/EtaManagement/ModalDetails.vue';
+import Screenshots from '@/Components/EtaManagement/Screenshots.vue';
 import { Button } from '@/Components/ui/button';
 import Datepicker from '@/Components/ui/datepicker/Datepicker.vue';
 import IconReset from '@/Components/ui/icons/IconReset.vue';
@@ -107,6 +108,7 @@ const getStatusText = (status) => {
                         <th class="w-[200px]">{{ messages.register_date }}</th>
                         <th class="min-w-[140px]">{{ messages.payment_status }}</th>
                         <th class="min-w-[140px]">{{ messages.register_status }}</th>
+                        <th class="min-w-[100px] max-w-[200px]">{{ messages.screenshots }}</th>
                         <th></th>
                     </tr>
                     <tr>
@@ -167,6 +169,7 @@ const getStatusText = (status) => {
                                 </SelectContent>
                             </Select>
                         </td>
+                        <td></td>
                         <td>
                             <div class="flex h-full justify-center gap-1">
                                 <button class="p-2 hover:text-blue-500" @click="search">
@@ -200,6 +203,9 @@ const getStatusText = (status) => {
                         <td>支払い状況</td>
                         <td>
                             {{ getStatusText(item.status) }}
+                        </td>
+                        <td>
+                            <Screenshots v-if="item.screenshots" :screenshots="item.screenshots" />
                         </td>
                         <td style="padding-right: 0">
                             <div class="flex justify-end">

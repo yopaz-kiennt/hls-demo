@@ -122,7 +122,7 @@ return [
     'registered_email' => 'メールアドレス',
     'resend_email' => 'メール再送',
     'detail' => '詳細',
-    'screenshots' => 'スクリーンショット',
+    'screenshots' => 'スクショ',
     'enter_your_email_address' => 'メールアドレスを入力',
     'registration_information_list' => '登録情報リスト',
     'choose_a_date' => '日付を選択する',

@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EtaManagementController;
+use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\EtaApplicationController;
 use App\Http\Controllers\Web\HomeController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Payment\PaymentController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

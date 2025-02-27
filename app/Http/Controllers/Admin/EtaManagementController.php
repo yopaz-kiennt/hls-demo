@@ -20,7 +20,7 @@ class EtaManagementController extends Controller
         $query = Application::query();
 
         if (! empty($request->email)) {
-            $query->whereRaw("JSON_EXTRACT(data, '$.contactDetails.emailAddress') LIKE ?", ['%' . $request->email . '%']);
+            $query->whereRaw("JSON_EXTRACT(data, '$.contactDetails.emailAddress') LIKE ?", ['%'.$request->email.'%']);
         }
 
         if (! empty($request->date)) {
@@ -71,8 +71,8 @@ class EtaManagementController extends Controller
 
     private function sendMail($email, $status, $application)
     {
-        $fullName = $application->data['personalDetails']['lastName'] . $application->data['personalDetails']['firstName'];
-        $title = "【 " . $fullName . "】様　の登録状況のお知らせーCanada eTA 申請サポート";
+        $fullName = $application->data['personalDetails']['lastName'].$application->data['personalDetails']['firstName'];
+        $title = '【 '.$fullName.'】様　の登録状況のお知らせーCanada eTA 申請サポート';
 
         Mail::to($email)->send(new SendApplicationMail($title, $application));
 
