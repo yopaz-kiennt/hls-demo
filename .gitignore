@@ -26,3 +26,4 @@ yarn-error.log
 .pnpm-store/*
 /public/screenshot
 .DS_Store
+nodesource_setup.sh
