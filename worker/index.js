@@ -75,8 +75,9 @@ require("dotenv").config({
   };
 
   const ApplicationPaymentStatus = {
-    SUCCESS: "success",
-    ERROR: "error",
+    PAID: "paid",
+    UNPAID: "unpaid",
+    NO_PAYMENT_REQUIRED: "no_payment_required",
   };
 
   // CALL ETA
@@ -157,7 +158,7 @@ require("dotenv").config({
       ApplicationStatus.PROCESSING,
       applicationId,
       ApplicationStatus.PENDING,
-      ApplicationPaymentStatus.SUCCESS,
+      ApplicationPaymentStatus.PAID,
     ];
     const [updateResult] = await dbConnection.execute(updateSql, updateValues);
 

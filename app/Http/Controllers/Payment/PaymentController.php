@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Services\RabbitMQService;
 
 class PaymentController extends Controller
 {
@@ -39,24 +41,37 @@ class PaymentController extends Controller
 
     public function success()
     {
-        return Inertia::render('Payment/Success', [
+        return Inertia::render('Payment/Success');
+    }
+
+    public function cancel()
+    {
+        return Inertia::render('Payment/Cancel', [
             'contactEmail' => config('payment.contact_email'),
         ]);
     }
 
     public function webhook(Request $request)
     {
-        if (isset($request->data['object']['metadata']['application_uuid'])) {
-            $applicationUuid = $request->data['object']['metadata']['application_uuid'];
+        Log::info($request->all());
 
-            if ($request->type == 'checkout.session.completed' || $request->type == 'checkout.session.async_payment_succeeded') {
-                Application::where('uuid', $applicationUuid)->update([
-                    'payment_status' => Application::$paymentStatusMap['success'],
+        if (isset($request->data['object']['metadata']['application_uuid']) && isset($request->data['object']['payment_status'])) {
+            $applicationUuid = $request->data['object']['metadata']['application_uuid'];
+            $paymentStatus = $request->data['object']['payment_status'];
+
+            if ($request->type === 'checkout.session.completed' || $request->type === 'checkout.session.async_payment_succeeded') {
+                $application = Application::where('uuid', $applicationUuid)->firstOrFail();
+                $application->update([
+                    'payment_status' => $paymentStatus
                 ]);
-            } else {
-                Application::where('uuid', $applicationUuid)->update([
-                    'payment_status' => Application::$paymentStatusMap['error'],
-                ]);
+
+                if ($paymentStatus === Application::$paymentStatusMap['paid']) {
+                    // Send message
+                    $rabbitmqService = new RabbitMQService;
+                    $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue_name'), json_encode([
+                        'id' => $application->id,
+                    ]));
+                }
             }
         }
     }

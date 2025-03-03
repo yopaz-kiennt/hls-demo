@@ -27,7 +27,7 @@ Route::group(['prefix' => 'eta', 'as' => 'eta_application.'], function () {
 Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
     Route::post('/checkout/{applicationUuid}', [PaymentController::class, 'checkout'])->name('checkout');
     Route::get('/success', [PaymentController::class, 'success'])->name('success');
-    Route::get('/error', [PaymentController::class, 'error'])->name('error');
+    Route::get('/cancel', [PaymentController::class, 'cancel'])->name('cancel');
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

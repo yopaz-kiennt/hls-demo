@@ -37,12 +37,6 @@ class EtaApplicationController extends Controller
             'uuid' => Str::uuid(),
         ]);
 
-        // send message
-        // $rabbitmqService = new RabbitMQService;
-        // $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue_name'), json_encode([
-        //     'id' => $applicationCreated->id,
-        // ]));
-
         return $this->responseSuccess([
             'applicationUuid' => $applicationCreated->uuid,
         ]);

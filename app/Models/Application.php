@@ -37,8 +37,9 @@ class Application extends Model
     ];
 
     public static $paymentStatusMap = [
-        'success' => 'success',
-        'error' => 'error',
+        'paid' => 'paid',
+        'unpaid' => 'unpaid',
+        'no_payment_required' => 'no_payment_required',
     ];
 
     public function getStatusLabelAttribute()
