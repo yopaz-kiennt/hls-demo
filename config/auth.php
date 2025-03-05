@@ -112,4 +112,5 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    'api_bearer_token' => env('API_BEARER_TOKEN', 'api_bearer_token'),
 ];

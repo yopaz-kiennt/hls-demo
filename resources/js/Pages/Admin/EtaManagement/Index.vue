@@ -1,6 +1,5 @@
 <script setup>
 import ModalDetails from '@/Components/EtaManagement/ModalDetails.vue';
-import Screenshots from '@/Components/EtaManagement/Screenshots.vue';
 import { Button } from '@/Components/ui/button';
 import Datepicker from '@/Components/ui/datepicker/Datepicker.vue';
 import IconReset from '@/Components/ui/icons/IconReset.vue';
@@ -169,7 +168,7 @@ const getStatusText = (status) => {
                                 </SelectContent>
                             </Select>
                         </td>
-                        <td></td>
+                        <!-- <td></td> -->
                         <td>
                             <div class="flex h-full justify-center gap-1">
                                 <button class="p-2 hover:text-blue-500" @click="search">
@@ -204,32 +203,66 @@ const getStatusText = (status) => {
                         <td>
                             {{ getStatusText(item.status) }}
                         </td>
-                        <td>
+                        <!-- <td>
                             <Screenshots v-if="item.screenshots" :screenshots="item.screenshots" />
-                        </td>
+                        </td> -->
                         <td style="padding-right: 0">
-                            <div class="flex justify-end">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="lg"
-                                    class="mr-[9px] rounded-[5px] border border-[#000000]"
-                                    @click="openModalDetails(item)"
-                                >
-                                    <span>{{ messages.detail }}</span>
-                                </Button>
+                            <!-- <div class="flex justify-end"> -->
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                class="mr-[9px] rounded-[5px] border border-[#000000]"
+                                @click="openModalDetails(item)"
+                            >
+                                <span>{{ messages.detail }}</span>
+                            </Button>
 
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="lg"
-                                    class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
-                                    :disabled="loading"
-                                    @click="etaApplicationStore.resendEmail(item.id)"
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                :disabled="loading"
+                                @click="etaApplicationStore.resendEmail(item.id)"
+                            >
+                                <span>{{ messages.resend_email }}</span>
+                            </Button>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                :disabled="!(item.payment_status === 'paid' && item.status !== 'success')"
+                            >
+                                <a
+                                    :href="'http://localhost:3003/applications/' + item.id + '/apply-to-canada'"
+                                    target="_blank"
+                                    >Apply to Canada</a
                                 >
-                                    <span>{{ messages.resend_email }}</span>
-                                </Button>
-                            </div>
+                            </Button>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                :disabled="!(item.payment_status === 'paid' && item.status === 'processing')"
+                            >
+                                <span>Update status to success</span>
+                            </Button>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="lg"
+                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                :disabled="!(item.payment_status === 'paid' && item.status === 'processing')"
+                            >
+                                <span>Update status to error</span>
+                            </Button>
+                            <!-- </div> -->
                         </td>
                     </tr>
                 </tbody>

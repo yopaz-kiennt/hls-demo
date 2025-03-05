@@ -21,12 +21,10 @@ class Application extends Model
         'payment_status',
         'uuid',
         'worker_log',
-        'screenshots',
     ];
 
     protected $casts = [
         'data' => 'array',
-        'screenshots' => 'array',
     ];
 
     protected $statusMap = [

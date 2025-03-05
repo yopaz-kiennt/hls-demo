@@ -64,14 +64,6 @@ class PaymentController extends Controller
                 $application->update([
                     'payment_status' => $paymentStatus
                 ]);
-
-                if ($paymentStatus === Application::$paymentStatusMap['paid']) {
-                    // Send message
-                    $rabbitmqService = new RabbitMQService;
-                    $rabbitmqService->sendMessage(config('queue.connections.rabbitmq.queue_name'), json_encode([
-                        'id' => $application->id,
-                    ]));
-                }
             }
         }
     }
