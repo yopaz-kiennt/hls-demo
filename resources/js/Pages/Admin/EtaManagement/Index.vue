@@ -249,13 +249,14 @@ const getStatusText = (status) => {
                                         item.status !== applicationStatus.processing
                                     ) || loading
                                 "
-                                @click="etaApplicationStore.updateStatus(item, applicationStatus.processing)"
+                                @click="item.status = applicationStatus.processing"
                             >
                                 <a
-                                    :href="'http://localhost:3003/applications/' + item.id + '/apply-to-canada'"
+                                    :href="`http://localhost:3003/applications/${item.id}/apply-to-canada`"
                                     target="_blank"
-                                    >Apply to Canada</a
                                 >
+                                    Apply to Canada
+                                </a>
                             </Button>
 
                             <Button

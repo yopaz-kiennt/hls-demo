@@ -20,7 +20,7 @@ class Application extends Model
         'status',
         'payment_status',
         'uuid',
-        'worker_log',
+        'puppeteer_log',
     ];
 
     protected $casts = [

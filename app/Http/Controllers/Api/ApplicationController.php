@@ -2,38 +2,46 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\ApplicationStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EtaApplication\RegisterRequest;
 use App\Models\Application;
-use App\Models\Occupation;
-use App\Services\RabbitMQService;
-use Inertia\Inertia;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ApplicationController extends Controller
 {
-    public function list(Request $request)
+    public function update(Request $request, int $id)
     {
-        // $token = request()->bearerToken();
+        $token = request()->bearerToken();
+        if ($token !== config('auth.api_bearer_token')) {
+            abort(401);
+        }
 
-        // if ($token !== config('auth.api_bearer_token')) {
-        //     abort(401);
-        // }
+        $input = $request->only([
+            'puppeteerLog',
+            'status'
+        ]);
 
-        return Application::orderByDesc('id')->paginate(10);
+        $updateData = [];
+        if (isset($input['puppeteerLog'])) {
+            $updateData['puppeteer_log'] = $input['puppeteerLog'];
+        }
+        if (isset($input['status'])) {
+            $updateData['status'] = $input['status'];
+        }
+
+        return Application::where('id', $id)->update($updateData);
     }
 
     public function details(int $id)
     {
-        // $token = request()->bearerToken();
+        $token = request()->bearerToken();
+        if ($token !== config('auth.api_bearer_token')) {
+            abort(401);
+        }
 
-        // if ($token !== config('auth.api_bearer_token')) {
-        //     abort(401);
-        // }
-
-        return Application::findOrFail($id);
+        return Application::where('id', $id)
+            ->where('payment_status', 'paid')
+            ->where('status', '!=', 'processing')
+            ->where('status', '!=', 'success')
+            ->firstOrFail();
     }
- 
 }
