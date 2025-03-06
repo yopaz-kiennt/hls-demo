@@ -35,8 +35,8 @@ class Application extends Model
     ];
 
     public static $paymentStatusMap = [
-        'paid' => 'paid',
-        'unpaid' => 'unpaid',
+        'paid' => '支払い済み',
+        'unpaid' => '支払い待ち',
         'no_payment_required' => 'no_payment_required',
     ];
 

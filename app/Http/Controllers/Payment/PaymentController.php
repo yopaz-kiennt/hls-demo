@@ -7,7 +7,8 @@ use App\Models\Application;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Services\RabbitMQService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendApplicationMail;
 
 class PaymentController extends Controller
 {
@@ -64,7 +65,21 @@ class PaymentController extends Controller
                 $application->update([
                     'payment_status' => $paymentStatus
                 ]);
+
+                if ($paymentStatus == 'paid') {
+                    $emailCustomer = $application->data['contactDetails']['emailAddress'];
+
+                    $this->sendMail($emailCustomer, $application);
+                }
             }
         }
+    }
+
+    private function sendMail($email, $application)
+    {
+        $fullName = $application->data['personalDetails']['lastName'].$application->data['personalDetails']['firstName'];
+        $title = '【 '.$fullName.'】様　の登録状況のお知らせーCanada eTA 申請サポート';
+
+        Mail::to($email)->send(new SendApplicationMail($title, $application));
     }
 }

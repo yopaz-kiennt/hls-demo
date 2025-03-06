@@ -36,6 +36,10 @@ const props = defineProps({
         type: Object,
         default: () => {},
     },
+    paymentStatusMap: {
+        type: Object,
+        required: true,
+    },
 });
 
 const openModalDetails = (item) => {
@@ -51,7 +55,7 @@ const closeModalDetails = () => {
 const formSearch = ref({
     email: props.filters.email || '',
     date: props.filters.date || '',
-    paymentStatus: props.filters.payment_status || '',
+    paymentStatus: props.filters.paymentStatus || '',
     status: props.filters.status || '',
 });
 
@@ -140,9 +144,8 @@ const getStatusText = (status) => {
 
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectItem value="0">支払い済み</SelectItem>
-                                        <SelectItem value="1">支払い待ち</SelectItem>
-                                        <SelectItem value="2">支払い不要</SelectItem>
+                                        <SelectItem value="paid">支払い済み</SelectItem>
+                                        <SelectItem value="unpaid">支払い待ち</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
@@ -202,7 +205,9 @@ const getStatusText = (status) => {
                         <td>
                             {{ formatDate(item.created_at) }}
                         </td>
-                        <td>支払い状況</td>
+                        <td>
+                            {{ paymentStatusMap[item.payment_status] }}
+                        </td>
                         <td>
                             {{ getStatusText(item.status) }}
                         </td>
@@ -226,14 +231,13 @@ const getStatusText = (status) => {
                                 variant="outline"
                                 size="lg"
                                 class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
-                                :disabled="loading"
+                                :disabled="loading || item.payment_status !== paymentStatus.paid"
                                 @click="etaApplicationStore.resendEmail(item.id)"
                             >
                                 <span>{{ messages.resend_email }}</span>
                             </Button>
 
                             <Button
-                                v-if="item.status === applicationStatus.pending"
                                 type="button"
                                 variant="outline"
                                 size="lg"
@@ -241,9 +245,11 @@ const getStatusText = (status) => {
                                 :disabled="
                                     !(
                                         item.payment_status === paymentStatus.paid &&
-                                        item.status !== applicationStatus.success
-                                    )
+                                        item.status !== applicationStatus.success &&
+                                        item.status !== applicationStatus.processing
+                                    ) || loading
                                 "
+                                @click="etaApplicationStore.updateStatus(item, applicationStatus.processing)"
                             >
                                 <a
                                     :href="'http://localhost:3003/applications/' + item.id + '/apply-to-canada'"
@@ -253,7 +259,6 @@ const getStatusText = (status) => {
                             </Button>
 
                             <Button
-                                v-if="item.status === applicationStatus.processing"
                                 type="button"
                                 variant="outline"
                                 size="lg"
@@ -262,25 +267,27 @@ const getStatusText = (status) => {
                                     !(
                                         item.payment_status === paymentStatus.paid &&
                                         item.status === applicationStatus.processing
-                                    )
+                                    ) || loading
                                 "
                                 @click="etaApplicationStore.updateStatus(item, applicationStatus.success)"
                             >
-                                <span>Update status to success</span>
+                                <span>Update application status to success</span>
                             </Button>
 
                             <Button
-                                v-if="item.status === applicationStatus.processing"
                                 type="button"
                                 variant="outline"
                                 size="lg"
                                 class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
                                 :disabled="
-                                    !(item.payment_status === paymentStatus.paid && item.status === 'processing')
+                                    !(
+                                        item.payment_status === paymentStatus.paid &&
+                                        item.status === applicationStatus.processing
+                                    ) || loading
                                 "
                                 @click="etaApplicationStore.updateStatus(item, applicationStatus.error)"
                             >
-                                <span>Update status to error</span>
+                                <span>Update application status to error</span>
                             </Button>
                             <!-- </div> -->
                         </td>

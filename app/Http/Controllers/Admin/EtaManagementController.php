@@ -31,14 +31,19 @@ class EtaManagementController extends Controller
             $query->where('status', $request->status);
         }
 
+        if (! empty($request->paymentStatus)) {
+            $query->where('payment_status', $request->paymentStatus);
+        }
+
         $applications = $query->orderBy('created_at', 'desc')->paginate(10);
 
         $occupations = Occupation::with('jobTitles')->get();
 
         return Inertia::render('Admin/EtaManagement/Index', [
             'applications' => $applications,
-            'filters' => $request->only('email', 'date', 'status'),
+            'filters' => $request->only('email', 'date', 'status', 'paymentStatus'),
             'occupations' => $occupations,
+            'paymentStatusMap' => Application::$paymentStatusMap,
         ]);
     }
 
