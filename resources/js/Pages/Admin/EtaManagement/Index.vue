@@ -9,6 +9,7 @@ import Loading from '@/Components/ui/loading/Loading.vue';
 import { ScrollArea, ScrollBar } from '@/Components/ui/scroll-area';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import VuePagination from '@/Components/VuePagination.vue';
+import { applicationStatus, paymentStatus } from '@/helper';
 import AdminLayout2 from '@/Layouts/AdminLayout2.vue';
 import { buildUrlParams, formatDate } from '@/lib/utils';
 import { useEtaApplicationStore } from '@/stores/useEtaApplicationStore';
@@ -19,6 +20,7 @@ import { ref } from 'vue';
 const { lang, messages } = usePage().props;
 
 const etaApplicationStore = useEtaApplicationStore();
+etaApplicationStore.setMessages(messages);
 const { isOpenModalDetails, selectedItem, loading } = storeToRefs(etaApplicationStore);
 
 const props = defineProps({
@@ -88,7 +90,7 @@ const getStatusText = (status) => {
         pending: lang === 'en' ? 'Pending' : '登録待ち',
         processing: lang === 'en' ? 'Processing' : '処理中',
         success: lang === 'en' ? 'Success' : '登録完了',
-        error: lang === 'en' ? 'Error' : '失敗',
+        error: lang === 'en' ? 'Error' : '申請失敗',
     };
     return translations[status] || '-';
 };
@@ -140,6 +142,7 @@ const getStatusText = (status) => {
                                     <SelectGroup>
                                         <SelectItem value="0">支払い済み</SelectItem>
                                         <SelectItem value="1">支払い待ち</SelectItem>
+                                        <SelectItem value="2">支払い不要</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
@@ -152,16 +155,16 @@ const getStatusText = (status) => {
 
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectItem value="success">
+                                        <SelectItem :value="applicationStatus.success">
                                             {{ lang == 'en' ? 'Success' : '申請成功' }}
                                         </SelectItem>
-                                        <SelectItem value="pending">
+                                        <SelectItem :value="applicationStatus.pending">
                                             {{ lang == 'en' ? 'Pending' : '通過待ち' }}
                                         </SelectItem>
-                                        <SelectItem value="error">
+                                        <SelectItem :value="applicationStatus.error">
                                             {{ lang == 'en' ? 'Error' : '申請失敗' }}
                                         </SelectItem>
-                                        <SelectItem value="processing">
+                                        <SelectItem :value="applicationStatus.processing">
                                             {{ lang == 'en' ? 'Processing' : '処理中' }}
                                         </SelectItem>
                                     </SelectGroup>
@@ -230,11 +233,17 @@ const getStatusText = (status) => {
                             </Button>
 
                             <Button
+                                v-if="item.status === applicationStatus.pending"
                                 type="button"
                                 variant="outline"
                                 size="lg"
                                 class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
-                                :disabled="!(item.payment_status === 'paid' && item.status !== 'success')"
+                                :disabled="
+                                    !(
+                                        item.payment_status === paymentStatus.paid &&
+                                        item.status !== applicationStatus.success
+                                    )
+                                "
                             >
                                 <a
                                     :href="'http://localhost:3003/applications/' + item.id + '/apply-to-canada'"
@@ -244,21 +253,32 @@ const getStatusText = (status) => {
                             </Button>
 
                             <Button
+                                v-if="item.payment_status === paymentStatus.processing"
                                 type="button"
                                 variant="outline"
                                 size="lg"
                                 class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
-                                :disabled="!(item.payment_status === 'paid' && item.status === 'processing')"
+                                :disabled="
+                                    !(
+                                        item.payment_status === paymentStatus.paid &&
+                                        item.status === applicationStatus.processing
+                                    )
+                                "
+                                @click="etaApplicationStore.updateStatus(item, applicationStatus.success)"
                             >
                                 <span>Update status to success</span>
                             </Button>
 
                             <Button
+                                v-if="item.payment_status === paymentStatus.processing"
                                 type="button"
                                 variant="outline"
                                 size="lg"
                                 class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
-                                :disabled="!(item.payment_status === 'paid' && item.status === 'processing')"
+                                :disabled="
+                                    !(item.payment_status === paymentStatus.paid && item.status === 'processing')
+                                "
+                                @click="etaApplicationStore.updateStatus(item, applicationStatus.error)"
                             >
                                 <span>Update status to error</span>
                             </Button>

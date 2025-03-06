@@ -76,3 +76,15 @@ export const getMonthNumber = (month) => {
 
     return months[month] !== undefined ? String(months[month] + 1).padStart(2, '0') : month;
 };
+
+export const paymentStatus = {
+    paid: 'paid',
+    unpaid: 'unpaid',
+};
+
+export const applicationStatus = {
+    success: 'success',
+    pending: 'pending',
+    error: 'error',
+    processing: 'processing',
+};
