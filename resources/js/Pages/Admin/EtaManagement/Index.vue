@@ -253,7 +253,7 @@ const getStatusText = (status) => {
                             </Button>
 
                             <Button
-                                v-if="item.payment_status === paymentStatus.processing"
+                                v-if="item.status === applicationStatus.processing"
                                 type="button"
                                 variant="outline"
                                 size="lg"
@@ -270,7 +270,7 @@ const getStatusText = (status) => {
                             </Button>
 
                             <Button
-                                v-if="item.payment_status === paymentStatus.processing"
+                                v-if="item.status === applicationStatus.processing"
                                 type="button"
                                 variant="outline"
                                 size="lg"
