@@ -44,6 +44,7 @@ class EtaManagementController extends Controller
             'filters' => $request->only('email', 'date', 'status', 'paymentStatus'),
             'occupations' => $occupations,
             'paymentStatusMap' => Application::$paymentStatusMap,
+            'etaAdminUrl' => config('payment.eta_admin_url'),
         ]);
     }
 

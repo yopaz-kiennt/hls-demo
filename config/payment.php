@@ -7,4 +7,5 @@ return [
     ],
     'contact_email' => env('CONTACT_EMAIL', ''),
     'total_amount' => env('TOTAL_AMOUNT', 4200),
+    'eta_admin_url' => env('ETA_ADMIN_URL', ''),
 ];

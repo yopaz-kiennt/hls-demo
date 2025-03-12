@@ -40,6 +40,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    etaAdminUrl: {
+        type: String,
+        required: true,
+    },
 });
 
 const openModalDetails = (item) => {
@@ -251,10 +255,7 @@ const getStatusText = (status) => {
                                 "
                                 @click="item.status = applicationStatus.processing"
                             >
-                                <a
-                                    :href="`http://localhost:3003/applications/${item.id}/apply-to-canada`"
-                                    target="_blank"
-                                >
+                                <a :href="`${etaAdminUrl}/applications/${item.id}/apply-to-canada`" target="_blank">
                                     カナダ政府へ申請
                                 </a>
                             </Button>
