@@ -230,7 +230,7 @@ const getStatusText = (status) => {
                                 type="button"
                                 variant="outline"
                                 size="lg"
-                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                class="rounded-[5px] bg-[#256400] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
                                 :disabled="loading || item.payment_status !== paymentStatus.paid"
                                 @click="etaApplicationStore.resendEmail(item.id)"
                             >
@@ -241,7 +241,7 @@ const getStatusText = (status) => {
                                 type="button"
                                 variant="outline"
                                 size="lg"
-                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                class="rounded-[5px] bg-[#256400] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
                                 :disabled="
                                     !(
                                         item.payment_status === paymentStatus.paid &&
@@ -263,7 +263,7 @@ const getStatusText = (status) => {
                                 type="button"
                                 variant="outline"
                                 size="lg"
-                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                class="rounded-[5px] bg-[#256400] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
                                 :disabled="
                                     !(
                                         item.payment_status === paymentStatus.paid &&
@@ -279,7 +279,7 @@ const getStatusText = (status) => {
                                 type="button"
                                 variant="outline"
                                 size="lg"
-                                class="rounded-[5px] bg-[#549B2A] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
+                                class="rounded-[5px] bg-[#256400] px-[28px] py-[15px] font-normal text-white hover:bg-[#4d8f28] hover:text-white"
                                 :disabled="
                                     !(
                                         item.payment_status === paymentStatus.paid &&
