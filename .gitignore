@@ -27,3 +27,4 @@ yarn-error.log
 /public/screenshot
 .DS_Store
 nodesource_setup.sh
+/worker/*

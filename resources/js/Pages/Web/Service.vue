@@ -47,6 +47,41 @@ import { Head } from '@inertiajs/vue3';
                         当サービスは、複雑かつリスクが伴う入国申請へのソリューションです。英語や仏語が不得手な方が頼らざるをえない申請サポートサービスは、一部、他社からも提供されていますが、処理日数を要したり、提供者の素性や料金が不透明であったりといった問題があります。<br />一方で、中途半端な理解で、英語や仏語で申請すると、自分の意に反した申請内容になりかねず、最悪の場合、不受理だけでなくブラックリストに載る可能性もあります。<br />このため当ホームページでは、（１）サービス提供者である弊社の素性や料金が明瞭であること、（２）日本語での説明の下で、申請者のデータを正確に入力して申請できること、を目指しました。
                     </p>
                 </li>
+                <li class="service_item">
+                    <h2 class="service_ttlArea">
+                        <span class="service_num">4</span>
+                        <span class="service_ttl">本サービス受付について</span>
+                    </h2>
+
+                    <div class="flex">
+                        <label
+                            class="flex h-[48px] w-[238px] items-center justify-center bg-[#e0232f] text-[19px] text-white"
+                        >
+                            申請サポート受付
+                        </label>
+                        <div class="ml-5 flex items-center gap-[20px] font-bold">
+                            <p class="text-[25px]">24時間受付</p>
+                            <p class="text-[18px]">申請から24時間以内に対応</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-[25px] mt-[10px] flex">
+                        <label
+                            class="flex h-[48px] w-[238px] items-center justify-center bg-[#e0232f] text-[19px] text-white"
+                        >
+                            サポート対応時間
+                        </label>
+                        <div class="ml-5 flex items-center gap-[10px] font-bold">
+                            <p class="text-[25px]">9:00〜20:00</p>
+                            <p class="text-[18px]">（土日祝を除く）</p>
+                        </div>
+                    </div>
+
+                    <p class="service_text">
+                        ※カナダeTA渡航認証申請サポートは24時間365日受け付けております。受付から24時間以内にカナダ政府へ審査の提出を行いますが、対応時間外の申請の場合は、翌対応日のサポートとなりますのであらかじめご了承下さい。<br />
+                        ※書類不備などで審査が通らない可能性もあるため、旅行当日の申請は避け、余裕を持った申請をおすすめいたします。やむを得ず旅行当日に申請される場合は、ご利用の空港でも申請できますのでそちらをご利用いただけますとスムーズです。
+                    </p>
+                </li>
             </ul>
         </section>
 
