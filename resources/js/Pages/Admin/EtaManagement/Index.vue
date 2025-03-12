@@ -255,7 +255,7 @@ const getStatusText = (status) => {
                                     :href="`http://localhost:3003/applications/${item.id}/apply-to-canada`"
                                     target="_blank"
                                 >
-                                    Apply to Canada
+                                    カナダ政府へ申請
                                 </a>
                             </Button>
 
@@ -272,7 +272,7 @@ const getStatusText = (status) => {
                                 "
                                 @click="etaApplicationStore.updateStatus(item, applicationStatus.success)"
                             >
-                                <span>Update application status to success</span>
+                                <span>登録状況を申請成功に更新</span>
                             </Button>
 
                             <Button
@@ -288,7 +288,7 @@ const getStatusText = (status) => {
                                 "
                                 @click="etaApplicationStore.updateStatus(item, applicationStatus.error)"
                             >
-                                <span>Update application status to error</span>
+                                <span>登録状況をエラーに更新</span>
                             </Button>
                             <!-- </div> -->
                         </td>
