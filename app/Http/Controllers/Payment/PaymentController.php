@@ -24,7 +24,7 @@ class PaymentController extends Controller
                     'product_data' => [
                         'name' => 'eTA Payment',
                     ],
-                    'unit_amount' => 4141,
+                    'unit_amount' => config('payment.total_amount'),
                 ],
                 'quantity' => 1,
             ]],

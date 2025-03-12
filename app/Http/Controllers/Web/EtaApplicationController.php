@@ -70,6 +70,7 @@ class EtaApplicationController extends Controller
 
         return Inertia::render('Web/EtaApplication/Pay', [
             'applicationUuid' => $applicationUuid,
+            'totalAmount' => config('payment.total_amount'),
         ]);
     }
 }
