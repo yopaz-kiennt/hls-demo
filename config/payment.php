@@ -6,4 +6,5 @@ return [
         'secret_key' => env('STRIPE_SECRET_KEY', ''),
     ],
     'contact_email' => env('CONTACT_EMAIL', ''),
+    'total_amount' => env('TOTAL_AMOUNT', 4200),
 ];

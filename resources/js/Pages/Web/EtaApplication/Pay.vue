@@ -9,6 +9,10 @@ defineProps({
         type: String,
         required: true,
     },
+    totalAmount: {
+        type: Number,
+        required: true,
+    },
 });
 
 const { messages } = usePage().props;
@@ -51,7 +55,7 @@ const disableSubmitting = () => {
             <div class="mt-[20px] flex flex-col items-end">
                 <div class="flex items-center space-x-12 pr-[48px] font-bold">
                     <span class="text-[25px]">{{ messages.total }}</span>
-                    <span class="text-[34px]">4141円</span>
+                    <span class="text-[34px]">{{ totalAmount }}円</span>
                 </div>
                 <p class="pr-[48px] text-[14px] font-normal">{{ messages.price_note }}</p>
             </div>
