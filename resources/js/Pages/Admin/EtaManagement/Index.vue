@@ -253,11 +253,9 @@ const getStatusText = (status) => {
                                         item.status !== applicationStatus.processing
                                     ) || loading
                                 "
-                                @click="item.status = applicationStatus.processing"
+                                @click="etaApplicationStore.applyToCanada(item, etaAdminUrl)"
                             >
-                                <a :href="`${etaAdminUrl}/applications/${item.id}/apply-to-canada`" target="_blank">
-                                    カナダ政府へ申請
-                                </a>
+                                <span>カナダ政府へ申請</span>
                             </Button>
 
                             <Button

@@ -1,4 +1,4 @@
-import { representativeRelationship } from '@/helper';
+import { applicationStatus, representativeRelationship } from '@/helper';
 import { router } from '@inertiajs/vue3';
 import { AxiosError, HttpStatusCode } from 'axios';
 import { isAfter, parse } from 'date-fns';
@@ -1274,6 +1274,22 @@ export const useEtaApplicationStore = defineStore('eta_application', {
                     this.loading = false;
                 }, 400);
             }
+        },
+        async applyToCanada(application, etaAdminUrl) {
+            await fetch(etaAdminUrl, {
+                method: 'GET',
+                mode: 'no-cors',
+            })
+                .then((res) => {
+                    application.status = applicationStatus.processing;
+                    window.open(`${etaAdminUrl}/applications/${application.id}/apply-to-canada`, '_blank');
+                })
+                .catch((err) => {
+                    window.$toast({
+                        type: 'error',
+                        title: 'あなたのeta-adminプログラムは有効になっていません。',
+                    });
+                });
         },
         changeHasPreviouslyAppliedToCanada() {
             this.formData.personalDetails.uci = this.formData.personalDetails.uciReEnter = '';
