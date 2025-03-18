@@ -45,6 +45,11 @@ const forwardedProps = useForwardProps(delegatedProps);
 </template>
 
 <style lang="scss">
+// .dropdown-item[aria-selected="true"] {
+//     background: #3cccff;
+//     color: #fff;
+// }
+
 @media screen and (min-width: 375px) and (max-width: 425px) {
     .dropdown-item {
         max-width: 320px;

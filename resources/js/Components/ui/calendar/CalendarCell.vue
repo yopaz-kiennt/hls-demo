@@ -23,7 +23,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     <CalendarCell
         :class="
             cn(
-                'relative h-9 w-9 p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([data-selected])]:rounded-md [&:has([data-selected])]:bg-accent [&:has([data-selected][data-outside-view])]:bg-accent/50',
+                'item relative h-9 w-9 p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([data-selected])]:rounded-md [&:has([data-selected])]:bg-accent [&:has([data-selected][data-outside-view])]:bg-accent/50',
                 props.class
             )
         "
@@ -32,3 +32,15 @@ const forwardedProps = useForwardProps(delegatedProps);
         <slot />
     </CalendarCell>
 </template>
+
+<style lang="scss">
+.item {
+    & > div[data-selected] {
+        background: #3cccff !important;
+
+        &:hover {
+            background: #3cccff;
+        }
+    }
+}
+</style>

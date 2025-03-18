@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 </script>
 
 <template>
@@ -60,24 +61,56 @@ import { Head } from '@inertiajs/vue3';
                 <div class="info_flow">
                     <h3 class="info_flowTtl green">申請の流れ</h3>
                     <ul class="info_flowList">
-                        <li class="info_flowItem info_flowItem--first green">
-                            ①必要情報を<br class="is-desktop" />ご入力ください
-                        </li>
-                        <li class="info_flowItem info_flowItem--second green">
-                            ②請求代金を<br class="is-desktop" />お支払いください
-                        </li>
-                        <li class="info_flowItem info_flowItem--three green">
-                            ③申請代行<br class="is-desktop" />いたします
-                        </li>
-                        <li class="info_flowItem info_flowItem--four green">
-                            ④審査後、結果が通知されます<br /><span class="info_flowItem--sm">
-                                書類不備などあれば再審査
+                        <li class="info_flowItem green">
+                            <span class="number">１</span>
+                            <span class="content">
+                                必要情報を <br />
+                                ご入力 <br />
+                                ください
                             </span>
                         </li>
-                        <li class="info_flowItem info_flowItem--five green">
-                            ⑤申請完了後、登録証が<br class="is-desktop" />メールで届きます。
+                        <li class="info_flowItem green">
+                            <span class="number">２</span>
+                            <span class="content">
+                                請求代金を <br />
+                                お支払い <br />
+                                ください
+                            </span>
                         </li>
-                        <li class="info_flowItem info_flowItem--six info_flowItem--green">カナダへ出発</li>
+                        <li class="info_flowItem green">
+                            <span class="number">３</span>
+                            <span class="content">
+                                申請代行 <br />
+                                いたします
+                            </span>
+                        </li>
+                        <li class="info_flowItem green">
+                            <span class="number">４</span>
+                            <div class="content">
+                                <span>
+                                    審査後 <br />
+                                    結果が通知 <br />
+                                    されます
+                                </span>
+                                <span class="note">
+                                    書類不備など<br />
+                                    あれば再審査
+                                </span>
+                            </div>
+                        </li>
+                        <li class="info_flowItem green">
+                            <span class="number">５</span>
+                            <span class="content">
+                                申請完了後 <br />
+                                登録証が <br />
+                                メールで <br />
+                                届きます
+                            </span>
+                        </li>
+                        <li class="info_flowItem info_flowItem--six info_flowItem--green">
+                            <span>カナダへ</span>
+                            <span>ご出発</span>
+                        </li>
                     </ul>
                     <p class="info_flowAttention red">
                         当サイトは申請時に申請費カナダ政府への公式申請料（CAN$7.00、2024年12月現在）以外に<span
@@ -169,3 +202,64 @@ import { Head } from '@inertiajs/vue3';
         </section>
     </AuthenticatedLayout>
 </template>
+
+<style scoped lang="scss">
+.info_flow {
+    .info_flowList {
+        gap: 0;
+        justify-content: space-between;
+
+        .info_flowItem {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            padding: 9px 12px;
+            min-height: 170px;
+            line-height: 1.5;
+            width: 16%;
+
+            .number {
+                font-size: 24px;
+                font-weight: bold;
+                height: 30%;
+            }
+
+            .content {
+                height: 70%;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                .note {
+                    font-size: 10px;
+                    font-weight: normal;
+                }
+            }
+
+            &--six {
+                line-height: 1.5;
+                text-align: center;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .info_flow {
+        .info_flowList {
+            display: flex;
+            flex-wrap: wrap;
+            row-gap: 10px;
+
+            .info_flowItem {
+                width: 31%;
+                max-height: 170px;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+</style>
